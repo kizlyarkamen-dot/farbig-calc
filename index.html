@@ -4,6 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Материалы по смете</title>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function(m,e,t,r,i,k,a){
+m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+})(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=113898791', 'ym');
+
+ym(113898791, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/113898791" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -278,6 +291,13 @@ details.mw[open]>summary{border-bottom:1px solid var(--line);background:var(--su
 .bar .acts{display:flex;gap:10px;align-items:center}
 .toast{font-size:13px;color:var(--on-band-muted)}
 footer .wrap{padding-block:16px 28px;font-size:12px;color:var(--muted)}
+footer a{color:var(--gold-text)}
+
+/* Cookies: плашка над нижней панелью итога */
+.cookie{position:fixed;left:0;right:0;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:21;padding-inline:max(12px,env(safe-area-inset-left,0px)) max(12px,env(safe-area-inset-right,0px))}
+.cookie .in{max-width:1000px;margin:0 auto;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:10px 14px;background:var(--surface);color:var(--ink);border:1px solid var(--gold);font-size:13px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.cookie a{color:var(--gold-text);font-weight:600}
+.cookie button{padding:6px 14px}
 </style>
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
@@ -373,7 +393,14 @@ footer .wrap{padding-block:16px 28px;font-size:12px;color:var(--muted)}
 
 </div>
 </main>
-<footer><div class="wrap">Технология и толщины слоёв малярки — техкарта «Экспресс К3» FARBIG. Составы, толщины, слои и допуски — техкарты WOHOM 2026. Цены ориентировочные.</div></footer>
+<footer><div class="wrap">Технология и толщины слоёв малярки — техкарта «Экспресс К3» FARBIG. Составы, толщины, слои и допуски — техкарты WOHOM 2026. Цены ориентировочные. <a href="privacy.html">Политика конфиденциальности</a></div></footer>
+
+<div class="cookie" id="cookie" hidden>
+  <div class="in">
+    <span>Сайт использует cookies и Яндекс Метрику, чтобы понимать, как люди пользуются калькулятором. <a href="privacy.html">Подробнее</a></span>
+    <button class="dark" id="cookie-ok">Понятно</button>
+  </div>
+</div>
 
 <div class="modal" id="settings" hidden role="dialog" aria-modal="true" aria-labelledby="set-title">
   <div class="sheet">
@@ -887,7 +914,12 @@ function matAoa(){
   const rows=GROUPS.flatMap(g=>lastRows.filter(r=>r.group===g)).map(r=>[r.group,r.name,+r.need.toFixed(2),r.unit,r.pn,r.packs,r.price,Math.round(r.sum),r.note+(r.est?" · норма — оценка":"")]);
   return [head,...rows];
 }
+/* Cookies: плашку показываем, пока посетитель не нажмёт «Понятно» */
+const placeCookie=()=>{$("#cookie").style.bottom=($(".bar").offsetHeight+8)+"px"};
+if(!store.get("cookie-ok",false)){ $("#cookie").hidden=false; placeCookie(); addEventListener("resize",placeCookie); }
+$("#cookie-ok").onclick=()=>{store.set("cookie-ok",true);$("#cookie").hidden=true};
 $("#btn-xlsx").onclick=async()=>{
+  try{ym(113898791,"reachGoal","excel")}catch{}
   const aoa=matAoa();
   if(!window.XLSX){
     try{await navigator.clipboard.writeText(aoa.map(r=>r.join("\t")).join("\n"));toast("Таблица скопирована — вставьте в Excel")}catch{toast("Не удалось скопировать")}
