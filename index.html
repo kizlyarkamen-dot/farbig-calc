@@ -88,6 +88,9 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .banner{padding:12px 14px;background:var(--surface);border-left:4px solid var(--gold);font-size:13px}
 .warns{display:grid;gap:6px;margin:0;padding:12px 14px 12px 30px;background:var(--warn-soft);color:var(--warn);font-size:13px}
 
+.projbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.projbar select{flex:1 1 220px;min-width:0;font:600 15px var(--f-body);padding:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .obj{display:grid;gap:8px;padding:16px}
 .obj label{font:500 12px var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .obj input{font:600 17px var(--f-body);border:0;border-bottom:2px solid var(--line);background:transparent;color:var(--ink);padding:4px 0;width:100%}
@@ -162,6 +165,48 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
 .norm .tk{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:6px}
 .tag-est{font-size:11px;padding:1px 6px;background:var(--warn-soft);color:var(--warn);font-weight:600}
 
+
+/* Settings */
+.setbtn{font:500 15px var(--f-display);letter-spacing:.04em;text-transform:uppercase;color:var(--gold-text);background:transparent;border:0;border-bottom:3px solid var(--gold);padding:4px 2px}
+.setbtn:hover{border-color:var(--gold);color:var(--ink)}
+.lab{font-weight:600;color:var(--ink)}
+.lab:empty{display:none}
+.lab:not(:empty)+.nsep::before{content:" · "}
+.works-labor{font-weight:600;color:var(--ink)!important;margin-top:-10px!important}
+.split{display:block;font-size:12px;color:var(--on-band-muted);margin-top:2px}
+.modal{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.55);display:flex;justify-content:center;align-items:flex-start;overflow-y:auto;padding:calc(12px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.sheet{background:var(--bg);color:var(--ink);width:100%;max-width:900px;border-top:6px solid var(--gold);display:grid}
+.sheet-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;background:var(--band);color:var(--on-band)}
+.sheet-head h2{color:var(--gold);font-size:26px}
+.sheet-head button{background:transparent;border:0;color:var(--on-band);font-size:28px;line-height:1;padding:2px 8px}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs button{border:0;border-bottom:3px solid transparent;background:transparent;font:500 15px var(--f-display);letter-spacing:.04em;text-transform:uppercase;padding:12px 14px;color:var(--muted);white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--gold)}
+.sheet-body{padding:16px;display:grid;gap:14px}
+.sheet-body h3{margin:6px 0 0;font:700 18px var(--f-display);text-transform:uppercase}
+.sheet-body .hint{margin:0}
+.srow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--line)}
+.srow .grow{flex:1 1 200px;min-width:0}
+.srow small{color:var(--muted)}
+.sheet-body input,.sheet-body select,.sheet-body textarea{font:14px var(--f-body);padding:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:0;min-width:0}
+.sheet-body textarea{width:100%;min-height:54px;resize:vertical}
+.badge{font-size:11px;padding:1px 6px;background:var(--surface);border:1px solid var(--line);color:var(--muted);font-weight:600}
+.badge.gold{border-color:var(--gold);color:var(--gold-text)}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.fgrid label,.mlab{display:grid;gap:4px;font:500 12px var(--f-display);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.chk{display:flex!important;align-items:center;gap:8px;text-transform:none!important;letter-spacing:0!important;font:14px var(--f-body)!important;color:var(--ink)!important}
+.mats-ed{display:grid;gap:8px}
+.mat-ed{display:grid;grid-template-columns:minmax(0,2fr) 70px 90px 90px minmax(0,1.2fr) 90px 70px 36px;gap:6px;align-items:end;padding:8px;background:var(--surface);border:1px solid var(--line)}
+.mat-ed label{display:grid;gap:3px;font:500 10.5px var(--f-display);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.mat-ed input{width:100%;background:var(--bg)}
+.mat-ed .chk{font-size:12px!important;grid-column:1/-1}
+@media (max-width:720px){.mat-ed{grid-template-columns:1fr 1fr 1fr}.mat-ed .mn{grid-column:1/-1}.mat-ed .x{grid-column:3}}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.err-msg{color:var(--bad);font-size:13px;font-weight:600}
+.ltable{width:100%}
+.ltable td{white-space:normal}
+.ltable input{width:110px;text-align:right}
+
 /* Bottom bar */
 .bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--band);color:var(--on-band);padding-bottom:env(safe-area-inset-bottom,0px)}
 .bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:12px}
@@ -188,7 +233,7 @@ footer .wrap{padding-block:16px 28px;font-size:12px;color:var(--muted)}
       <b>FARBIG</b>
     </span>
     <span class="lbl">Калькулятор материалов</span>
-    <span class="mark">ТК</span>
+    <button class="setbtn" id="btn-settings" aria-haspopup="dialog">Настройки</button>
   </div>
 </div>
 
@@ -205,8 +250,14 @@ footer .wrap{padding-block:16px 28px;font-size:12px;color:var(--muted)}
 
   <section aria-labelledby="h-obj">
     <h2 id="h-obj"><span class="step">Шаг 1:</span> объект</h2>
-    <div class="banner" id="example-banner" hidden><b>Пример.</b> Малярные работы на 204 м² стен по смете из презентации FARBIG «Организация отделочных работ». Замените работы на свои или нажмите «Очистить всё».</div>
+    <div class="banner" id="example-banner" hidden><b>Пример.</b> Малярные работы на 204 м² стен по смете из презентации FARBIG «Организация отделочных работ». Замените работы на свои или создайте новый проект.</div>
     <ul class="warns" id="warns" hidden></ul>
+    <div class="projbar">
+      <label for="proj-sel" class="sr">Проект</label>
+      <select id="proj-sel" aria-label="Проект"></select>
+      <button class="dark" id="btn-new">+ Новый проект</button>
+      <button class="link" id="btn-del">Удалить проект</button>
+    </div>
     <div class="panel obj">
       <label for="obj-name">Название объекта</label>
       <input id="obj-name" placeholder="Например: квартира 54 м², ЖК «Северный»">
@@ -220,6 +271,7 @@ footer .wrap{padding-block:16px 28px;font-size:12px;color:var(--muted)}
   <section aria-labelledby="h-works">
     <h2 id="h-works"><span class="step">Шаг 2:</span> объёмы работ</h2>
     <p class="lead" id="works-count"></p>
+    <p class="lead works-labor" id="works-labor"></p>
     <div class="panel">
       <div id="works"></div>
       <div class="works-foot">
@@ -252,9 +304,22 @@ footer .wrap{padding-block:16px 28px;font-size:12px;color:var(--muted)}
 </main>
 <footer><div class="wrap">Нормы КНАУФ — ИЭСН-2013 (на 100 м², пересчитаны на 1 м²) и альбом 1.045.9-2.08. Технология и толщины слоёв малярки — техкарта «Экспресс К3» FARBIG. Составы, толщины, слои и допуски — техкарты WOHOM 2026. Цены ориентировочные.</div></footer>
 
+<div class="modal" id="settings" hidden role="dialog" aria-modal="true" aria-labelledby="set-title">
+  <div class="sheet">
+    <div class="sheet-head"><h2 id="set-title">Настройки</h2><button id="set-close" aria-label="Закрыть настройки">×</button></div>
+    <div class="tabs" role="tablist">
+      <button role="tab" data-tab="works" aria-selected="true">Виды работ</button>
+      <button role="tab" data-tab="labor" aria-selected="false">Цены работ</button>
+      <button role="tab" data-tab="groups" aria-selected="false">Отделы</button>
+      <button role="tab" data-tab="share" aria-selected="false">Обмен</button>
+    </div>
+    <div class="sheet-body" id="set-body"></div>
+  </div>
+</div>
+
 <div class="bar">
   <div class="wrap">
-    <div class="total"><small>Итого материалы</small><b id="total">0 ₽</b></div>
+    <div class="total"><small>Итого: материалы + работы</small><b id="total">0 ₽</b><span class="split" id="total-split"></span></div>
     <div class="acts">
       <span class="toast" id="toast" aria-live="polite"></span>
       <button class="primary" id="btn-xlsx">Скачать Excel</button>
@@ -297,7 +362,7 @@ const M={
   primer_paint:{k:"primer_paint",n:"Грунт под окраску (Primer)",u:"л",pack:10,pn:"ведро 10 л",price:6500,waste:5},
 };
 const use=(key,o)=>({...M[key],...o});
-const CAT={
+const BASE_CAT={
   /* ---------- Черновые ---------- */
   partition_aerated:{name:"Перегородки из газобетона D500, 100 мм",group:"Черновые",unit:"м²",src:"WOHOM ТК-05 (состав, армирование); расход — "+EST,est:true,
     tk:"ТК-05: перевязка ≥150 мм; базальтовая сетка 25×25 через каждый второй ряд; связи со стенами через 2–3 ряда; верхний шов ~20 мм минватой.",mats:[
@@ -487,7 +552,23 @@ const CAT={
     {k:"elbow50",n:"Отвод 50 мм 45°",u:"шт",rate:2,pack:1,pn:"шт",price:60,waste:0},
     {k:"clamp50",n:"Хомут 50 мм",u:"шт",rate:2,pack:1,pn:"шт",price:90,waste:0}]},
 };
-const GROUPS=["Черновые","Малярные (FARBIG)","Отделка","Электрика","Сантехника","Из документа"];
+const BASE_GROUPS=["Черновые","Малярные (FARBIG)","Отделка","Электрика","Сантехника"];
+const DOC_GROUP="Из документа";
+/* Цены работ по умолчанию — из сметы FARBIG «Организация отделочных работ» (₽ за единицу) */
+const LABOR_DEF={fb_sand_plaster:150,fb_primer:50,fb_pigment:100,fb_corner:250,fb_base:250,fb_sand_base:100,fb_glass:210,fb_finish:260,fb_sand_finish:150,fb_primer_paint:200,paint_walls:350};
+let SET=(()=>{let v;try{v=JSON.parse(localStorage.getItem("msm2-settings")||"null")}catch{} return Object.assign({groups:[],works:{},over:{},labor:{}},v||{})})();
+const saveSet=()=>{try{localStorage.setItem("msm2-settings",JSON.stringify(SET))}catch{}};
+let CAT={}, GROUPS=[];
+function buildCatalog(){
+  CAT={};
+  for(const [id,c] of Object.entries(BASE_CAT)) CAT[id]=SET.over[id]?{...SET.over[id],base:true,edited:true}:{...c,base:true};
+  for(const [id,c] of Object.entries(SET.works)) CAT[id]={...c,custom:true};
+  GROUPS=[...BASE_GROUPS,...SET.groups.filter(g=>!BASE_GROUPS.includes(g)),DOC_GROUP];
+  for(const c of Object.values(CAT)) if(!GROUPS.includes(c.group)) GROUPS.splice(GROUPS.length-1,0,c.group);
+}
+const workGroups=()=>GROUPS.filter(g=>g!==DOC_GROUP);
+const laborPrice=id=>{const v=SET.labor[id]; return v!=null?v:(LABOR_DEF[id]??0)};
+buildCatalog();
 
 /* ================= Утилиты ================= */
 const $=s=>document.querySelector(s);
@@ -519,11 +600,28 @@ const EXAMPLE={isExample:true,object:"Пример: малярные работ�
     {type:"paint_walls",room:"Стены",qty:226,p:2},
     {type:"other",room:"Молдинги",qty:54.5,name:"Покраска молдингов в цвет стен, м.п.",note:"нет в справочнике"}],
   docMats:[],warnings:[]};
-let S=store.get("msm2-project",null)||structuredClone(EXAMPLE);
-S.works.forEach(w=>w.id||(w.id=uid())); (S.docMats||(S.docMats=[])).forEach(m=>m.id||(m.id=uid()));
+/* Проекты: несколько объектов, каждый со своими работами */
+let P=store.get("msm2-projects",null);
+if(!P||!Array.isArray(P.list)||!P.list.length){
+  const first=store.get("msm2-project",null)||structuredClone(EXAMPLE);
+  P={current:"p1",list:[{id:"p1",data:first}]};
+}
+let S;
+function useProject(id){
+  const p=P.list.find(x=>x.id===id)||P.list[0]; P.current=p.id; S=p.data;
+  S.works=S.works||[]; S.rooms=S.rooms||[]; S.warnings=S.warnings||[];
+  S.works.forEach(w=>w.id||(w.id=uid())); (S.docMats||(S.docMats=[])).forEach(m=>m.id||(m.id=uid()));
+}
+useProject(P.current);
 let prices=store.get("msm2-prices",{});
 let reserve=store.get("msm-reserve",0);
-const save=()=>store.set("msm2-project",S);
+const save=()=>{const p=P.list.find(x=>x.id===P.current); if(p) p.data=S; store.set("msm2-projects",P)};
+const projTitle=d=>(d.object||"").trim()||"Без названия";
+function renderProjects(){
+  const sel=$("#proj-sel");
+  sel.innerHTML=P.list.map(p=>`<option value="${p.id}"${p.id===P.current?" selected":""}>${esc(projTitle(p.data))}</option>`).join("");
+  $("#btn-del").hidden=P.list.length<2;
+}
 
 /* ================= Расчёт ================= */
 const shortName=c=>c.name.replace(/\s*\(.*?\)/g,"");
@@ -556,14 +654,19 @@ function calc(){
 /* ================= Отрисовка ================= */
 function typeOptions(sel){
   let h="";
-  for(const g of GROUPS.slice(0,5)){
+  for(const g of workGroups()){
     h+=`<optgroup label="${esc(g)}">`;
     for(const [id,c] of Object.entries(CAT)) if(c.group===g) h+=`<option value="${id}"${id===sel?" selected":""}>${esc(c.name)}</option>`;
     h+="</optgroup>";
   }
   return h+`<option value="other"${sel==="other"?" selected":""}>— Нет в справочнике (не считается)</option>`;
 }
+function laborText(w){
+  const c=CAT[w.type]; const q=num(w.qty); const pr=c?laborPrice(w.type):0;
+  return c&&pr>0?`работа: ${rub(pr)}/${c.unit}`+(q>0?` = ${rub(pr*q)}`:""):"";
+}
 function workRow(w){
+  if(!CAT[w.type]&&w.type!=="other"){w.name=w.name||"удалённый вид работ";w.type="other"}
   const c=CAT[w.type]; const unit=c?c.unit:"";
   const param=c?.param?`<label class="unitbox p" title="${esc(c.param.label)}"><input id="w-${w.id}-p" data-f="p" inputmode="decimal" value="${esc(w.p??c.param.def)}" aria-label="${esc(c.param.label)}"><span>${esc(c.param.unit)}</span></label>`:`<span class="p"></span>`;
   const bits=[w.type==="other"&&w.name?`«${esc(w.name)}»`:"", w.name&&w.type!=="other"?`в документе: ${esc(w.name)}`:"", esc(w.note||""), c?.tk?`<b>${esc(c.tk)}</b>`:""].filter(Boolean);
@@ -573,7 +676,7 @@ function workRow(w){
     <label class="unitbox q"><input id="w-${w.id}-qty" data-f="qty" inputmode="decimal" value="${esc(w.qty)}" aria-label="Объём"><span>${esc(unit)}</span></label>
     ${param}
     <button class="del" data-del aria-label="Удалить работу">×</button>
-    <div class="note">${bits.join(" · ")}</div></div>`;
+    <div class="note"><span class="lab" id="lab-${w.id}">${esc(laborText(w))}</span>${bits.length?`<span class="nsep"></span>`+bits.join(" · "):""}</div></div>`;
 }
 function renderWorks(){
   $("#works").innerHTML=S.works.length?S.works.map(workRow).join(""):`<div class="empty">Работ пока нет. Нажмите «+ Добавить работу».</div>`;
@@ -593,7 +696,7 @@ function renderObject(){
 let lastRows=[];
 function renderMaterials(){
   const rows=lastRows=calc(); const el=$("#mats");
-  if(!rows.length){el.innerHTML=`<div class="panel empty">Здесь появится список материалов, когда будут работы с объёмами.</div>`;$("#total").textContent=rub(0);return}
+  if(!rows.length){el.innerHTML=`<div class="panel empty">Здесь появится список материалов, когда будут работы с объёмами.</div>`;renderTotals(0);return}
   let h="",total=0;
   for(const g of GROUPS){
     const rs=rows.filter(r=>r.group===g); if(!rs.length) continue;
@@ -609,23 +712,32 @@ function renderMaterials(){
     }
     h+="</div></div>";
   }
-  el.innerHTML=h; $("#total").textContent=rub(total);
+  el.innerHTML=h; renderTotals(total);
+}
+function laborSum(){return S.works.reduce((s,w)=>{const c=CAT[w.type],q=num(w.qty);return s+(c&&q>0?laborPrice(w.type)*q:0)},0)}
+let lastMat=0;
+function renderTotals(mat){
+  lastMat=mat; const lab=laborSum();
+  $("#total").textContent=rub(mat+lab);
+  $("#total-split").textContent=`материалы ${rub(mat)} · работы ${rub(lab)}`;
+  const wl=$("#works-labor"); if(wl) wl.textContent=lab>0?`Стоимость работ: ${rub(lab)}`:"Цены работ можно задать в «Настройках»";
 }
 function normText(m,c){ return m.nt || `${fmt(m.per??m.rate,4)} ${m.u}/${c.unit}${m.per!=null?" на 1 "+c.param.unit:""}`; }
 function renderNorms(){
-  $("#norms").innerHTML=GROUPS.slice(0,5).map(g=>`<div class="norm-group"><h3>${esc(g)}</h3><div class="norms">${
+  $("#norms").innerHTML=workGroups().map(g=>`<div class="norm-group"><h3>${esc(g)}</h3><div class="norms">${
     Object.values(CAT).filter(c=>c.group===g).map(c=>`<div class="norm"><h4>${esc(c.name)}</h4>
       <div class="src">${esc(c.src)}</div>
       <ul>${c.mats.map(m=>`<li>${esc(m.n)} — <span class="num">${esc(normText(m,c))}</span>${m.est?` <span class="tag-est">оценка</span>`:""}</li>`).join("")}</ul>
       ${c.tk?`<div class="tk">${esc(c.tk)}</div>`:""}</div>`).join("")}</div></div>`).join("");
 }
-function renderAll(){renderObject();renderWorks();renderMaterials()}
+function renderAll(){renderProjects();renderObject();renderWorks();renderMaterials()}
 
 /* ================= Редактирование ================= */
 const dropExample=()=>{if(S.isExample){S.isExample=false;$("#example-banner").hidden=true}};
 $("#works").addEventListener("input",e=>{
   const row=e.target.closest(".work"); const f=e.target.dataset.f; if(!row||!f||f==="type") return;
   const w=S.works.find(x=>x.id===row.dataset.id); w[f]=e.target.value; dropExample(); save(); renderMaterials();
+  const lb=document.getElementById("lab-"+w.id); if(lb) lb.textContent=laborText(w);
 });
 $("#works").addEventListener("change",e=>{
   if(e.target.dataset.f!=="type") return;
@@ -646,7 +758,22 @@ $("#btn-clear").onclick=e=>{
   clearArmed=false;e.target.textContent="Очистить всё";
   S={isExample:false,object:"",rooms:[],works:[],docMats:[],warnings:[]}; save(); renderAll();
 };
-$("#obj-name").addEventListener("input",e=>{S.object=e.target.value;dropExample();save()});
+$("#obj-name").addEventListener("input",e=>{S.object=e.target.value;dropExample();save();
+  const o=$("#proj-sel").selectedOptions[0]; if(o) o.textContent=projTitle(S)});
+$("#proj-sel").addEventListener("change",e=>{save();useProject(e.target.value);save();renderAll();if(typeof setStatus==="function")setStatus("")});
+$("#btn-new").onclick=()=>{
+  save(); const id="p"+uid();
+  P.list.push({id,data:{isExample:false,object:"Новый объект "+(P.list.length+1),rooms:[],works:[],docMats:[],warnings:[]}});
+  useProject(id); save(); renderAll();
+  const n=$("#obj-name"); n.focus(); n.select();
+};
+let delArmed=false;
+$("#btn-del").onclick=e=>{
+  if(P.list.length<2) return;
+  if(!delArmed){delArmed=true;e.target.textContent="Точно удалить «"+projTitle(S)+"»?";setTimeout(()=>{delArmed=false;e.target.textContent="Удалить проект"},3000);return}
+  delArmed=false;e.target.textContent="Удалить проект";
+  P.list=P.list.filter(p=>p.id!==P.current); useProject(P.list[0].id); save(); renderAll();
+};
 $("#mats").addEventListener("change",e=>{
   const k=e.target.dataset.k; if(!k) return; const v=num(e.target.value);
   if(v>=0){prices[k]=v}else{delete prices[k]} store.set("msm2-prices",prices); renderMaterials();
@@ -655,6 +782,14 @@ const rv=$("#reserve"); rv.value=reserve; $("#reserve-v").textContent=reserve+"%
 rv.addEventListener("input",()=>{reserve=+rv.value;$("#reserve-v").textContent=reserve+"%";store.set("msm-reserve",reserve);renderMaterials()});
 
 /* ================= Экспорт ================= */
+let downloads=null;
+(async()=>{try{downloads=await window.claude?.use?.("downloads")}catch{}})();
+async function saveFile(name,blob){
+  if(downloads){ try{await downloads.save({filename:name,data:blob});toast("Файл сохранён");return true}
+    catch(e){ if(e?.code!=="declined") toast(e?.code==="unavailable"?"Сохранение здесь недоступно":"Не удалось сохранить файл"); return false } }
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=name; document.body.append(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000); toast("Файл скачан"); return true;
+}
 function toast(t){const el=$("#toast");el.textContent=t;clearTimeout(toast.t);toast.t=setTimeout(()=>el.textContent="",4000)}
 function matAoa(){
   const head=["Раздел","Материал","Нужно (с запасом)","Ед.","Упаковка","Кол-во упаковок","Цена за упаковку, ₽","Сумма, ₽","Примечание"];
@@ -673,9 +808,10 @@ $("#btn-xlsx").onclick=async()=>{
   for(let i=5;i<=n+3;i++) ws[`H${i}`]={t:"n",f:`F${i}*G${i}`,v:aoa[i-4][7]};
   ws["!cols"]=[{wch:18},{wch:46},{wch:16},{wch:7},{wch:18},{wch:14},{wch:18},{wch:14},{wch:46}];
   XLSX.utils.book_append_sheet(wb,ws,"Материалы");
-  const wa=[["Помещение","Работа","Объём","Ед.","Параметр","Из документа","Примечание"],...S.works.map(w=>{const c=CAT[w.type];
-    return [w.room,c?c.name:("Нет в справочнике: "+(w.name||"")),num(w.qty)||"",c?c.unit:"",c?.param?`${w.p??c.param.def} ${c.param.unit}`:"",w.name||"",w.note||""]})];
-  const ws2=XLSX.utils.aoa_to_sheet(wa); ws2["!cols"]=[{wch:22},{wch:46},{wch:10},{wch:7},{wch:12},{wch:30},{wch:40}];
+  const wa=[["Отдел","Помещение","Работа","Объём","Ед.","Параметр","Цена работы, ₽/ед","Сумма работ, ₽","Из документа","Примечание"],...S.works.map(w=>{const c=CAT[w.type];const q=num(w.qty)||0;const pr=c?laborPrice(w.type):0;
+    return [c?c.group:"",w.room,c?c.name:("Нет в справочнике: "+(w.name||"")),q||"",c?c.unit:"",c?.param?`${w.p??c.param.def} ${c.param.unit}`:"",pr||"",Math.round(pr*q)||"",w.name||"",w.note||""]})];
+  wa.push(["","","ИТОГО РАБОТЫ","","","","",Math.round(laborSum()),"",""]);
+  const ws2=XLSX.utils.aoa_to_sheet(wa); ws2["!cols"]=[{wch:18},{wch:22},{wch:46},{wch:10},{wch:7},{wch:12},{wch:16},{wch:16},{wch:30},{wch:40}];
   XLSX.utils.book_append_sheet(wb,ws2,"Работы");
   const used=[...new Set(S.works.map(w=>w.type))].filter(t=>CAT[t]);
   const na=[["Работа","Материал","Норма","Источник","Требования техкарт"]];
@@ -683,9 +819,229 @@ $("#btn-xlsx").onclick=async()=>{
   const ws3=XLSX.utils.aoa_to_sheet(na); ws3["!cols"]=[{wch:40},{wch:44},{wch:30},{wch:50},{wch:60}];
   XLSX.utils.book_append_sheet(wb,ws3,"Нормы и источники");
   if(S.rooms?.length) XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["Помещение","Пол, м²","Стены, м²","Периметр, м","Высота, м"],...S.rooms.map(r=>[r.name,r.floor||"",r.walls||"",r.perimeter||"",r.height||""])]),"Помещения");
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["Итог по объекту",S.object||""],["Материалы, ₽",Math.round(lastMat)],["Работы, ₽",Math.round(laborSum())],["Всего, ₽",Math.round(lastMat+laborSum())]]),"Итог");
+  const buf=XLSX.write(wb,{bookType:"xlsx",type:"array"});
   const name=((S.object||"Материалы").replace(/[\\/:*?"<>|]+/g," ").trim().slice(0,60)||"Материалы")+".xlsx";
-  try{XLSX.writeFile(wb,name);toast("Файл скачан")}catch{toast("Не удалось сохранить файл")}
+  await saveFile(name,new Blob([buf],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}));
 };
+
+/* ================= Настройки: виды работ, цены работ, отделы ================= */
+let setTab="works", editId=null, editNew=false, worksFilter="";
+const modal=$("#settings");
+function openSettings(tab){ setTab=tab||setTab; editId=null; editNew=false; modal.hidden=false; document.body.style.overflow="hidden"; renderSettings(); $("#set-close").focus(); }
+function closeSettings(){ modal.hidden=true; document.body.style.overflow=""; $("#btn-settings").focus(); }
+$("#btn-settings").onclick=()=>openSettings();
+$("#set-close").onclick=closeSettings;
+modal.addEventListener("click",e=>{ if(e.target===modal) closeSettings(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!modal.hidden) closeSettings(); });
+modal.querySelector(".tabs").addEventListener("click",e=>{
+  const t=e.target.closest("[data-tab]"); if(!t) return; setTab=t.dataset.tab; editId=null; editNew=false; renderSettings();
+});
+function applyCatalog(){ saveSet(); buildCatalog(); renderNorms(); renderWorks(); renderMaterials(); }
+const unitList=["м²","м.п.","шт","точка","м³","кг","компл."];
+
+function renderSettings(){
+  modal.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===setTab)));
+  const body=$("#set-body");
+  if(setTab==="works") body.innerHTML=(editId||editNew)?workEditor():worksList();
+  else if(setTab==="labor") body.innerHTML=laborList();
+  else if(setTab==="groups") body.innerHTML=groupsList();
+  else body.innerHTML=shareTab();
+}
+
+/* --- Виды работ: список --- */
+function worksList(){
+  const gs=workGroups();
+  let h=`<div class="actions"><button class="dark" data-act="new-work">+ Новый вид работ</button>
+    <select id="wf" aria-label="Фильтр по отделу"><option value="">Все отделы</option>${gs.map(g=>`<option${g===worksFilter?" selected":""}>${esc(g)}</option>`).join("")}</select></div>
+    <p class="hint">Свои работы и изменения стандартных хранятся в этом браузере. Чтобы передать их сотрудникам, используйте вкладку «Обмен».</p>`;
+  for(const g of gs){
+    if(worksFilter&&g!==worksFilter) continue;
+    const items=Object.entries(CAT).filter(([,c])=>c.group===g);
+    h+=`<h3>${esc(g)}</h3>`;
+    if(!items.length){h+=`<p class="hint">В этом отделе пока нет работ.</p>`;continue}
+    for(const [id,c] of items){
+      const pr=laborPrice(id);
+      h+=`<div class="srow"><div class="grow"><b>${esc(c.name)}</b> ${c.custom?'<span class="badge gold">своя</span>':c.edited?'<span class="badge gold">изменена</span>':''}<br>
+        <small>${esc(c.unit)} · материалов: ${c.mats.length}${pr>0?` · работа ${rub(pr)}/${esc(c.unit)}`:""}</small></div>
+        <button data-act="edit-work" data-id="${id}">Изменить</button></div>`;
+    }
+  }
+  return h;
+}
+
+/* --- Виды работ: редактор --- */
+function matRow(m,i){
+  const isPer=m.per!=null;
+  return `<div class="mat-ed" data-k="${esc(m.k||"")}">
+    <label class="mn">Материал<input class="m-n" value="${esc(m.n||"")}" placeholder="Например: Шпаклёвка финишная"></label>
+    <label>Ед.<input class="m-u" value="${esc(m.u||"")}" placeholder="кг"></label>
+    <label>Расход<input class="m-r" inputmode="decimal" value="${esc(isPer?m.per:(m.rate??""))}" placeholder="0,5"></label>
+    <label>Упаковка<input class="m-pack" inputmode="decimal" value="${esc(m.pack??1)}" title="Сколько единиц материала в упаковке"></label>
+    <label>Название упак.<input class="m-pn" value="${esc(m.pn||"")}" placeholder="ведро 25 кг"></label>
+    <label>Цена упак., ₽<input class="m-price" inputmode="decimal" value="${esc(m.price??"")}"></label>
+    <label>Запас %<input class="m-waste" inputmode="decimal" value="${esc(m.waste??0)}"></label>
+    <button class="del x" data-act="del-mat" aria-label="Удалить материал">×</button>
+    <label class="chk"><input type="checkbox" class="m-per"${isPer?" checked":""}> Расход умножается на параметр работы (толщину, слои)</label>
+  </div>`;
+}
+function workEditor(){
+  const c=editNew?{name:"",group:worksFilter||workGroups()[0],unit:"м²",mats:[]}:CAT[editId];
+  const pr=editNew?"":laborPrice(editId);
+  const p=c.param||null;
+  return `<div class="actions"><button class="link" data-act="back">← К списку работ</button></div>
+  <h3>${editNew?"Новый вид работ":esc(c.name)}</h3>
+  ${c.base&&!editNew?`<p class="hint">Это стандартная работа${c.src?` (источник: ${esc(c.src)})`:""}. Изменения сохранятся поверх стандарта; вернуть исходные нормы можно кнопкой «Сбросить к стандарту».</p>`:""}
+  <div class="fgrid">
+    <label>Название работы<input id="e-name" value="${esc(c.name)}" placeholder="Например: Покраска молдингов"></label>
+    <label>Отдел<select id="e-group">${workGroups().map(g=>`<option${g===c.group?" selected":""}>${esc(g)}</option>`).join("")}</select></label>
+    <label>Единица работы<input id="e-unit" list="units" value="${esc(c.unit)}"><datalist id="units">${unitList.map(u=>`<option value="${u}">`).join("")}</datalist></label>
+    <label>Цена работы, ₽ за единицу<input id="e-price" inputmode="decimal" value="${esc(pr||"")}" placeholder="0"></label>
+  </div>
+  <label class="chk"><input type="checkbox" id="e-hasp"${p?" checked":""}> У работы есть параметр (толщина слоя, число слоёв)</label>
+  <div class="fgrid" id="e-pbox"${p?"":" hidden"}>
+    <label>Параметр<input id="e-pl" value="${esc(p?.label||"толщина")}"></label>
+    <label>Ед. параметра<input id="e-pu" value="${esc(p?.unit||"мм")}"></label>
+    <label>По умолчанию<input id="e-pd" inputmode="decimal" value="${esc(p?.def??1)}"></label>
+  </div>
+  <h3>Материалы на 1 единицу работы</h3>
+  <p class="hint">Расход — сколько материала уходит на 1 ${esc(c.unit||"ед.")} работы. Если отмечено «умножается на параметр», расход указывается на 1 единицу параметра (например, кг на 1 мм слоя).</p>
+  <div class="mats-ed" id="e-mats">${c.mats.map(matRow).join("")}</div>
+  <div class="actions"><button data-act="add-mat">+ Добавить материал</button></div>
+  <div class="fgrid"><label style="grid-column:1/-1">Требования техкарты / примечание<textarea id="e-tk">${esc(c.tk||"")}</textarea></label></div>
+  <p class="err-msg" id="e-err" hidden></p>
+  <div class="actions">
+    <button class="primary" data-act="save-work">Сохранить</button>
+    <button class="ghost" data-act="back">Отмена</button>
+    ${!editNew&&c.custom?`<button class="link" data-act="del-work">Удалить вид работ</button>`:""}
+    ${!editNew&&c.edited?`<button class="link" data-act="reset-work">Сбросить к стандарту</button>`:""}
+  </div>`;
+}
+function readEditor(){
+  const err=t=>{const e=$("#e-err");e.textContent=t;e.hidden=false;return null};
+  const name=$("#e-name").value.trim(), unit=$("#e-unit").value.trim(), group=$("#e-group").value;
+  if(!name) return err("Укажите название работы.");
+  if(!unit) return err("Укажите единицу работы, например м².");
+  const hasP=$("#e-hasp").checked;
+  const def={name,group,unit,mats:[]};
+  if(hasP){ const d=num($("#e-pd").value); def.param={label:$("#e-pl").value.trim()||"параметр",unit:$("#e-pu").value.trim()||"ед.",def:d>0?d:1}; }
+  const tk=$("#e-tk").value.trim(); if(tk) def.tk=tk;
+  const old=editNew?null:CAT[editId];
+  if(old?.src) def.src=old.src+(old.base?" · изменено вручную":""); else def.src="своя норма";
+  let i=0;
+  for(const row of $("#e-mats").querySelectorAll(".mat-ed")){
+    i++;
+    const q=sel=>row.querySelector(sel);
+    const n=q(".m-n").value.trim(), u=q(".m-u").value.trim(); const r=num(q(".m-r").value), pack=num(q(".m-pack").value);
+    if(!n&&!u&&!(r>0)) continue;
+    if(!n) return err(`Материал №${i}: укажите название.`);
+    if(!u) return err(`Материал «${n}»: укажите единицу.`);
+    if(!(r>0)) return err(`Материал «${n}»: расход должен быть больше нуля.`);
+    if(!(pack>0)) return err(`Материал «${n}»: упаковка должна быть больше нуля.`);
+    const perOn=q(".m-per").checked&&hasP;
+    const m={k:row.dataset.k||("c:"+n.toLowerCase()+"|"+u),n,u,pack,pn:q(".m-pn").value.trim()||`${String(pack).replace(".",",")} ${u}`,price:num(q(".m-price").value)||0,waste:num(q(".m-waste").value)||0};
+    if(perOn) m.per=r; else m.rate=r;
+    def.mats.push(m);
+  }
+  return {def,price:num($("#e-price").value)};
+}
+let delWorkArmed=false;
+$("#set-body").addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]"); if(!b) return; const act=b.dataset.act;
+  if(act==="new-work"){editNew=true;editId=null;renderSettings();$("#e-name").focus()}
+  else if(act==="edit-work"){editId=b.dataset.id;editNew=false;renderSettings()}
+  else if(act==="back"){editId=null;editNew=false;renderSettings()}
+  else if(act==="add-mat"){$("#e-mats").insertAdjacentHTML("beforeend",matRow({pack:1,waste:5},0));$("#e-mats").lastElementChild.querySelector(".m-n").focus()}
+  else if(act==="del-mat"){b.closest(".mat-ed").remove()}
+  else if(act==="save-work"){
+    const r=readEditor(); if(!r) return;
+    let id=editId;
+    if(editNew){ id="cw_"+uid(); SET.works[id]=r.def; }
+    else if(CAT[id].custom) SET.works[id]=r.def;
+    else SET.over[id]=r.def;
+    if(r.price>=0&&$("#e-price").value.trim()!=="") SET.labor[id]=r.price; else delete SET.labor[id];
+    applyCatalog(); editId=null; editNew=false; worksFilter=r.def.group; renderSettings(); toast("Вид работ сохранён");
+  }
+  else if(act==="del-work"){
+    if(!delWorkArmed){delWorkArmed=true;b.textContent="Точно удалить?";setTimeout(()=>{delWorkArmed=false;b.textContent="Удалить вид работ"},3000);return}
+    delWorkArmed=false; delete SET.works[editId]; delete SET.labor[editId]; applyCatalog(); editId=null; renderSettings(); toast("Вид работ удалён");
+  }
+  else if(act==="reset-work"){ delete SET.over[editId]; applyCatalog(); renderSettings(); toast("Нормы сброшены к стандарту"); }
+  else if(act==="add-group"){
+    const inp=$("#g-new"); const g=inp.value.trim(); const msg=$("#g-err");
+    if(!g){msg.textContent="Введите название отдела.";msg.hidden=false;return}
+    if(GROUPS.includes(g)){msg.textContent="Такой отдел уже есть.";msg.hidden=false;return}
+    SET.groups.push(g); applyCatalog(); renderSettings(); toast("Отдел добавлен");
+  }
+  else if(act==="del-group"){
+    const g=b.dataset.g; const n=Object.values(CAT).filter(c=>c.group===g).length;
+    if(n){const msg=$("#g-err");msg.textContent=`В отделе «${g}» есть работы (${n}). Перенесите или удалите их, потом удалите отдел.`;msg.hidden=false;return}
+    SET.groups=SET.groups.filter(x=>x!==g); applyCatalog(); renderSettings(); toast("Отдел удалён");
+  }
+  else if(act==="export-set"){
+    const data=JSON.stringify({app:"farbig-calc",version:1,settings:SET,prices},null,1);
+    saveFile("Настройки калькулятора FARBIG.json",new Blob([data],{type:"application/json"}));
+  }
+  else if(act==="reset-labor"){ SET.labor={}; applyCatalog(); renderSettings(); toast("Цены работ сброшены"); }
+});
+$("#set-body").addEventListener("change",e=>{
+  const t=e.target;
+  if(t.id==="wf"){worksFilter=t.value;renderSettings()}
+  else if(t.id==="e-hasp"){$("#e-pbox").hidden=!t.checked}
+  else if(t.classList.contains("lp")){ const v=num(t.value); if(t.value.trim()==="") delete SET.labor[t.dataset.id]; else if(v>=0) SET.labor[t.dataset.id]=v; saveSet(); renderWorks(); renderMaterials(); }
+  else if(t.classList.contains("g-ren")){
+    const old=t.dataset.g, g=t.value.trim(); const msg=$("#g-err");
+    if(!g||g===old){t.value=old;return}
+    if(GROUPS.includes(g)){msg.textContent="Такой отдел уже есть.";msg.hidden=false;t.value=old;return}
+    SET.groups=SET.groups.map(x=>x===old?g:x);
+    for(const c of Object.values(SET.works)) if(c.group===old) c.group=g;
+    for(const c of Object.values(SET.over)) if(c.group===old) c.group=g;
+    applyCatalog(); renderSettings(); toast("Отдел переименован");
+  }
+  else if(t.id==="imp-file"){
+    const f=t.files[0]; if(!f) return;
+    f.text().then(txt=>{
+      const d=JSON.parse(txt); if(d.app!=="farbig-calc"||!d.settings) throw 0;
+      const st=d.settings; SET={groups:Array.isArray(st.groups)?st.groups:[],works:st.works||{},over:st.over||{},labor:st.labor||{}};
+      if(d.prices&&typeof d.prices==="object"){prices=d.prices;store.set("msm2-prices",prices)}
+      applyCatalog(); renderSettings(); toast("Настройки загружены");
+    }).catch(()=>{const m=$("#imp-err");m.textContent="Это не файл настроек калькулятора. Выберите файл, скачанный на вкладке «Обмен».";m.hidden=false});
+  }
+});
+
+/* --- Цены работ --- */
+function laborList(){
+  let h=`<p class="hint">Цена работы за единицу. Сумма работ считается по объёмам на «Шаге» с работами и попадает в итог и Excel. Стандартные цены малярных работ взяты из сметы FARBIG «Организация отделочных работ».</p>`;
+  for(const g of workGroups()){
+    const items=Object.entries(CAT).filter(([,c])=>c.group===g); if(!items.length) continue;
+    h+=`<h3>${esc(g)}</h3><div class="tbl-x"><table class="ltable"><tbody>`;
+    for(const [id,c] of items) h+=`<tr><td>${esc(c.name)}</td><td class="n">${esc(c.unit)}</td><td class="n"><input class="lp" data-id="${id}" inputmode="decimal" value="${laborPrice(id)||""}" placeholder="0" aria-label="Цена работы: ${esc(c.name)}"> ₽</td></tr>`;
+    h+=`</tbody></table></div>`;
+  }
+  return h+`<div class="actions"><button class="link" data-act="reset-labor">Сбросить цены работ к стандартным</button></div>`;
+}
+
+/* --- Отделы --- */
+function groupsList(){
+  let h=`<p class="hint">Отделы — разделы, по которым сгруппированы работы и материалы. Стандартные отделы не удаляются; свои можно переименовать или удалить, если в них нет работ.</p>`;
+  for(const g of BASE_GROUPS){ const n=Object.values(CAT).filter(c=>c.group===g).length;
+    h+=`<div class="srow"><div class="grow"><b>${esc(g)}</b> <span class="badge">стандартный</span><br><small>работ: ${n}</small></div></div>`; }
+  for(const g of SET.groups){ const n=Object.values(CAT).filter(c=>c.group===g).length;
+    h+=`<div class="srow"><input class="g-ren grow" data-g="${esc(g)}" value="${esc(g)}" aria-label="Название отдела"><small>работ: ${n}</small><button class="link" data-act="del-group" data-g="${esc(g)}">Удалить</button></div>`; }
+  h+=`<h3>Новый отдел</h3><div class="actions"><input id="g-new" class="grow" placeholder="Например: Декоративные покрытия"><button class="dark" data-act="add-group">+ Добавить отдел</button></div>
+    <p class="err-msg" id="g-err" hidden></p>`;
+  return h;
+}
+
+/* --- Обмен --- */
+function shareTab(){
+  return `<p class="hint">Виды работ, отделы, цены работ и цены материалов хранятся в этом браузере. Чтобы у сотрудников были такие же настройки, скачайте файл и отправьте им — они загрузят его здесь у себя.</p>
+  <div class="actions"><button class="dark" data-act="export-set">Скачать файл настроек</button></div>
+  <h3>Загрузить настройки</h3>
+  <p class="hint">Текущие настройки этого браузера заменятся настройками из файла.</p>
+  <input type="file" id="imp-file" accept=".json,application/json">
+  <p class="err-msg" id="imp-err" hidden></p>`;
+}
 
 renderNorms(); renderAll();
 </script>
