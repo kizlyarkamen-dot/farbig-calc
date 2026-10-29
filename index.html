@@ -121,6 +121,20 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .rooms-tot{margin:4px 0 0;font-size:13px;color:var(--muted)}
 .rooms-tot b{color:var(--ink)}
 @media (max-width:720px){.room-ed{grid-template-columns:repeat(3,minmax(0,1fr))}.room-ed .rn{grid-column:1/3}.room-ed .x{grid-column:3;grid-row:1;justify-self:end}}
+/* Технология: автоматический список работ по размерам помещений */
+.tech{margin-top:14px;border:1px solid var(--gold);background:var(--surface);padding:12px 14px;display:grid;gap:10px}
+.tech-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.tech-head h3{margin:0;font:600 15px var(--f-display);letter-spacing:.04em;text-transform:uppercase}
+.tech-state{font-size:12px;font-weight:600;padding:2px 8px;border:1px solid var(--line);color:var(--muted)}
+.tech-state.on{background:var(--gold);border-color:var(--gold);color:#1B1B1B}
+.tech-grid{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,1fr);gap:10px}
+.tech-grid label{display:grid;gap:3px;font:500 10.5px var(--f-display)!important;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.obj .tech select,.obj .tech input[type=text]{font:14px var(--f-body);padding:7px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-width:0;width:100%;border-radius:0}
+.tech-opts{display:flex;gap:8px 18px;flex-wrap:wrap;font-size:13px}
+.obj .tech-opts label{display:inline-flex;gap:6px;align-items:center;cursor:pointer;color:var(--ink);font:14px var(--f-body);text-transform:none;letter-spacing:0}
+.obj .tech-opts input{accent-color:var(--gold);width:auto;flex:none;margin:0}
+.tech .hint b{color:var(--ink)}
+@media (max-width:720px){.tech-grid{grid-template-columns:1fr}}
 .lm{margin-top:14px;border:1px solid var(--gold);background:var(--surface)}
 .lm>summary{cursor:pointer;padding:12px 14px;font:600 15px var(--f-display);letter-spacing:.04em;text-transform:uppercase;color:var(--ink);list-style:none}
 .lm>summary::-webkit-details-marker{display:none}
@@ -355,6 +369,7 @@ footer a{color:var(--gold-text)}
       <p class="hint">Введите длину и ширину — пол, периметр и стены посчитаются сами (стены = периметр × высота − проёмы). Площади можно вписать и вручную.</p>
       <div id="rooms" class="rooms-ed"></div>
       <p class="rooms-tot num" id="rooms-tot"></p>
+      <div class="tech" id="tech"></div>
       <details class="lm" id="lm-box"><summary>Калькулятор погонных метров <small>швы ГКЛ, плинтус, молдинги, углы</small></summary><div id="lm"></div></details>
     </div>
   </section>
@@ -645,16 +660,19 @@ function workRow(w){
     <div class="note">${S.rooms.length&&w.type!=="other"?`<select class="w-src" data-src aria-label="Взять объём из помещений"><option value="">Объём из помещений…</option>${Object.entries(SRC_N).map(([k,n])=>`<option value="${k}">${n[0].toUpperCase()+n.slice(1)}</option>`).join("")}</select>`:""}<span class="lab" id="lab-${w.id}">${esc(laborText(w))}</span>${bits.length?`<span class="nsep"></span>`+bits.join(" · "):""}</div></div>`;
 }
 function renderWorks(){
-  $("#works").innerHTML=S.works.length?S.works.map(workRow).join(""):`<div class="empty">Работ пока нет. Нажмите «+ Добавить работу».</div>`;
+  const auto=techState().auto;
+  $("#works").innerHTML=S.works.length?S.works.map(workRow).join(""):`<div class="empty">${auto?"Введите размеры помещений на шаге 1 — работы посчитаются сами.":"Работ пока нет. Нажмите «+ Добавить работу» или «Рассчитать работы автоматически» на шаге 1."}</div>`;
   const other=S.works.filter(w=>w.type==="other").length;
-  $("#works-count").textContent=S.works.length?`${S.works.length} позиций`+(other?`, из них ${other} нет в справочнике — их материал не считается`:"")+". Поправьте объём, толщину или число слоёв — материалы пересчитаются сразу.":"";
+  $("#works-count").textContent=S.works.length?`${S.works.length} позиций`+(other?`, из них ${other} нет в справочнике — их материал не считается`:"")+". "+
+    (auto?`Работы рассчитаны автоматически: «${(TECH_SCHEMES[techState().scheme]||TECH_SCHEMES.k3).n}». Меняйте размеры или технологию на шаге 1 — список обновится сам. Правка строки выключит авто.`
+      :"Поправьте объём, толщину или число слоёв — материалы пересчитаются сразу."):"";
 }
 function renderObject(){
   $("#obj-name").value=S.object||"";
   $("#example-banner").hidden=!S.isExample;
   const w=$("#warns"); w.hidden=!S.warnings?.length; w.innerHTML=(S.warnings||[]).map(x=>`<li>${esc(x)}</li>`).join("");
   for(const el of document.querySelectorAll("[data-o]")) el.value=S[el.dataset.o]??"";
-  renderRooms();
+  renderRooms(); renderTech();
 }
 /* --- Помещения: ручной ввод --- */
 const ROOM_F=[["len","Длина, м"],["wid","Ширина, м"],["height","Высота, м"],["open","Проёмы, м²"],["floor","Пол, м²"],["perimeter","Периметр, м"],["walls","Стены, м²"]];
@@ -691,19 +709,19 @@ $("#rooms").addEventListener("input",e=>{
   const f=e.target.dataset.r; const row=e.target.closest(".room-ed"); if(!f||!row) return;
   const r=S.rooms.find(x=>x.id===row.dataset.id); r[f]=e.target.value;
   for(const k of recalcRoom(r,f)){const i=row.querySelector(`[data-r="${k}"]`); i.value=rv2(r[k]); i.classList.add("calc")}
-  dropExample(); save(); renderRoomsTot(); renderRoomLists();
+  dropExample(); save(); renderRoomsTot(); renderRoomLists(); techChanged();
 });
 $("#rooms").addEventListener("click",e=>{
   const b=e.target.closest("[data-del-room]"); if(!b) return;
-  S.rooms=S.rooms.filter(r=>r.id!==b.closest(".room-ed").dataset.id); save(); renderRooms(); renderWorks();
+  S.rooms=S.rooms.filter(r=>r.id!==b.closest(".room-ed").dataset.id); save(); renderRooms(); renderWorks(); techChanged();
 });
 $("#btn-room").onclick=()=>{
-  S.rooms.push({id:uid(),name:"Помещение "+(S.rooms.length+1)}); dropExample(); save(); renderRooms(); renderWorks();
+  S.rooms.push({id:uid(),name:"Помещение "+(S.rooms.length+1)}); dropExample(); save(); renderRooms(); renderWorks(); renderTechSum();
   const i=$("#rooms").lastElementChild.querySelector("input"); i.focus(); i.select();
 };
 document.querySelectorAll("[data-o]").forEach(el=>el.addEventListener("input",()=>{
   S[el.dataset.o]=el.value; dropExample();
-  if(el.dataset.o==="height"){ S.rooms.forEach(r=>{if(!(num(r.height)>0)) recalcRoom(r,"obj")}); renderRooms(); }
+  if(el.dataset.o==="height"){ S.rooms.forEach(r=>{if(!(num(r.height)>0)) recalcRoom(r,"obj")}); renderRooms(); techChanged(); }
   save();
 }));
 /* --- Калькулятор погонных метров --- */
@@ -803,6 +821,94 @@ function roomVolume(roomName,src){
   const list=rs.length?rs:S.rooms;
   return {v:r2(list.reduce((s,r)=>s+(num(r[key])>0?num(r[key]):0),0)),label:rs.length?rs[0].name:ALL_ROOMS};
 }
+/* ================= Технология: работы считаются сами по размерам помещений =================
+   Шаг схемы: [вид работы, откуда объём, подпись, параметр]. Объём: W — стены, F — пол/потолок, C — углы, P — периметр. */
+const TECH_SCHEMES={
+  k3:{n:"К3: стеклохолст на шпатлёвку (полный цикл)",steps:[
+    ["fb_cover","F","Укрывка"],["fb_sand_plaster","W","Стены"],["fb_primer","W","Стены",150],["fb_pigment","W","Стены"],
+    ["fb_corner","C","Углы и примыкания"],["fb_base","W","Стены",1],["fb_sand_base","W","Стены"],["fb_primer","W","Стены, перед холстом",150],
+    ["fb_glass","W","Стены"],["fb_finish","W","Стены",1.3],["fb_sand_finish","W","Стены"],["fb_primer","W","Стены, перед окраской",150],
+    ["fb_primer_paint","W","Стены"],["paint_walls","W","Стены"]]},
+  glue:{n:"Стеклохолст на клей + СуКуш",steps:[
+    ["fb_cover","F","Укрывка"],["fb_sand_plaster","W","Стены"],["fb_primer","W","Стены",150],
+    ["fb_corner","C","Углы и примыкания"],["fb_base","W","Стены",1],["fb_sand_base","W","Стены"],["fb_glass_glue","W","Стены"],
+    ["fb_finish","W","Стены",1.3],["fb_sand_finish","W","Стены"],["fb_primer","W","Стены, перед окраской",150],
+    ["fb_primer_paint","W","Стены"],["paint_walls","W","Стены"]]},
+  plain:{n:"Без стеклохолста: база → финиш → покраска",steps:[
+    ["fb_cover","F","Укрывка"],["fb_sand_plaster","W","Стены"],["fb_primer","W","Стены",150],["fb_pigment","W","Стены"],
+    ["fb_corner","C","Углы и примыкания"],["fb_base","W","Стены",1],["fb_sand_base","W","Стены"],["fb_primer","W","Стены, перед финишем",150],
+    ["fb_finish","W","Стены",1.3],["fb_sand_finish","W","Стены"],["fb_primer","W","Стены, перед окраской",150],
+    ["fb_primer_paint","W","Стены"],["paint_walls","W","Стены"]]},
+  finish:{n:"Только финиш и покраска (основание готово)",steps:[
+    ["fb_cover","F","Укрывка"],["fb_primer","W","Стены",150],["fb_corner","C","Углы и примыкания"],
+    ["fb_finish","W","Стены",1.3],["fb_sand_finish","W","Стены"],["fb_primer","W","Стены, перед окраской",150],
+    ["fb_primer_paint","W","Стены"],["paint_walls","W","Стены"]]},
+};
+const TECH_CEIL=[["fb_primer","F","Потолок",150],["fb_base","F","Потолок",1],["fb_sand_base","F","Потолок"],["fb_primer","F","Потолок, перед финишем",150],
+  ["fb_finish","F","Потолок",1.3],["fb_sand_finish","F","Потолок"],["fb_primer","F","Потолок, перед окраской",150],["fb_primer_paint","F","Потолок"],["paint_ceiling","F","Потолок"]];
+const TECH_DEF={auto:true,scheme:"k3",ceil:false,gkl:false,mold:false,coats:2};
+const PAINT_TYPES=["paint_walls","paint_ceiling","paint_molding"];
+function techState(){ if(!S.tech) S.tech={...TECH_DEF,auto:false}; return S.tech; }
+function techVolumes(){
+  const t=roomsTotal(); let corners=0;
+  /* Углы: 4 вертикальных угла × высота + примыкание стен к потолку (периметр) */
+  for(const r of S.rooms){ const H=num(r.height)>0?num(r.height):num(S.height); if(H>0&&num(r.walls)>0) corners+=4*H+(num(r.perimeter)>0?num(r.perimeter):0); }
+  return {W:r2(t.walls),F:r2(t.floor),C:r2(corners),P:r2(t.perimeter)};
+}
+function buildTechWorks(){
+  const T=techState(), V=techVolumes();
+  const steps=[...(TECH_SCHEMES[T.scheme]||TECH_SCHEMES.k3).steps];
+  if(T.gkl){ const i=steps.findIndex(s=>s[0]==="fb_primer")+1;
+    steps.splice(i,0,["fb_joints","W","Стены (ГКЛ)"],...(steps.some(s=>s[0]==="fb_pigment")?[]:[["fb_pigment","W","Стены (ГКЛ)"]])); }
+  if(T.ceil) steps.push(...TECH_CEIL);
+  if(T.mold) steps.push(["paint_molding","P","Молдинги, плинтусы"]);
+  const coats=num(T.coats)>0?num(T.coats):2;
+  return steps.filter(([type,src])=>CAT[type]&&V[src]>0).map(([type,src,room,p])=>({id:uid(),type,room,qty:V[src],
+    p:PAINT_TYPES.includes(type)?coats:(p??CAT[type].param?.def),auto:true}));
+}
+/* В режиме «Авто» работы схемы пересобираются; добавленные вручную строки остаются после них */
+function applyTech(){ if(techState().auto) S.works=[...buildTechWorks(),...S.works.filter(w=>!w.auto)]; }
+function techChanged(){ renderTechSum(); if(!techState().auto) return; applyTech(); save(); renderWorks(); renderMaterials(); }
+function autoOff(){
+  const T=techState(); if(!T.auto) return;
+  T.auto=false; S.works.forEach(w=>delete w.auto); renderTech();
+  const wc=$("#works-count"); wc.textContent=wc.textContent.replace(/Работы рассчитаны автоматически.*$/,"Поправьте объём, толщину или число слоёв — материалы пересчитаются сразу.");
+  toast("Авто выключено — список работ теперь правится вручную");
+}
+function renderTechSum(){
+  const el=$("#tech-sum"); if(!el) return; const V=techVolumes();
+  el.innerHTML=S.rooms.length?`Объёмы из помещений: стены <b>${fmt(V.W)} м²</b> · пол и потолок <b>${fmt(V.F)} м²</b> · углы <b>${fmt(V.C)} м.п.</b> (4 угла × высота + примыкание к потолку) · периметр <b>${fmt(V.P)} м</b>`
+    :"Добавьте помещения с размерами — объёмы работ возьмутся из них.";
+}
+function renderTech(){
+  const T=techState();
+  const chk=(k,l)=>`<label><input type="checkbox" data-t="${k}"${T[k]?" checked":""}> ${l}</label>`;
+  $("#tech").innerHTML=`<div class="tech-head"><h3>Технология</h3><span class="tech-state${T.auto?" on":""}">${T.auto?"Авто: работы считаются сами":"Ручной режим"}</span></div>
+    <div class="tech-grid">
+      <label>Стены<select data-t="scheme">${Object.entries(TECH_SCHEMES).map(([k,s])=>`<option value="${k}"${k===T.scheme?" selected":""}>${esc(s.n)}</option>`).join("")}</select></label>
+      <label>Покраска, слоёв<input type="text" data-t="coats" inputmode="numeric" value="${esc(T.coats)}"></label>
+    </div>
+    <div class="tech-opts">${chk("ceil","Потолок")}${chk("gkl","Стены из ГКЛ (заделка швов)")}${chk("mold","Покраска молдингов и плинтусов")}</div>
+    <p class="hint" id="tech-sum"></p>
+    <div class="actions">${T.auto?`<button class="link" data-t-act="off">Выключить авто и править работы вручную</button>`
+      :`<button class="dark" data-t-act="on">Рассчитать работы автоматически</button>`}</div>`;
+  renderTechSum();
+}
+let techArmed=false;
+$("#tech").addEventListener("change",e=>{
+  const k=e.target.dataset.t; if(!k) return; const T=techState();
+  T[k]=e.target.type==="checkbox"?e.target.checked:e.target.value; dropExample(); save(); techChanged();
+});
+$("#tech").addEventListener("input",e=>{ if(e.target.dataset.t==="coats"){ techState().coats=e.target.value; save(); techChanged(); } });
+$("#tech").addEventListener("click",e=>{
+  const a=e.target.dataset.tAct; if(!a) return; const T=techState();
+  if(a==="off"){ autoOff(); save(); renderWorks(); return; }
+  const manual=S.works.some(w=>w.type!=="other");
+  if(manual&&!techArmed){ techArmed=true; e.target.textContent="Текущие работы заменятся — нажмите ещё раз";
+    setTimeout(()=>{ if(techArmed){techArmed=false; e.target.textContent="Рассчитать работы автоматически"} },4000); return; }
+  techArmed=false; T.auto=true; S.works=S.works.filter(w=>w.type==="other"); dropExample(); applyTech(); save(); renderTech(); renderWorks(); renderMaterials();
+});
+
 let lastRows=[];
 function renderMaterials(){
   const rows=lastRows=calc(); const el=$("#mats");
@@ -840,13 +946,13 @@ function renderNorms(){
       <ul>${c.mats.map(m=>`<li>${esc(m.n)} — <span class="num">${esc(normText(m,c))}</span>${m.est?` <span class="tag-est">оценка</span>`:""}</li>`).join("")}</ul>
       ${c.tk?`<div class="tk">${esc(c.tk)}</div>`:""}</div>`).join("")}</div></div>`).join("");
 }
-function renderAll(){renderProjects();renderObject();renderWorks();renderMaterials()}
+function renderAll(){if(techState().auto)applyTech();renderProjects();renderObject();renderWorks();renderMaterials()}
 
 /* ================= Редактирование ================= */
 const dropExample=()=>{if(S.isExample){S.isExample=false;$("#example-banner").hidden=true}};
 $("#works").addEventListener("input",e=>{
   const row=e.target.closest(".work"); const f=e.target.dataset.f; if(!row||!f||f==="type") return;
-  const w=S.works.find(x=>x.id===row.dataset.id); w[f]=e.target.value; dropExample(); save(); renderMaterials();
+  const w=S.works.find(x=>x.id===row.dataset.id); if(w.auto) autoOff(); w[f]=e.target.value; dropExample(); save(); renderMaterials();
   const lb=document.getElementById("lab-"+w.id); if(lb) lb.textContent=laborText(w);
 });
 $("#works").addEventListener("change",e=>{
@@ -855,16 +961,16 @@ $("#works").addEventListener("change",e=>{
     const w=S.works.find(x=>x.id===e.target.closest(".work").dataset.id);
     const {v,label}=roomVolume(w.room,src); e.target.value="";
     if(!(v>0)){toast(`У помещений не заполнено: ${SRC_N[src]}`);return}
-    w.qty=v; if(!String(w.room||"").trim()) w.room=label;
+    if(w.auto) autoOff(); w.qty=v; if(!String(w.room||"").trim()) w.room=label;
     dropExample(); save(); renderWorks(); renderMaterials(); toast(`Объём: ${SRC_N[src]}, ${label} — ${fmt(v)}`); return;
   }
   if(e.target.dataset.f!=="type") return;
   const w=S.works.find(x=>x.id===e.target.closest(".work").dataset.id);
-  w.type=e.target.value; w.p=CAT[w.type]?.param?.def; dropExample(); save(); renderWorks(); renderMaterials();
+  if(w.auto) autoOff(); w.type=e.target.value; w.p=CAT[w.type]?.param?.def; dropExample(); save(); renderWorks(); renderMaterials();
 });
 $("#works").addEventListener("click",e=>{
   if(!e.target.closest("[data-del]")) return;
-  const id=e.target.closest(".work").dataset.id; S.works=S.works.filter(w=>w.id!==id); dropExample(); save(); renderWorks(); renderMaterials();
+  const id=e.target.closest(".work").dataset.id; if(S.works.find(w=>w.id===id)?.auto) autoOff(); S.works=S.works.filter(w=>w.id!==id); dropExample(); save(); renderWorks(); renderMaterials();
 });
 $("#btn-add").onclick=()=>{
   S.works.push({id:uid(),type:"paint_walls",room:"",qty:"",p:2}); dropExample(); save(); renderWorks(); renderMaterials();
@@ -874,14 +980,14 @@ let clearArmed=false;
 $("#btn-clear").onclick=e=>{
   if(!clearArmed){clearArmed=true;e.target.textContent="Точно очистить?";setTimeout(()=>{clearArmed=false;e.target.textContent="Очистить всё"},3000);return}
   clearArmed=false;e.target.textContent="Очистить всё";
-  S={isExample:false,object:"",rooms:[],works:[],docMats:[],warnings:[]}; save(); renderAll();
+  S={isExample:false,object:"",rooms:[],works:[],docMats:[],warnings:[],tech:{...TECH_DEF}}; save(); renderAll();
 };
 $("#obj-name").addEventListener("input",e=>{S.object=e.target.value;dropExample();save();
   const o=$("#proj-sel").selectedOptions[0]; if(o) o.textContent=projTitle(S)});
 $("#proj-sel").addEventListener("change",e=>{save();useProject(e.target.value);save();renderAll();if(typeof setStatus==="function")setStatus("")});
 $("#btn-new").onclick=()=>{
   save(); const id="p"+uid();
-  P.list.push({id,data:{isExample:false,object:"Новый объект "+(P.list.length+1),rooms:[],works:[],docMats:[],warnings:[]}});
+  P.list.push({id,data:{isExample:false,object:"Новый объект "+(P.list.length+1),rooms:[],works:[],docMats:[],warnings:[],tech:{...TECH_DEF}}});
   useProject(id); save(); renderAll();
   const n=$("#obj-name"); n.focus(); n.select();
 };
