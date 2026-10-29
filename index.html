@@ -121,6 +121,20 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .rooms-tot{margin:4px 0 0;font-size:13px;color:var(--muted)}
 .rooms-tot b{color:var(--ink)}
 @media (max-width:720px){.room-ed{grid-template-columns:repeat(3,minmax(0,1fr))}.room-ed .rn{grid-column:1/3}.room-ed .x{grid-column:3;grid-row:1;justify-self:end}}
+/* Сворачиваемые блоки: заголовок-плашка со сводкой */
+details.fold>summary{cursor:pointer;list-style:none}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary h3::before{content:"▸ ";color:var(--gold)}
+details.fold[open]>summary h3::before{content:"▾ "}
+details.fold>summary:hover h3{text-decoration:underline;text-underline-offset:4px}
+/* WhatsApp-группа */
+.wa{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:16px;background:var(--surface);border:1px solid var(--line);border-left:4px solid #25D366}
+.wa p{margin:0;max-width:60ch}
+.wa p b{display:block;font:600 17px var(--f-body)}
+.wa p small{color:var(--muted)}
+.wa a{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;background:#1FAF54;color:#fff;text-decoration:none;font:600 15px var(--f-body);white-space:nowrap}
+.wa a:hover{filter:brightness(1.08)}
+.wa a svg{width:20px;height:20px;flex:none}
 /* Расход по работам и ведомость на объект */
 details.use{margin-top:4px}
 details.use summary{font-size:12px;color:var(--gold-text);font-weight:600}
@@ -388,13 +402,16 @@ footer a{color:var(--gold-text)}
     <h2 id="h-works"><span class="step">Шаг 2:</span> объёмы работ</h2>
     <p class="lead" id="works-count"></p>
     <p class="lead works-labor" id="works-labor"></p>
-    <div class="panel">
-      <div id="works"></div>
-      <div class="works-foot">
-        <button id="btn-add">+ Добавить работу</button>
-        <button class="link" id="btn-clear">Очистить всё</button>
+    <details class="fold" id="fold-works" data-fold="works">
+      <summary class="g-head"><h3 id="works-sum">Работы</h3><span class="num" id="works-sum-r"></span></summary>
+      <div class="panel">
+        <div id="works"></div>
+        <div class="works-foot">
+          <button id="btn-add">+ Добавить работу</button>
+          <button class="link" id="btn-clear">Очистить всё</button>
+        </div>
       </div>
-    </div>
+    </details>
   </section>
 
   <section aria-labelledby="h-mat">
@@ -404,9 +421,18 @@ footer a{color:var(--gold-text)}
       <input type="range" id="reserve" min="0" max="20" step="1" value="0">
       <span class="num" id="reserve-v">0%</span>
       <span>Цены можно поправить — они запомнятся в этом браузере.</span>
+      <button class="link" id="btn-fold-all">Развернуть всё</button>
     </div>
     <div class="groups" id="mats"></div>
     <div class="vedom" id="vedom" hidden></div>
+  </section>
+
+  <section class="wa" aria-label="Группа в WhatsApp">
+    <p><b>Группа FARBIG в WhatsApp</b><small>Вопросы по технологии, новости и обновления калькулятора</small></p>
+    <a href="https://chat.whatsapp.com/JSCiWzrOvhdJBkMgP3UbGS" target="_blank" rel="noopener" id="wa-link">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.1 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
+      Вступить в группу
+    </a>
   </section>
 
   <section aria-labelledby="h-norms">
@@ -677,6 +703,8 @@ function renderWorks(){
   const auto=techState().auto;
   $("#works").innerHTML=S.works.length?S.works.map(workRow).join(""):`<div class="empty">${auto?"Введите размеры помещений на шаге 1 — работы посчитаются сами.":"Работ пока нет. Нажмите «+ Добавить работу» или «Рассчитать работы автоматически» на шаге 1."}</div>`;
   const other=S.works.filter(w=>w.type==="other").length;
+  $("#works-sum").textContent=`Работы: ${S.works.length} поз.`+(auto?" · авто":"");
+  $("#works-sum-r").textContent=rub(laborSum());
   $("#works-count").textContent=S.works.length?`${S.works.length} позиций`+(other?`, из них ${other} нет в справочнике — их материал не считается`:"")+". "+
     (auto?`Работы рассчитаны автоматически: «${(TECH_SCHEMES[techState().scheme]||TECH_SCHEMES.k3).n}». Меняйте размеры или технологию на шаге 1 — список обновится сам. Правка строки выключит авто.`
       :"Поправьте объём, толщину или число слоёв — материалы пересчитаются сразу."):"";
@@ -931,7 +959,7 @@ function renderMaterials(){
   for(const g of GROUPS){
     const rs=rows.filter(r=>r.group===g); if(!rs.length) continue;
     const sub=rs.reduce((s,r)=>s+r.sum,0); total+=sub;
-    h+=`<div><div class="g-head"><h3>${esc(g)}</h3><span class="num">${rub(sub)}</span></div><div class="group">
+    h+=`<details class="fold" data-fold="g:${esc(g)}"${foldOpen("g:"+g)?" open":""}><summary class="g-head"><h3>${esc(g)}</h3><span class="num">${rs.length} мат. · ${rub(sub)}</span></summary><div class="group">
       <div class="mrow hdr"><span>Материал</span><span class="r">Нужно</span><span class="r">Купить</span><span class="r">Цена, ₽</span><span class="r">Сумма</span></div>`;
     for(const r of rs){
       h+=`<div class="mrow"><div class="mname"><b>${esc(r.name)}${r.est?` <span class="tag-est">оценка</span>`:""}</b><small>${esc(r.note)}</small>${useDetails(r)}</div>
@@ -940,9 +968,9 @@ function renderMaterials(){
         <div class="r"><span class="lbl">Цена за ${esc(r.pn)}</span><input class="price" id="pr-${esc(r.key)}" data-k="${esc(r.key)}" inputmode="decimal" value="${r.price}" aria-label="Цена: ${esc(r.name)}"></div>
         <div class="r num sum"><span class="lbl">Сумма</span>${rub(r.sum)}</div></div>`;
     }
-    h+="</div></div>";
+    h+="</div></details>";
   }
-  el.innerHTML=h; renderTotals(total); renderVedom(rows,total);
+  el.innerHTML=h; renderTotals(total); renderVedom(rows,total); renderFoldAll();
 }
 /* Расход по работам: под каждым материалом, свёрнуто */
 const numU=(v,u)=>`${fmt(v,v<10?2:1)} ${u}`;
@@ -964,12 +992,31 @@ function renderVedom(rows,total){
   if(!rows.length){el.hidden=true;return}
   el.hidden=false;
   const list=GROUPS.flatMap(g=>rows.filter(r=>r.group===g));
-  el.innerHTML=`<div class="g-head"><h3>Ведомость материалов на объект</h3><span class="num">${rub(total)}</span></div>
+  el.innerHTML=`<details class="fold" data-fold="vedom"${foldOpen("vedom")?" open":""}><summary class="g-head"><h3>Ведомость на объект</h3><span class="num">${list.length} поз. · ${rub(total)}</span></summary>
     <div class="tbl-x"><table class="vtab"><thead><tr><th>Материал</th><th class="n">Расход на объект</th><th class="n">Купить</th><th class="n">Сумма</th></tr></thead>
     <tbody>${list.map(r=>`<tr><td>${esc(r.name)}</td><td class="n">${esc(numU(r.need,r.unit))}</td><td class="n">${fmt(r.packs,2)} × ${esc(r.pn)}</td><td class="n">${rub(r.sum)}</td></tr>`).join("")}</tbody>
     <tfoot><tr><td colspan="3">Итого материалы</td><td class="n">${rub(total)}</td></tr></tfoot></table></div>
+    </details>
     <div class="works-foot"><span class="hint">Расход — с учётом запаса. Позиций: ${list.length}.</span><button class="dark" id="btn-copy-list">Скопировать список</button></div>`;
 }
+/* Сворачивание: работы и отделы материалов по умолчанию свёрнуты, ведомость открыта; выбор запоминается */
+const FOLD=store.get("fold",{});
+const foldOpen=k=>FOLD[k]??(k==="vedom");
+function setFold(k,open){ FOLD[k]=open; store.set("fold",FOLD); }
+document.addEventListener("toggle",e=>{
+  const d=e.target; if(!d.matches?.("details.fold")) return;
+  setFold(d.dataset.fold,d.open); renderFoldAll();
+},true);
+function renderFoldAll(){
+  const b=$("#btn-fold-all"); if(!b) return;
+  const ds=[...document.querySelectorAll("details.fold")];
+  b.textContent=ds.length&&ds.every(d=>d.open)?"Свернуть всё":"Развернуть всё";
+}
+$("#btn-fold-all").onclick=()=>{
+  const ds=[...document.querySelectorAll("details.fold")]; const open=!ds.every(d=>d.open);
+  ds.forEach(d=>d.open=open);
+};
+$("#fold-works").open=foldOpen("works");
 function vedomText(){
   const list=GROUPS.flatMap(g=>lastRows.filter(r=>r.group===g));
   return [`Ведомость материалов${S.object?` — ${S.object}`:""}`,S.address?`Адрес: ${S.address}`:"","",
@@ -986,6 +1033,7 @@ function renderTotals(mat){
   lastMat=mat; const lab=laborSum();
   $("#total").textContent=rub(mat+lab);
   $("#total-split").textContent=`материалы ${rub(mat)} · работы ${rub(lab)}`;
+  $("#works-sum-r").textContent=rub(lab);
   const wl=$("#works-labor"); if(wl) wl.textContent=lab>0?`Стоимость работ: ${rub(lab)}`:"Цены работ можно задать в «Настройках»";
 }
 function normText(m,c){ return m.nt || `${fmt(m.per??m.rate,4)} ${m.u}/${c.unit}${m.per!=null?" на 1 "+c.param.unit:""}`; }
@@ -1023,7 +1071,7 @@ $("#works").addEventListener("click",e=>{
   const id=e.target.closest(".work").dataset.id; if(S.works.find(w=>w.id===id)?.auto) autoOff(); S.works=S.works.filter(w=>w.id!==id); dropExample(); save(); renderWorks(); renderMaterials();
 });
 $("#btn-add").onclick=()=>{
-  S.works.push({id:uid(),type:"paint_walls",room:"",qty:"",p:2}); dropExample(); save(); renderWorks(); renderMaterials();
+  S.works.push({id:uid(),type:"paint_walls",room:"",qty:"",p:2}); dropExample(); save(); renderWorks(); renderMaterials(); $("#fold-works").open=true;
   document.getElementById(`w-${S.works.at(-1).id}-type`)?.focus();
 };
 let clearArmed=false;
@@ -1074,6 +1122,7 @@ function matAoa(){
 const placeCookie=()=>{$("#cookie").style.bottom=($(".bar").offsetHeight+8)+"px"};
 if(!store.get("cookie-ok",false)){ $("#cookie").hidden=false; placeCookie(); addEventListener("resize",placeCookie); }
 $("#cookie-ok").onclick=()=>{store.set("cookie-ok",true);$("#cookie").hidden=true};
+$("#wa-link").addEventListener("click",()=>{try{ym(113898791,"reachGoal","whatsapp")}catch{}});
 $("#btn-xlsx").onclick=async()=>{
   try{ym(113898791,"reachGoal","excel")}catch{}
   const aoa=matAoa();
