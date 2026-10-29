@@ -121,6 +121,16 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .rooms-tot{margin:4px 0 0;font-size:13px;color:var(--muted)}
 .rooms-tot b{color:var(--ink)}
 @media (max-width:720px){.room-ed{grid-template-columns:repeat(3,minmax(0,1fr))}.room-ed .rn{grid-column:1/3}.room-ed .x{grid-column:3;grid-row:1;justify-self:end}}
+/* Расход по работам и ведомость на объект */
+details.use{margin-top:4px}
+details.use summary{font-size:12px;color:var(--gold-text);font-weight:600}
+details.use ul{margin:4px 0;padding-left:16px;font-size:12px;color:var(--muted)}
+details.use p{margin:2px 0 0;font-size:12px;font-weight:600;color:var(--ink)}
+.vedom{border:1px solid var(--line);min-width:0;max-width:100%}
+.vtab td{white-space:normal}
+.vtab td:first-child{min-width:140px}
+@media (max-width:720px){.vtab{font-size:12px}.vtab th,.vtab td{padding:6px 4px}.vtab td:first-child{min-width:100px}.vtab th{white-space:normal}}
+.vtab tfoot td{font-weight:700;border-bottom:0}
 /* Технология: автоматический список работ по размерам помещений */
 .tech{margin-top:14px;border:1px solid var(--gold);background:var(--surface);padding:12px 14px;display:grid;gap:10px}
 .tech-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
@@ -396,6 +406,7 @@ footer a{color:var(--gold-text)}
       <span>Цены можно поправить — они запомнятся в этом браузере.</span>
     </div>
     <div class="groups" id="mats"></div>
+    <div class="vedom" id="vedom" hidden></div>
   </section>
 
   <section aria-labelledby="h-norms">
@@ -612,17 +623,20 @@ function calc(){
     const c=CAT[w.type]; const q=num(w.qty); if(!c||!(q>0)) continue;
     const p=c.param?(num(w.p)>0?num(w.p):c.param.def):1;
     for(const m of c.mats){
-      const base=q*(m.per!=null?m.per*p:m.rate);
+      const rate=m.per!=null?m.per*p:m.rate, base=q*rate;
       let a=agg.get(m.k);
-      if(!a){a={...m,group:c.group,base:0,from:new Set()};agg.set(m.k,a)}
+      if(!a){a={...m,group:c.group,base:0,from:new Set(),parts:[]};agg.set(m.k,a)}
       a.base+=base; a.from.add(shortName(c));
+      /* Расшифровка расхода: объём работы × норма = количество материала */
+      a.parts.push({work:shortName(c),room:w.room||"",qty:q,unit:c.unit,rate,base,
+        rateNote:m.per!=null?`${fmt(m.per,4)} × ${fmt(p,3)} ${c.param.unit}`:""});
     }
   }
   const rows=[...agg.values()].map(a=>{
     const need=a.base*(1+a.waste/100)*(1+reserve/100);
     const packs=Math.ceil(need/a.pack-1e-9);
     const price=prices[a.k]??a.price;
-    return {key:a.k,group:a.group,name:a.n,unit:a.u,need,pack:a.pack,pn:a.pn,packs,price,sum:packs*price,
+    return {key:a.k,group:a.group,name:a.n,unit:a.u,need,base:a.base,waste:a.waste,parts:a.parts,pack:a.pack,pn:a.pn,packs,price,sum:packs*price,
       note:"для: "+[...a.from].join(", ")+(a.waste?` · запас ${a.waste}%`:""),est:!!a.est};
   });
   for(const d of S.docMats){
@@ -920,7 +934,7 @@ function renderMaterials(){
     h+=`<div><div class="g-head"><h3>${esc(g)}</h3><span class="num">${rub(sub)}</span></div><div class="group">
       <div class="mrow hdr"><span>Материал</span><span class="r">Нужно</span><span class="r">Купить</span><span class="r">Цена, ₽</span><span class="r">Сумма</span></div>`;
     for(const r of rs){
-      h+=`<div class="mrow"><div class="mname"><b>${esc(r.name)}${r.est?` <span class="tag-est">оценка</span>`:""}</b><small>${esc(r.note)}</small></div>
+      h+=`<div class="mrow"><div class="mname"><b>${esc(r.name)}${r.est?` <span class="tag-est">оценка</span>`:""}</b><small>${esc(r.note)}</small>${useDetails(r)}</div>
         <div class="r num"><span class="lbl">Нужно</span>${fmt(r.need,r.need<10?2:1)} ${esc(r.unit)}</div>
         <div class="r num"><span class="lbl">Купить</span>${fmt(r.packs,2)} × ${esc(r.pn)}</div>
         <div class="r"><span class="lbl">Цена за ${esc(r.pn)}</span><input class="price" id="pr-${esc(r.key)}" data-k="${esc(r.key)}" inputmode="decimal" value="${r.price}" aria-label="Цена: ${esc(r.name)}"></div>
@@ -928,8 +942,44 @@ function renderMaterials(){
     }
     h+="</div></div>";
   }
-  el.innerHTML=h; renderTotals(total);
+  el.innerHTML=h; renderTotals(total); renderVedom(rows,total);
 }
+/* Расход по работам: под каждым материалом, свёрнуто */
+const numU=(v,u)=>`${fmt(v,v<10?2:1)} ${u}`;
+function partLine(r,p){
+  const where=p.room&&!p.work.toLowerCase().includes(p.room.toLowerCase())?`, ${p.room.toLowerCase()}`:"";
+  return `${p.work}${where}: ${fmt(p.qty)} ${p.unit} × ${fmt(p.rate,3)} ${r.unit}/${p.unit}${p.rateNote?` (${p.rateNote})`:""} = ${numU(p.base,r.unit)}`;
+}
+function reserveLine(r){
+  const k=[r.waste?`запас ${r.waste}%`:"",reserve?`доп. запас ${reserve}%`:""].filter(Boolean).join(" + ");
+  return `Расход ${numU(r.base,r.unit)}${k?` + ${k}`:""} → нужно ${numU(r.need,r.unit)} → купить ${fmt(r.packs,2)} × ${r.pn}`;
+}
+function useDetails(r){
+  if(!r.parts?.length) return "";
+  return `<details class="use"><summary>Расход по работам (${r.parts.length})</summary><ul>${r.parts.map(p=>`<li>${esc(partLine(r,p))}</li>`).join("")}</ul><p>${esc(reserveLine(r))}</p></details>`;
+}
+/* Ведомость на объект: сводный список для снабжения */
+function renderVedom(rows,total){
+  const el=$("#vedom"); if(!el) return;
+  if(!rows.length){el.hidden=true;return}
+  el.hidden=false;
+  const list=GROUPS.flatMap(g=>rows.filter(r=>r.group===g));
+  el.innerHTML=`<div class="g-head"><h3>Ведомость материалов на объект</h3><span class="num">${rub(total)}</span></div>
+    <div class="tbl-x"><table class="vtab"><thead><tr><th>Материал</th><th class="n">Расход на объект</th><th class="n">Купить</th><th class="n">Сумма</th></tr></thead>
+    <tbody>${list.map(r=>`<tr><td>${esc(r.name)}</td><td class="n">${esc(numU(r.need,r.unit))}</td><td class="n">${fmt(r.packs,2)} × ${esc(r.pn)}</td><td class="n">${rub(r.sum)}</td></tr>`).join("")}</tbody>
+    <tfoot><tr><td colspan="3">Итого материалы</td><td class="n">${rub(total)}</td></tr></tfoot></table></div>
+    <div class="works-foot"><span class="hint">Расход — с учётом запаса. Позиций: ${list.length}.</span><button class="dark" id="btn-copy-list">Скопировать список</button></div>`;
+}
+function vedomText(){
+  const list=GROUPS.flatMap(g=>lastRows.filter(r=>r.group===g));
+  return [`Ведомость материалов${S.object?` — ${S.object}`:""}`,S.address?`Адрес: ${S.address}`:"","",
+    ...list.map((r,i)=>`${i+1}. ${r.name} — ${numU(r.need,r.unit)} → ${fmt(r.packs,2)} × ${r.pn}`),"",
+    `Итого материалы: ${rub(lastMat)}`].filter((x,i)=>x!==""||i>1).join("\n");
+}
+$("#vedom").addEventListener("click",async e=>{
+  if(e.target.id!=="btn-copy-list") return;
+  try{await navigator.clipboard.writeText(vedomText());toast("Список скопирован — вставьте в мессенджер")}catch{toast("Не удалось скопировать")}
+});
 function laborSum(){return S.works.reduce((s,w)=>{const c=CAT[w.type],q=num(w.qty);return s+(c&&q>0?laborPrice(w.type)*q:0)},0)}
 let lastMat=0;
 function renderTotals(mat){
@@ -1037,6 +1087,14 @@ $("#btn-xlsx").onclick=async()=>{
   for(let i=5;i<=n+3;i++) ws[`H${i}`]={t:"n",f:`F${i}*G${i}`,v:aoa[i-4][7]};
   ws["!cols"]=[{wch:18},{wch:46},{wch:16},{wch:7},{wch:18},{wch:14},{wch:18},{wch:14},{wch:46}];
   XLSX.utils.book_append_sheet(wb,ws,"Материалы");
+  const ua=[["Материал","Работа","Помещение","Объём работы","Ед.","Норма на ед.","Расход","Ед. материала"]];
+  for(const r of GROUPS.flatMap(g=>lastRows.filter(x=>x.group===g))){
+    if(!r.parts?.length) continue;
+    r.parts.forEach((p,i)=>ua.push([i?"":r.name,p.work,p.room,r2(p.qty),p.unit,+p.rate.toFixed(4),+p.base.toFixed(2),r.unit]));
+    ua.push(["",`Итого с запасом (${[r.waste?`${r.waste}%`:"",reserve?`+ доп. ${reserve}%`:""].filter(Boolean).join(" ")||"без запаса"})`,"","","","",+r.need.toFixed(2),r.unit],[]);
+  }
+  const wsU=XLSX.utils.aoa_to_sheet(ua); wsU["!cols"]=[{wch:44},{wch:40},{wch:24},{wch:13},{wch:7},{wch:13},{wch:12},{wch:12}];
+  XLSX.utils.book_append_sheet(wb,wsU,"Расход по работам");
   const wa=[["Отдел","Помещение","Работа","Объём","Ед.","Параметр","Цена работы, ₽/ед","Сумма работ, ₽","Из документа","Примечание"],...S.works.map(w=>{const c=CAT[w.type];const q=num(w.qty)||0;const pr=c?laborPrice(w.type):0;
     return [c?c.group:"",w.room,c?c.name:("Нет в справочнике: "+(w.name||"")),q||"",c?c.unit:"",c?.param?`${w.p??c.param.def} ${c.param.unit}`:"",pr||"",Math.round(pr*q)||"",w.name||"",w.note||""]})];
   wa.push(["","","ИТОГО РАБОТЫ","","","","",Math.round(laborSum()),"",""]);
