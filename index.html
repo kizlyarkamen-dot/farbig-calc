@@ -94,6 +94,21 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .obj{display:grid;gap:8px;padding:16px}
 .obj label{font:500 12px var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .obj input{font:600 17px var(--f-body);border:0;border-bottom:2px solid var(--line);background:transparent;color:var(--ink);padding:4px 0;width:100%}
+.obj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin:6px 0}
+.obj-grid label{display:grid;gap:4px}
+.obj-grid input,#obj-comment{font-size:15px;font-weight:500}
+.rooms-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px}
+.rooms-head h3{margin:0}
+.rooms-ed{display:grid;gap:6px}
+.room-ed{display:grid;grid-template-columns:minmax(0,2fr) repeat(7,minmax(0,1fr)) 36px;gap:6px;align-items:end;padding:8px;background:var(--surface);border:1px solid var(--line)}
+.room-ed label{display:grid;gap:3px;font:500 10.5px var(--f-display)!important;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.obj .room-ed input{font:14px var(--f-body);padding:7px;border:1px solid var(--line);background:var(--bg);min-width:0}
+.room-ed input.calc{border-color:var(--gold)}
+.room-ed .x{padding:6px;width:36px;height:36px;color:var(--muted);background:transparent;border-color:transparent;font-size:19px;line-height:1}
+.rooms-tot{margin:4px 0 0;font-size:13px;color:var(--muted)}
+.rooms-tot b{color:var(--ink)}
+@media (max-width:720px){.room-ed{grid-template-columns:repeat(3,minmax(0,1fr))}.room-ed .rn{grid-column:1/3}.room-ed .x{grid-column:3;grid-row:1;justify-self:end}}
+.w-src{width:auto!important;font-size:12px!important;padding:2px 4px!important;margin-right:8px;background:var(--bg)!important;color:var(--gold-text)!important;border-color:var(--gold)!important}
 details summary{cursor:pointer;color:var(--muted);font-size:13px}
 .tbl-x{overflow-x:auto}
 table{border-collapse:collapse;width:100%;font-size:13px}
@@ -202,6 +217,14 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
 .mat-ed .chk{font-size:12px!important;grid-column:1/-1}
 @media (max-width:720px){.mat-ed{grid-template-columns:1fr 1fr 1fr}.mat-ed .mn{grid-column:1/-1}.mat-ed .x{grid-column:3}}
 .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.md-row{display:grid;grid-template-columns:minmax(0,2.2fr) 70px 100px minmax(0,1.3fr) 110px;gap:6px;align-items:end;padding:8px;background:var(--surface);border:1px solid var(--line);margin-bottom:6px}
+.md-row label{display:grid;gap:3px;font:500 10.5px var(--f-display);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.md-row input{width:100%;background:var(--bg);min-width:0}
+.md-meta{grid-column:1/-1;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px}
+.md-meta small{color:var(--muted);flex:1 1 200px}
+.md-new{padding:12px;border:1px solid var(--gold);margin:8px 0 14px}
+.md-grp h3 small{font-size:11px;vertical-align:middle}
+@media (max-width:720px){.md-row{grid-template-columns:1fr 1fr 1fr}.md-row .mn{grid-column:1/-1}}
 .err-msg{color:var(--bad);font-size:13px;font-weight:600}
 .ltable{width:100%}
 .ltable td{white-space:normal}
@@ -261,10 +284,17 @@ footer .wrap{padding-block:16px 28px;font-size:12px;color:var(--muted)}
     <div class="panel obj">
       <label for="obj-name">Название объекта</label>
       <input id="obj-name" placeholder="Например: квартира 54 м², ЖК «Северный»">
-      <details id="rooms-box">
-        <summary id="rooms-sum">Помещения</summary>
-        <div class="tbl-x"><table id="rooms"></table></div>
-      </details>
+      <div class="obj-grid">
+        <label>Адрес<input id="obj-address" data-o="address" placeholder="Город, улица, дом, кв."></label>
+        <label>Заказчик<input id="obj-client" data-o="client" placeholder="Имя и телефон"></label>
+        <label>Высота потолков, м<input id="obj-height" data-o="height" inputmode="decimal" placeholder="2,7"></label>
+      </div>
+      <label for="obj-comment">Комментарий</label>
+      <input id="obj-comment" data-o="comment" placeholder="Сроки, условия, особенности объекта">
+      <div class="rooms-head"><h3 id="rooms-sum">Помещения</h3><button id="btn-room">+ Помещение</button></div>
+      <p class="hint">Введите длину и ширину — пол, периметр и стены посчитаются сами (стены = периметр × высота − проёмы). Площади можно вписать и вручную.</p>
+      <div id="rooms" class="rooms-ed"></div>
+      <p class="rooms-tot num" id="rooms-tot"></p>
     </div>
   </section>
 
@@ -309,6 +339,7 @@ footer .wrap{padding-block:16px 28px;font-size:12px;color:var(--muted)}
     <div class="sheet-head"><h2 id="set-title">Настройки</h2><button id="set-close" aria-label="Закрыть настройки">×</button></div>
     <div class="tabs" role="tablist">
       <button role="tab" data-tab="works" aria-selected="true">Виды работ</button>
+      <button role="tab" data-tab="mats" aria-selected="false">Материалы</button>
       <button role="tab" data-tab="labor" aria-selected="false">Цены работ</button>
       <button role="tab" data-tab="groups" aria-selected="false">Отделы</button>
       <button role="tab" data-tab="share" aria-selected="false">Обмен</button>
@@ -556,13 +587,21 @@ const BASE_GROUPS=["Черновые","Малярные (FARBIG)","Отделк�
 const DOC_GROUP="Из документа";
 /* Цены работ по умолчанию — из сметы FARBIG «Организация отделочных работ» (₽ за единицу) */
 const LABOR_DEF={fb_sand_plaster:150,fb_primer:50,fb_pigment:100,fb_corner:250,fb_base:250,fb_sand_base:100,fb_glass:210,fb_finish:260,fb_sand_finish:150,fb_primer_paint:200,paint_walls:350};
-let SET=(()=>{let v;try{v=JSON.parse(localStorage.getItem("msm2-settings")||"null")}catch{} return Object.assign({groups:[],works:{},over:{},labor:{}},v||{})})();
+let SET=(()=>{let v;try{v=JSON.parse(localStorage.getItem("msm2-settings")||"null")}catch{} return Object.assign({groups:[],works:{},over:{},labor:{},mo:{},lib:{}},v||{})})();
 const saveSet=()=>{try{localStorage.setItem("msm2-settings",JSON.stringify(SET))}catch{}};
 let CAT={}, GROUPS=[];
+/* Справочник материалов: свойства материала общие для всех работ (название, ед., упаковка, цена) */
+const MAT_PROPS=["n","u","pack","pn"];
+const BASE_MAT={}; for(const c of Object.values(BASE_CAT)) for(const m of c.mats) if(!BASE_MAT[m.k]) BASE_MAT[m.k]=m;
+const pickMat=m=>{const o={}; if(m) for(const p of MAT_PROPS) if(m[p]!=null&&m[p]!=="") o[p]=m[p]; return o};
 function buildCatalog(){
   CAT={};
   for(const [id,c] of Object.entries(BASE_CAT)) CAT[id]=SET.over[id]?{...SET.over[id],base:true,edited:true}:{...c,base:true};
   for(const [id,c] of Object.entries(SET.works)) CAT[id]={...c,custom:true};
+  for(const c of Object.values(CAT)) c.mats=c.mats.map(m=>{
+    const b=SET.lib[m.k]||BASE_MAT[m.k];
+    return {...m,...pickMat(b),...(b&&b.price!=null?{price:b.price}:{}),...pickMat(SET.mo[m.k])};
+  });
   GROUPS=[...BASE_GROUPS,...SET.groups.filter(g=>!BASE_GROUPS.includes(g)),DOC_GROUP];
   for(const c of Object.values(CAT)) if(!GROUPS.includes(c.group)) GROUPS.splice(GROUPS.length-1,0,c.group);
 }
@@ -672,11 +711,11 @@ function workRow(w){
   const bits=[w.type==="other"&&w.name?`«${esc(w.name)}»`:"", w.name&&w.type!=="other"?`в документе: ${esc(w.name)}`:"", esc(w.note||""), c?.tk?`<b>${esc(c.tk)}</b>`:""].filter(Boolean);
   return `<div class="work${w.type==="other"?" other":""}" data-id="${w.id}">
     <select class="w-type" id="w-${w.id}-type" data-f="type" aria-label="Вид работы">${typeOptions(w.type)}</select>
-    <input class="w-room" id="w-${w.id}-room" data-f="room" value="${esc(w.room)}" placeholder="Помещение" aria-label="Помещение">
+    <input class="w-room" id="w-${w.id}-room" data-f="room" list="room-names" value="${esc(w.room)}" placeholder="Помещение" aria-label="Помещение">
     <label class="unitbox q"><input id="w-${w.id}-qty" data-f="qty" inputmode="decimal" value="${esc(w.qty)}" aria-label="Объём"><span>${esc(unit)}</span></label>
     ${param}
     <button class="del" data-del aria-label="Удалить работу">×</button>
-    <div class="note"><span class="lab" id="lab-${w.id}">${esc(laborText(w))}</span>${bits.length?`<span class="nsep"></span>`+bits.join(" · "):""}</div></div>`;
+    <div class="note">${S.rooms.length&&w.type!=="other"?`<select class="w-src" data-src aria-label="Взять объём из помещений"><option value="">Объём из помещений…</option>${Object.entries(SRC_N).map(([k,n])=>`<option value="${k}">${n[0].toUpperCase()+n.slice(1)}</option>`).join("")}</select>`:""}<span class="lab" id="lab-${w.id}">${esc(laborText(w))}</span>${bits.length?`<span class="nsep"></span>`+bits.join(" · "):""}</div></div>`;
 }
 function renderWorks(){
   $("#works").innerHTML=S.works.length?S.works.map(workRow).join(""):`<div class="empty">Работ пока нет. Нажмите «+ Добавить работу».</div>`;
@@ -687,11 +726,71 @@ function renderObject(){
   $("#obj-name").value=S.object||"";
   $("#example-banner").hidden=!S.isExample;
   const w=$("#warns"); w.hidden=!S.warnings?.length; w.innerHTML=(S.warnings||[]).map(x=>`<li>${esc(x)}</li>`).join("");
-  $("#rooms-box").hidden=!S.rooms?.length;
-  $("#rooms-sum").textContent=`Помещения (${S.rooms?.length||0})`;
-  const v=x=>x>0?fmt(x):"—";
-  $("#rooms").innerHTML=`<tr><th>Помещение</th><th class="r">Пол, м²</th><th class="r">Стены, м²</th><th class="r">Периметр, м</th><th class="r">Высота, м</th></tr>`+
-    (S.rooms||[]).map(r=>`<tr><td>${esc(r.name)}</td><td class="n">${v(r.floor)}</td><td class="n">${v(r.walls)}</td><td class="n">${v(r.perimeter)}</td><td class="n">${v(r.height)}</td></tr>`).join("");
+  for(const el of document.querySelectorAll("[data-o]")) el.value=S[el.dataset.o]??"";
+  renderRooms();
+}
+/* --- Помещения: ручной ввод --- */
+const ROOM_F=[["len","Длина, м"],["wid","Ширина, м"],["height","Высота, м"],["open","Проёмы, м²"],["floor","Пол, м²"],["perimeter","Периметр, м"],["walls","Стены, м²"]];
+const rv2=x=>(x==null||x===""||Number.isNaN(x))?"":x;
+function roomRow(r){
+  return `<div class="room-ed" data-id="${r.id}">
+    <label class="rn">Помещение<input data-r="name" value="${esc(r.name||"")}" placeholder="Кухня"></label>
+    ${ROOM_F.map(([f,l])=>`<label>${l}<input data-r="${f}" inputmode="decimal" value="${esc(rv2(r[f]))}"${f==="height"&&num(S.height)>0?` placeholder="${esc(S.height)}"`:""}></label>`).join("")}
+    <button class="x" data-del-room aria-label="Удалить помещение">×</button></div>`;
+}
+function roomsTotal(){
+  const t=k=>S.rooms.reduce((s,r)=>s+(num(r[k])>0?num(r[k]):0),0);
+  return {floor:t("floor"),walls:t("walls"),perimeter:t("perimeter")};
+}
+function renderRoomsTot(){
+  const t=roomsTotal();
+  $("#rooms-sum").textContent=`Помещения (${S.rooms.length})`;
+  $("#rooms-tot").innerHTML=S.rooms.length?`Итого: пол <b>${fmt(t.floor)} м²</b> · стены <b>${fmt(t.walls)} м²</b> · периметр <b>${fmt(t.perimeter)} м</b>`:"";
+}
+function renderRooms(){
+  S.rooms.forEach(r=>r.id||(r.id=uid()));
+  $("#rooms").innerHTML=S.rooms.length?S.rooms.map(roomRow).join(""):`<p class="hint">Помещений пока нет. Нажмите «+ Помещение».</p>`;
+  renderRoomsTot(); renderRoomLists();
+}
+const r2=x=>Math.round(x*100)/100;
+function recalcRoom(r,f){
+  const L=num(r.len),W=num(r.wid),H=num(r.height)>0?num(r.height):num(S.height),O=num(r.open)>0?num(r.open):0;
+  const ch=[];
+  if((f==="len"||f==="wid")&&L>0&&W>0){r.floor=r2(L*W);r.perimeter=r2(2*(L+W));ch.push("floor","perimeter")}
+  if(["len","wid","height","open","perimeter","obj"].includes(f)&&num(r.perimeter)>0&&H>0){r.walls=r2(Math.max(0,num(r.perimeter)*H-O));ch.push("walls")}
+  return ch;
+}
+$("#rooms").addEventListener("input",e=>{
+  const f=e.target.dataset.r; const row=e.target.closest(".room-ed"); if(!f||!row) return;
+  const r=S.rooms.find(x=>x.id===row.dataset.id); r[f]=e.target.value;
+  for(const k of recalcRoom(r,f)){const i=row.querySelector(`[data-r="${k}"]`); i.value=rv2(r[k]); i.classList.add("calc")}
+  dropExample(); save(); renderRoomsTot(); renderRoomLists();
+});
+$("#rooms").addEventListener("click",e=>{
+  const b=e.target.closest("[data-del-room]"); if(!b) return;
+  S.rooms=S.rooms.filter(r=>r.id!==b.closest(".room-ed").dataset.id); save(); renderRooms(); renderWorks();
+});
+$("#btn-room").onclick=()=>{
+  S.rooms.push({id:uid(),name:"Помещение "+(S.rooms.length+1)}); dropExample(); save(); renderRooms(); renderWorks();
+  const i=$("#rooms").lastElementChild.querySelector("input"); i.focus(); i.select();
+};
+document.querySelectorAll("[data-o]").forEach(el=>el.addEventListener("input",()=>{
+  S[el.dataset.o]=el.value; dropExample();
+  if(el.dataset.o==="height"){ S.rooms.forEach(r=>{if(!(num(r.height)>0)) recalcRoom(r,"obj")}); renderRooms(); }
+  save();
+}));
+/* Подсказка помещений в работах и перенос объёма */
+const ALL_ROOMS="Все помещения";
+function renderRoomLists(){
+  let dl=$("#room-names"); if(!dl){dl=document.createElement("datalist");dl.id="room-names";document.body.append(dl)}
+  dl.innerHTML=[ALL_ROOMS,...S.rooms.map(r=>r.name).filter(Boolean)].map(n=>`<option value="${esc(n)}">`).join("");
+}
+const SRC_N={walls:"стены",floor:"пол",ceil:"потолок",perimeter:"периметр"};
+function roomVolume(roomName,src){
+  const key=src==="ceil"?"floor":src; const nm=String(roomName||"").trim().toLowerCase();
+  const rs=S.rooms.filter(r=>nm&&nm!==ALL_ROOMS.toLowerCase()&&String(r.name||"").trim().toLowerCase()===nm);
+  const list=rs.length?rs:S.rooms;
+  return {v:r2(list.reduce((s,r)=>s+(num(r[key])>0?num(r[key]):0),0)),label:rs.length?rs[0].name:ALL_ROOMS};
 }
 let lastRows=[];
 function renderMaterials(){
@@ -740,6 +839,14 @@ $("#works").addEventListener("input",e=>{
   const lb=document.getElementById("lab-"+w.id); if(lb) lb.textContent=laborText(w);
 });
 $("#works").addEventListener("change",e=>{
+  if(e.target.matches("[data-src]")){
+    const src=e.target.value; if(!src) return;
+    const w=S.works.find(x=>x.id===e.target.closest(".work").dataset.id);
+    const {v,label}=roomVolume(w.room,src); e.target.value="";
+    if(!(v>0)){toast(`У помещений не заполнено: ${SRC_N[src]}`);return}
+    w.qty=v; if(!String(w.room||"").trim()) w.room=label;
+    dropExample(); save(); renderWorks(); renderMaterials(); toast(`Объём: ${SRC_N[src]}, ${label} — ${fmt(v)}`); return;
+  }
   if(e.target.dataset.f!=="type") return;
   const w=S.works.find(x=>x.id===e.target.closest(".work").dataset.id);
   w.type=e.target.value; w.p=CAT[w.type]?.param?.def; dropExample(); save(); renderWorks(); renderMaterials();
@@ -818,8 +925,9 @@ $("#btn-xlsx").onclick=async()=>{
   for(const t of used){const c=CAT[t]; c.mats.forEach((m,i)=>na.push([i?"":c.name,m.n,normText(m,c)+(m.est?" (оценка)":""),i?"":c.src,i?"":(c.tk||"")]))}
   const ws3=XLSX.utils.aoa_to_sheet(na); ws3["!cols"]=[{wch:40},{wch:44},{wch:30},{wch:50},{wch:60}];
   XLSX.utils.book_append_sheet(wb,ws3,"Нормы и источники");
-  if(S.rooms?.length) XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["Помещение","Пол, м²","Стены, м²","Периметр, м","Высота, м"],...S.rooms.map(r=>[r.name,r.floor||"",r.walls||"",r.perimeter||"",r.height||""])]),"Помещения");
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["Итог по объекту",S.object||""],["Материалы, ₽",Math.round(lastMat)],["Работы, ₽",Math.round(laborSum())],["Всего, ₽",Math.round(lastMat+laborSum())]]),"Итог");
+  if(S.rooms?.length){const nv=x=>num(x)>0?num(x):"";const t=roomsTotal();
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["Помещение","Длина, м","Ширина, м","Высота, м","Проёмы, м²","Пол, м²","Периметр, м","Стены, м²"],...S.rooms.map(r=>[r.name||"",nv(r.len),nv(r.wid),nv(r.height)||nv(S.height),nv(r.open),nv(r.floor),nv(r.perimeter),nv(r.walls)]),["Итого","","","","",r2(t.floor),r2(t.perimeter),r2(t.walls)]]),"Помещения");}
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["Итог по объекту",S.object||""],...[["Адрес",S.address],["Заказчик",S.client],["Высота потолков, м",S.height],["Комментарий",S.comment]].filter(x=>String(x[1]??"").trim()),["Материалы, ₽",Math.round(lastMat)],["Работы, ₽",Math.round(laborSum())],["Всего, ₽",Math.round(lastMat+laborSum())]]),"Итог");
   const buf=XLSX.write(wb,{bookType:"xlsx",type:"array"});
   const name=((S.object||"Материалы").replace(/[\\/:*?"<>|]+/g," ").trim().slice(0,60)||"Материалы")+".xlsx";
   await saveFile(name,new Blob([buf],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}));
@@ -835,7 +943,7 @@ $("#set-close").onclick=closeSettings;
 modal.addEventListener("click",e=>{ if(e.target===modal) closeSettings(); });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!modal.hidden) closeSettings(); });
 modal.querySelector(".tabs").addEventListener("click",e=>{
-  const t=e.target.closest("[data-tab]"); if(!t) return; setTab=t.dataset.tab; editId=null; editNew=false; renderSettings();
+  const t=e.target.closest("[data-tab]"); if(!t) return; setTab=t.dataset.tab; editId=null; editNew=false; matNew=false; renderSettings();
 });
 function applyCatalog(){ saveSet(); buildCatalog(); renderNorms(); renderWorks(); renderMaterials(); }
 const unitList=["м²","м.п.","шт","точка","м³","кг","компл."];
@@ -844,6 +952,7 @@ function renderSettings(){
   modal.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===setTab)));
   const body=$("#set-body");
   if(setTab==="works") body.innerHTML=(editId||editNew)?workEditor():worksList();
+  else if(setTab==="mats") body.innerHTML=matsTab();
   else if(setTab==="labor") body.innerHTML=laborList();
   else if(setTab==="groups") body.innerHTML=groupsList();
   else body.innerHTML=shareTab();
@@ -874,7 +983,7 @@ function worksList(){
 function matRow(m,i){
   const isPer=m.per!=null;
   return `<div class="mat-ed" data-k="${esc(m.k||"")}">
-    <label class="mn">Материал<input class="m-n" value="${esc(m.n||"")}" placeholder="Например: Шпаклёвка финишная"></label>
+    <label class="mn">Материал<input class="m-n" list="mat-names" value="${esc(m.n||"")}" placeholder="Например: Шпаклёвка финишная"></label>
     <label>Ед.<input class="m-u" value="${esc(m.u||"")}" placeholder="кг"></label>
     <label>Расход<input class="m-r" inputmode="decimal" value="${esc(isPer?m.per:(m.rate??""))}" placeholder="0,5"></label>
     <label>Упаковка<input class="m-pack" inputmode="decimal" value="${esc(m.pack??1)}" title="Сколько единиц материала в упаковке"></label>
@@ -906,7 +1015,9 @@ function workEditor(){
   </div>
   <h3>Материалы на 1 единицу работы</h3>
   <p class="hint">Расход — сколько материала уходит на 1 ${esc(c.unit||"ед.")} работы. Если отмечено «умножается на параметр», расход указывается на 1 единицу параметра (например, кг на 1 мм слоя).</p>
-  <div class="mats-ed" id="e-mats">${c.mats.map(matRow).join("")}</div>
+  <p class="hint">Начните вводить название — можно выбрать материал из справочника, его упаковка и цена подставятся.</p>
+  <datalist id="mat-names">${[...matDir().values()].map(e=>`<option value="${esc(e.n)}">`).join("")}</datalist>
+  <div class="mats-ed" id="e-mats">${c.mats.map(m=>matRow({...m,price:prices[m.k]??m.price})).join("")}</div>
   <div class="actions"><button data-act="add-mat">+ Добавить материал</button></div>
   <div class="fgrid"><label style="grid-column:1/-1">Требования техкарты / примечание<textarea id="e-tk">${esc(c.tk||"")}</textarea></label></div>
   <p class="err-msg" id="e-err" hidden></p>
@@ -960,7 +1071,8 @@ $("#set-body").addEventListener("click",e=>{
     else if(CAT[id].custom) SET.works[id]=r.def;
     else SET.over[id]=r.def;
     if(r.price>=0&&$("#e-price").value.trim()!=="") SET.labor[id]=r.price; else delete SET.labor[id];
-    applyCatalog(); editId=null; editNew=false; worksFilter=r.def.group; renderSettings(); toast("Вид работ сохранён");
+    for(const m of r.def.mats) syncMat(m);
+    store.set("msm2-prices",prices); applyCatalog(); editId=null; editNew=false; worksFilter=r.def.group; renderSettings(); toast("Вид работ сохранён");
   }
   else if(act==="del-work"){
     if(!delWorkArmed){delWorkArmed=true;b.textContent="Точно удалить?";setTimeout(()=>{delWorkArmed=false;b.textContent="Удалить вид работ"},3000);return}
@@ -1002,11 +1114,127 @@ $("#set-body").addEventListener("change",e=>{
     const f=t.files[0]; if(!f) return;
     f.text().then(txt=>{
       const d=JSON.parse(txt); if(d.app!=="farbig-calc"||!d.settings) throw 0;
-      const st=d.settings; SET={groups:Array.isArray(st.groups)?st.groups:[],works:st.works||{},over:st.over||{},labor:st.labor||{}};
+      const st=d.settings; SET={groups:Array.isArray(st.groups)?st.groups:[],works:st.works||{},over:st.over||{},labor:st.labor||{},mo:st.mo||{},lib:st.lib||{}};
       if(d.prices&&typeof d.prices==="object"){prices=d.prices;store.set("msm2-prices",prices)}
       applyCatalog(); renderSettings(); toast("Настройки загружены");
     }).catch(()=>{const m=$("#imp-err");m.textContent="Это не файл настроек калькулятора. Выберите файл, скачанный на вкладке «Обмен».";m.hidden=false});
   }
+});
+
+/* --- Материалы: справочник --- */
+function syncMat(m){
+  const k=m.k, b=SET.lib[k]||BASE_MAT[k];
+  if(SET.lib[k]) Object.assign(SET.lib[k],pickMat(m));
+  else if(BASE_MAT[k]){ const o={}; for(const p of MAT_PROPS) if(m[p]!==BASE_MAT[k][p]) o[p]=m[p]; if(Object.keys(o).length) SET.mo[k]=o; else delete SET.mo[k]; }
+  else delete SET.mo[k];
+  if(b?.price==null||m.price===b.price) delete prices[k]; else prices[k]=m.price;
+}
+function matDir(){
+  const d=new Map();
+  for(const c of Object.values(CAT)) for(const m of c.mats){
+    let e=d.get(m.k);
+    if(!e){e={k:m.k,n:m.n,u:m.u,pack:m.pack,pn:m.pn,def:m.price||0,group:c.group,works:[]};d.set(m.k,e)}
+    if(!e.works.includes(shortName(c))) e.works.push(shortName(c));
+  }
+  for(const [k,m] of Object.entries(SET.lib)) if(!d.has(k)) d.set(k,{k,...pickMat(m),pack:m.pack,def:m.price||0,group:"Свои материалы",works:[]});
+  for(const e of d.values()){ e.lib=!!SET.lib[e.k]; e.price=prices[e.k]??e.def; e.edited=!e.lib&&(!!SET.mo[e.k]||prices[e.k]!=null); }
+  return d;
+}
+let matNew=false;
+function mdMeta(e){
+  return `${e.lib?'<span class="badge gold">свой</span> ':e.edited?'<span class="badge gold">изменён</span> ':''}<small>${e.works.length?"в работах: "+esc(e.works.join(", ")):"пока не используется в работах"}</small>
+    ${e.edited?`<button class="link" data-act="reset-mat">Сбросить</button>`:""}${e.lib?`<button class="link" data-act="del-libmat">Удалить</button>`:""}`;
+}
+function mdRow(e){
+  return `<div class="md-row" data-k="${esc(e.k)}" data-s="${esc((e.n+" "+e.works.join(" ")).toLowerCase())}">
+    <label class="mn">Материал<input class="md-n" value="${esc(e.n)}"></label>
+    <label>Ед.<input class="md-u" value="${esc(e.u)}"></label>
+    <label>В упаковке<input class="md-pack" inputmode="decimal" value="${esc(e.pack)}" title="Сколько единиц материала в упаковке"></label>
+    <label>Упаковка<input class="md-pn" value="${esc(e.pn)}"></label>
+    <label>Цена упак., ₽<input class="md-price" inputmode="decimal" value="${esc(e.price)}"></label>
+    <div class="md-meta">${mdMeta(e)}</div></div>`;
+}
+function matsTab(){
+  const d=[...matDir().values()];
+  const gs=[...workGroups(),"Свои материалы"];
+  let h=`<div class="actions"><button class="dark" data-act="new-libmat">+ Новый материал</button>
+    <input id="mf" class="grow" type="search" placeholder="Поиск: название или работа" aria-label="Поиск материала"></div>
+    <p class="hint">Название, упаковка и цена материала общие для всех работ и проектов. Расход на единицу работы задаётся во вкладке «Виды работ». Изменения сохраняются сразу.</p>`;
+  if(matNew) h+=`<div class="md-new"><h3>Новый материал</h3><div class="fgrid">
+    <label>Название<input id="nm-n" placeholder="Например: Грунт глубокого проникновения"></label>
+    <label>Единица<input id="nm-u" placeholder="л"></label>
+    <label>В упаковке<input id="nm-pack" inputmode="decimal" value="1"></label>
+    <label>Упаковка<input id="nm-pn" placeholder="канистра 10 л"></label>
+    <label>Цена упаковки, ₽<input id="nm-price" inputmode="decimal" placeholder="0"></label></div>
+    <p class="err-msg" id="nm-err" hidden></p>
+    <div class="actions"><button class="primary" data-act="add-libmat">Добавить</button><button class="ghost" data-act="cancel-libmat">Отмена</button></div>
+    <p class="hint">Чтобы материал считался, добавьте его в нужный вид работ и укажите расход.</p></div>`;
+  for(const g of gs){
+    const rs=d.filter(e=>e.group===g); if(!rs.length) continue;
+    h+=`<div class="md-grp"><h3>${esc(g)} <small class="badge">${rs.length}</small></h3>${rs.map(mdRow).join("")}</div>`;
+  }
+  return h+`<p class="hint" id="mf-empty" hidden>Ничего не найдено.</p>
+    <div class="actions"><button class="link" data-act="reset-mats">Сбросить все цены и изменения материалов</button></div>`;
+}
+function refreshMdRow(row){ const e=matDir().get(row.dataset.k); if(e) row.querySelector(".md-meta").innerHTML=mdMeta(e); }
+$("#set-body").addEventListener("input",e=>{
+  if(e.target.id!=="mf") return; const q=e.target.value.trim().toLowerCase(); let any=false;
+  for(const g of document.querySelectorAll(".md-grp")){ let vis=0;
+    for(const r of g.querySelectorAll(".md-row")){ const ok=!q||r.dataset.s.includes(q); r.hidden=!ok; vis+=ok; }
+    g.hidden=!vis; any=any||vis>0; }
+  $("#mf-empty").hidden=any;
+});
+$("#set-body").addEventListener("change",e=>{
+  const t=e.target, row=t.closest(".md-row"); if(!row||t.tagName!=="INPUT") return;
+  const k=row.dataset.k, v=t.value.trim(), cur=matDir().get(k);
+  if(t.classList.contains("md-price")){
+    const n=num(v);
+    if(v===""){delete prices[k]} else if(n>=0){ if(n===cur.def) delete prices[k]; else prices[k]=n; } else {t.value=cur.price;toast("Цена должна быть числом");return}
+    store.set("msm2-prices",prices);
+  } else {
+    const prop={"md-n":"n","md-u":"u","md-pack":"pack","md-pn":"pn"}[t.className]; if(!prop) return;
+    let val=v;
+    if(prop==="pack"){ val=num(v); if(!(val>0)){t.value=cur.pack;toast("Количество в упаковке должно быть больше нуля");return} }
+    else if(!val){t.value=cur[prop];return}
+    if(SET.lib[k]) SET.lib[k][prop]=val;
+    else { const o={...(SET.mo[k]||{})}; const base=BASE_MAT[k]; if(base&&base[prop]===val) delete o[prop]; else o[prop]=val;
+      if(Object.keys(o).length) SET.mo[k]=o; else delete SET.mo[k]; }
+    if(prop==="n") row.dataset.s=(val+" "+cur.works.join(" ")).toLowerCase();
+  }
+  applyCatalog(); refreshMdRow(row);
+});
+$("#set-body").addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]"); if(!b) return; const act=b.dataset.act; const row=b.closest(".md-row");
+  if(act==="new-libmat"){matNew=true;renderSettings();$("#nm-n").focus()}
+  else if(act==="cancel-libmat"){matNew=false;renderSettings()}
+  else if(act==="add-libmat"){
+    const err=t=>{const m=$("#nm-err");m.textContent=t;m.hidden=false};
+    const n=$("#nm-n").value.trim(), u=$("#nm-u").value.trim(), pack=num($("#nm-pack").value), price=num($("#nm-price").value);
+    if(!n) return err("Укажите название материала.");
+    if(!u) return err("Укажите единицу, например кг или л.");
+    if(!(pack>0)) return err("Количество в упаковке должно быть больше нуля.");
+    const k="c:"+n.toLowerCase()+"|"+u;
+    if(matDir().has(k)||[...matDir().values()].some(x=>x.n.toLowerCase()===n.toLowerCase())) return err("Такой материал уже есть в справочнике.");
+    SET.lib[k]={n,u,pack,pn:$("#nm-pn").value.trim()||`${String(pack).replace(".",",")} ${u}`,price:price>0?price:0};
+    matNew=false; saveSet(); renderSettings(); toast("Материал добавлен в справочник");
+  }
+  else if(act==="reset-mat"){ const k=row.dataset.k; delete SET.mo[k]; delete prices[k]; store.set("msm2-prices",prices); applyCatalog();
+    const e2=matDir().get(k); if(e2) row.outerHTML=mdRow(e2); toast("Материал сброшен к стандарту"); }
+  else if(act==="del-libmat"){ const k=row.dataset.k; const e2=matDir().get(k);
+    if(e2?.works.length){toast("Материал используется в работах: "+e2.works.join(", ")+". Сначала уберите его оттуда.");return}
+    delete SET.lib[k]; delete prices[k]; store.set("msm2-prices",prices); saveSet(); row.remove(); toast("Материал удалён"); }
+  else if(act==="reset-mats"){
+    if(b.dataset.armed!=="1"){b.dataset.armed="1";b.textContent="Точно сбросить все цены материалов?";setTimeout(()=>{b.dataset.armed="";b.textContent="Сбросить все цены и изменения материалов"},3000);return}
+    SET.mo={}; for(const k of Object.keys(prices)) if(!k.startsWith("doc:")) delete prices[k]; store.set("msm2-prices",prices); applyCatalog(); renderSettings(); toast("Материалы сброшены");
+  }
+});
+/* В редакторе работ: выбор материала из справочника */
+$("#set-body").addEventListener("change",e=>{
+  if(!e.target.classList.contains("m-n")) return;
+  const row=e.target.closest(".mat-ed"); const v=e.target.value.trim().toLowerCase(); if(!v) return;
+  const hit=[...matDir().values()].find(x=>x.n.toLowerCase()===v); if(!hit||hit.k===row.dataset.k) return;
+  row.dataset.k=hit.k; const q=s=>row.querySelector(s);
+  q(".m-u").value=hit.u; q(".m-pack").value=hit.pack; q(".m-pn").value=hit.pn; q(".m-price").value=hit.price;
 });
 
 /* --- Цены работ --- */
@@ -1035,7 +1263,7 @@ function groupsList(){
 
 /* --- Обмен --- */
 function shareTab(){
-  return `<p class="hint">Виды работ, отделы, цены работ и цены материалов хранятся в этом браузере. Чтобы у сотрудников были такие же настройки, скачайте файл и отправьте им — они загрузят его здесь у себя.</p>
+  return `<p class="hint">Виды работ, материалы и их цены, отделы и цены работ хранятся в этом браузере. Чтобы у сотрудников были такие же настройки, скачайте файл и отправьте им — они загрузят его здесь у себя.</p>
   <div class="actions"><button class="dark" data-act="export-set">Скачать файл настроек</button></div>
   <h3>Загрузить настройки</h3>
   <p class="hint">Текущие настройки этого браузера заменятся настройками из файла.</p>
