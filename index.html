@@ -108,6 +108,26 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .rooms-tot{margin:4px 0 0;font-size:13px;color:var(--muted)}
 .rooms-tot b{color:var(--ink)}
 @media (max-width:720px){.room-ed{grid-template-columns:repeat(3,minmax(0,1fr))}.room-ed .rn{grid-column:1/3}.room-ed .x{grid-column:3;grid-row:1;justify-self:end}}
+.lm{margin-top:14px;border:1px solid var(--gold);background:var(--surface)}
+.lm>summary{cursor:pointer;padding:12px 14px;font:600 15px var(--f-display);letter-spacing:.04em;text-transform:uppercase;color:var(--ink);list-style:none}
+.lm>summary::-webkit-details-marker{display:none}
+.lm>summary::before{content:"▸ ";color:var(--gold)}
+.lm[open]>summary::before{content:"▾ "}
+.lm>summary small{display:block;font:400 12px var(--f-body);text-transform:none;letter-spacing:0;color:var(--muted);margin-top:2px}
+#lm{padding:0 14px 14px;display:grid;gap:10px}
+.lm-modes{display:flex;flex-wrap:wrap;gap:6px}
+.lm-modes button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.lm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.lm-grid label,.lm-seg label{display:grid;gap:3px;font:500 10.5px var(--f-display)!important;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.obj .lm input,.obj .lm select{font:14px var(--f-body);padding:7px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-width:0;width:100%}
+.lm-res{background:var(--bg);border-left:3px solid var(--gold);padding:10px 12px;font-size:14px;display:grid;gap:3px}
+.lm-res b.big{font:600 22px var(--f-display);color:var(--ink)}
+.lm-res small{color:var(--muted)}
+.lm-add{display:flex;flex-wrap:wrap;gap:8px;align-items:end}
+.lm-add label{display:grid;gap:3px;flex:1 1 180px;font:500 10.5px var(--f-display)!important;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.lm-seg{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr) 36px;gap:6px;align-items:end}
+.lm-seg .x{padding:6px;width:36px;height:36px;color:var(--muted);background:transparent;border-color:transparent;font-size:19px;line-height:1}
+.lm .mini{font-size:12px;padding:4px 8px}
 .w-src{width:auto!important;font-size:12px!important;padding:2px 4px!important;margin-right:8px;background:var(--bg)!important;color:var(--gold-text)!important;border-color:var(--gold)!important}
 details summary{cursor:pointer;color:var(--muted);font-size:13px}
 .tbl-x{overflow-x:auto}
@@ -222,9 +242,29 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
 .md-row input{width:100%;background:var(--bg);min-width:0}
 .md-meta{grid-column:1/-1;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px}
 .md-meta small{color:var(--muted);flex:1 1 200px}
+.md-row.in-work{grid-template-columns:minmax(0,2fr) 110px 60px 90px minmax(0,1.2fr) 100px 36px}
+.md-row .x{padding:6px;width:36px;height:36px;color:var(--muted);background:transparent;border-color:transparent;font-size:19px;line-height:1}
+.md-row .x:hover{color:var(--bad)}
+details.mw{border:1px solid var(--line);margin-bottom:6px;background:var(--bg)}
+details.mw>summary{cursor:pointer;padding:12px 14px;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;list-style:none}
+details.mw>summary::-webkit-details-marker{display:none}
+details.mw>summary::before{content:"▸";color:var(--gold);font-size:13px}
+details.mw[open]>summary::before{content:"▾"}
+details.mw>summary .mw-name{font-weight:600;flex:1 1 200px}
+details.mw>summary small{color:var(--muted)}
+details.mw[open]>summary{border-bottom:1px solid var(--line);background:var(--surface)}
+.mw-body{padding:10px 12px;display:grid;gap:6px}
+.mw-top{display:flex;gap:12px;align-items:end;flex-wrap:wrap}
+.mw-top label{display:grid;gap:3px;font:500 10.5px var(--f-display);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.mw-top input{width:140px;text-align:right}
+.md-row{margin-bottom:0!important}
+.g-ord{display:flex;gap:2px}
+.g-arrow{width:34px;height:34px;padding:0;font-size:16px;line-height:1}
+.g-arrow:disabled{opacity:.35}
+.g-move{flex-basis:100%;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;padding:8px;background:var(--surface);border:1px solid var(--gold)}
 .md-new{padding:12px;border:1px solid var(--gold);margin:8px 0 14px}
 .md-grp h3 small{font-size:11px;vertical-align:middle}
-@media (max-width:720px){.md-row{grid-template-columns:1fr 1fr 1fr}.md-row .mn{grid-column:1/-1}}
+@media (max-width:720px){.md-row,.md-row.in-work{grid-template-columns:1fr 1fr 1fr}.md-row .mn{grid-column:1/3}.md-row.in-work .x{grid-column:3;grid-row:1;justify-self:end}.md-row:not(.in-work) .mn{grid-column:1/-1}}
 .err-msg{color:var(--bad);font-size:13px;font-weight:600}
 .ltable{width:100%}
 .ltable td{white-space:normal}
@@ -295,6 +335,7 @@ footer .wrap{padding-block:16px 28px;font-size:12px;color:var(--muted)}
       <p class="hint">Введите длину и ширину — пол, периметр и стены посчитаются сами (стены = периметр × высота − проёмы). Площади можно вписать и вручную.</p>
       <div id="rooms" class="rooms-ed"></div>
       <p class="rooms-tot num" id="rooms-tot"></p>
+      <details class="lm" id="lm-box"><summary>Калькулятор погонных метров <small>швы ГКЛ, плинтус, молдинги, углы</small></summary><div id="lm"></div></details>
     </div>
   </section>
 
@@ -395,15 +436,6 @@ const M={
 const use=(key,o)=>({...M[key],...o});
 const BASE_CAT={
   /* ---------- Черновые ---------- */
-  partition_aerated:{name:"Перегородки из газобетона D500, 100 мм",group:"Черновые",unit:"м²",src:"WOHOM ТК-05 (состав, армирование); расход — "+EST,est:true,
-    tk:"ТК-05: перевязка ≥150 мм; базальтовая сетка 25×25 через каждый второй ряд; связи со стенами через 2–3 ряда; верхний шов ~20 мм минватой.",mats:[
-    {k:"aer100",n:"Блок газобетонный D500 625×250×100",u:"шт",rate:6.4,pack:1,pn:"шт",price:160,waste:5},
-    {k:"aerglue",n:"Клей для газобетона",u:"кг",rate:1.6,pack:25,pn:"мешок 25 кг",price:450,waste:5,est:true},
-    {k:"basmesh",n:"Сетка базальтовая 25×25 мм (полоса в шов)",u:"м",rate:2.0,pack:50,pn:"рулон 50 м",price:1500,waste:5},
-    {k:"aertie",n:"Гибкая связь для газобетона",u:"шт",rate:0.5,pack:1,pn:"шт",price:25,waste:0,est:true}]},
-  partition_pgp:{name:"Перегородки из ПГП 80 мм",group:"Черновые",unit:"м²",src:EST,est:true,mats:[
-    {k:"pgp80",n:"Пазогребневая плита 667×500×80",u:"шт",rate:3.0,pack:1,pn:"шт",price:330,waste:5},
-    {k:"glue_gyps",n:"Клей монтажный гипсовый",u:"кг",rate:1.5,pack:25,pn:"мешок 25 кг",price:600,waste:5}]},
   partition_gkl:{name:"Перегородка ГКЛ С111 (1 слой с двух сторон)",group:"Черновые",unit:"м²",src:IESN+"01-1.1-01-01",
     tk:"WOHOM ТК-12: шаг стоек — по системе и проекту, без универсального «всегда 600 мм».",mats:[
     {k:"pn75",n:"Профиль ПН 75×40, 3 м",u:"шт",rate:0.324,pack:1,pn:"шт",price:380,waste:0,nt:"0,972 м/м²"},
@@ -457,28 +489,6 @@ const BASE_CAT={
     use("beacon",{rate:0.383,nt:"1,15 м/м²"})]},
   plaster_cement:{name:"Штукатурка цементная КНАУФ-Грюнбанд (по кирпичу)",group:"Черновые",unit:"м²",param:{label:"слой",unit:"мм",def:15},src:IESN+"03-02-01-01",mats:[
     {k:"grunband",n:"Штукатурка КНАУФ-Грюнбанд",u:"кг",per:1.282,pack:25,pn:"мешок 25 кг",price:520,waste:0}]},
-  screed:{name:"Полусухая стяжка пола (ЦПС)",group:"Черновые",unit:"м²",param:{label:"толщина",unit:"мм",def:50},src:"Толщина 50 мм — WOHOM ТК-11; расход ЦПС ≈ 2 кг/м² на 1 мм — "+EST,est:true,
-    tk:"ТК-11: базово 50 мм, не менее 40 мм; над трубами — диаметр + 45 мм; деформационные швы на ½ толщины; плоскость ≤2 мм / 2 м.",mats:[
-    {k:"cps",n:"Пескобетон / ЦПС М300",u:"кг",per:2.0,pack:40,pn:"мешок 40 кг",price:330,waste:5},
-    {k:"fiber",n:"Фиброволокно полипропиленовое",u:"кг",per:0.0018,pack:0.6,pn:"пакет 0,6 кг",price:250,waste:0},
-    use("damper",{rate:0.4,est:true})]},
-  self_level:{name:"Наливная стяжка КНАУФ-Боден 15",group:"Черновые",unit:"м²",param:{label:"толщина",unit:"мм",def:5},src:IESN+"02-02-01",mats:[
-    use("grund",{rate:0.113}),
-    {k:"boden15",n:"Смесь КНАУФ-Боден 15",u:"кг",per:1.6,pack:25,pn:"мешок 25 кг",price:700,waste:4}]},
-  dry_screed:{name:"Сухая сборная стяжка (ЭП по керамзитовой засыпке)",group:"Черновые",unit:"м²",param:{label:"засыпка",unit:"мм",def:50},src:IESN+"02-1.1-01-01",mats:[
-    {k:"pefilm",n:"Плёнка полиэтиленовая 200 мкм",u:"м²",rate:1.19,pack:50,pn:"рулон 50 м²",price:900,waste:0},
-    {k:"keramzit",n:"Песок керамзитовый 0–4 мм",u:"м³",per:0.001,pack:0.05,pn:"мешок 50 л",price:260,waste:0},
-    {k:"ep",n:"Элемент пола КНАУФ (ЭП) 1200×600",u:"шт",rate:1.389,pack:1,pn:"шт",price:780,waste:0,nt:"1,0 м²/м²"},
-    {k:"edgetape",n:"Лента кромочная",u:"м",rate:1.266,pack:25,pn:"рулон 25 м",price:600,waste:0},
-    {k:"epglue",n:"Клей для фальцев ЭП",u:"кг",rate:0.05,pack:1,pn:"флакон 1 кг",price:450,waste:0},
-    {k:"mn19",n:"Шуруп для ЭП 3,9×22",u:"шт",rate:12.18,pack:1000,pn:"уп. 1000 шт",price:700,waste:0}]},
-  waterproof:{name:"Гидроизоляция мокрых зон (обмазочная)",group:"Черновые",unit:"м²",param:{label:"слоёв",unit:"сл.",def:2},src:"Слои и завод на стены — WOHOM ТК-13; расход — "+EST,est:true,
-    tk:"ТК-13: не менее 2 полноценных слоёв; завод на стены ≥200 мм — включите эту полосу в площадь.",mats:[
-    {k:"wp_mastic",n:"Гидроизоляция обмазочная",u:"кг",per:0.75,pack:15,pn:"ведро 15 кг",price:2600,waste:5,est:true},
-    {k:"wp_tape",n:"Лента гидроизоляционная для углов",u:"м",rate:0.8,pack:10,pn:"рулон 10 м",price:1100,waste:5,est:true},
-    use("primer",{rate:0.15,est:true})]},
-
-  /* ---------- Малярные (FARBIG) ---------- */
   fb_cover:{name:"Укрывка: пол, окна, двери",group:"Малярные (FARBIG)",unit:"м²",src:"WOHOM ТК-02, презентация FARBIG «Укрывка»; расход — "+EST,est:true,
     tk:"Обязательная укрывка поверхностей, особенно окон и подоконников. Площадь — по полу.",mats:[
     {k:"kraft",n:"Укрывной картон / крафт-бумага",u:"м²",rate:1.1,pack:25,pn:"рулон 25 м²",price:1300,waste:0},
@@ -497,6 +507,10 @@ const BASE_CAT={
     tk:"Обрезные кромки — Унифлот/Пуфас в 2 слоя; заводские стыки — с усиленной стеклолентой и накрывкой.",mats:[
     {k:"uniflot",n:"Шпаклёвка КНАУФ-Унифлот",u:"кг",rate:0.4,pack:25,pn:"мешок 25 кг",price:2600,waste:5},
     {k:"fibafuse",n:"Лента стекловолоконная FibaFuse Max",u:"м",rate:1.2,pack:75,pn:"рулон 75 м",price:1500,waste:5}]},
+  fb_joints_m:{name:"Заделка швов ГКЛ (по погонным метрам шва)",group:"Малярные (FARBIG)",unit:"м.п.",src:"Расход "+ALB+" пересчитан на 1 м.п. шва (≈1,2 м шва на 1 м² ГКЛ)",
+    tk:"Длину швов посчитайте в «Калькуляторе погонных метров» на шаге «Объект». Обрезные кромки — Унифлот/Пуфас в 2 слоя; заводские стыки — с лентой и накрывкой.",mats:[
+    {k:"uniflot",n:"Шпаклёвка КНАУФ-Унифлот",u:"кг",rate:0.33,pack:25,pn:"мешок 25 кг",price:2600,waste:5},
+    {k:"fibafuse",n:"Лента стекловолоконная FibaFuse Max",u:"м",rate:1,pack:75,pn:"рулон 75 м",price:1500,waste:10}]},
   fb_corner:{name:"Малярный уголок: армирование углов лентой",group:"Малярные (FARBIG)",unit:"м.п.",src:"Ленты — «Применение армирующих лент»; отводка 50–60 см в 2 слоя — "+K3+"; расход — расчёт",
     tk:"Композитные ленты клеятся только на полимерные составы. Внутренние углы — Tuff-Tape, наружные — Uno Bead / Original.",mats:[
     {k:"tufftape",n:"Лента композитная Tuff-Tape 57 мм",u:"м",rate:1.05,pack:30,pn:"рулон 30 м",price:3900,waste:0},
@@ -528,67 +542,24 @@ const BASE_CAT={
     tk:"ТК-19: не менее 2 полноценных финишных слоёв. Приёмка под прожектором до 6000 лм, до 4000 К.",mats:[
     {k:"paint_wall",n:"Краска интерьерная",u:"л",per:0.11,pack:9,pn:"ведро 9 л",price:7500,waste:5},
     {k:"masktape",n:"Малярная лента 50 мм",u:"м",rate:0.3,pack:50,pn:"рулон 50 м",price:220,waste:0}]},
+  paint_molding:{name:"Окраска молдингов, плинтусов, карнизов",group:"Малярные (FARBIG)",unit:"м.п.",param:{label:"слоёв",unit:"сл.",def:2},src:"Расход на слой — "+EST,est:true,
+    tk:"Длину посчитайте в «Калькуляторе погонных метров»: периметр минус дверные проёмы.",mats:[
+    {k:"paint_wall",n:"Краска интерьерная",u:"л",per:0.02,pack:9,pn:"ведро 9 л",price:7500,waste:10},
+    {k:"masktape",n:"Малярная лента 50 мм",u:"м",rate:2,pack:50,pn:"рулон 50 м",price:220,waste:0}]},
   paint_ceiling:{name:"Окраска потолка",group:"Малярные (FARBIG)",unit:"м²",param:{label:"слоёв",unit:"сл.",def:2},src:"Слои — WOHOM ТК-19; расход на слой — "+EST,est:true,mats:[
     {k:"paint_ceil",n:"Краска для потолков",u:"л",per:0.12,pack:9,pn:"ведро 9 л",price:5500,waste:5}]},
-
-  /* ---------- Отделка ---------- */
-  wallpaper:{name:"Поклейка обоев (1,06×10 м)",group:"Отделка",unit:"м²",src:EST,est:true,tk:"WOHOM ТК-19: до резки рассчитать повтор рисунка и запас; одна партия.",mats:[
-    {k:"wallpaper",n:"Обои флизелиновые 1,06×10 м",u:"рулон",rate:0.125,pack:1,pn:"рулон",price:2200,waste:5},
-    {k:"wp_glue",n:"Клей для флизелиновых обоев",u:"пачка",rate:0.04,pack:1,pn:"пачка",price:450,waste:0},
-    use("primer",{rate:0.1})]},
-  tile_walls:{name:"Плитка на стены",group:"Отделка",unit:"м²",src:EST,est:true,tk:"WOHOM ТК-15: плоскость ≤2 мм / 2 м; швы ≤1 мм/м; перепад соседних плиток ≤1 мм.",mats:[
-    {k:"tile_wall",n:"Плитка настенная",u:"м²",rate:1,pack:1,pn:"м²",price:1400,waste:10},
-    {k:"tile_glue",n:"Клей плиточный С1",u:"кг",rate:4.5,pack:25,pn:"мешок 25 кг",price:480,waste:5},
-    {k:"grout",n:"Затирка",u:"кг",rate:0.35,pack:2,pn:"уп. 2 кг",price:550,waste:5},
-    {k:"svp",n:"СВП / крестики",u:"шт",rate:20,pack:100,pn:"уп. 100 шт",price:250,waste:10},
-    use("primer",{rate:0.15})]},
-  tile_floor:{name:"Керамогранит на пол",group:"Отделка",unit:"м²",src:EST,est:true,tk:"WOHOM ТК-15: плоскость ≤2 мм / 2 м; швы ≤1 мм/м.",mats:[
-    {k:"tile_floor",n:"Керамогранит напольный",u:"м²",rate:1,pack:1,pn:"м²",price:1800,waste:10},
-    {k:"tile_glue2",n:"Клей для керамогранита С2",u:"кг",rate:6,pack:25,pn:"мешок 25 кг",price:690,waste:5},
-    {k:"grout",n:"Затирка",u:"кг",rate:0.35,pack:2,pn:"уп. 2 кг",price:550,waste:5},
-    {k:"svp",n:"СВП / крестики",u:"шт",rate:20,pack:100,pn:"уп. 100 шт",price:250,waste:10},
-    use("primer",{rate:0.15})]},
-  laminate:{name:"Ламинат / SPC",group:"Отделка",unit:"м²",src:EST,est:true,mats:[
-    {k:"laminate",n:"Ламинат / SPC",u:"м²",rate:1,pack:2.13,pn:"упак. 2,13 м²",price:2000,waste:7},
-    {k:"underlay",n:"Подложка",u:"м²",rate:1,pack:10,pn:"рулон 10 м²",price:700,waste:5}]},
-  skirting:{name:"Плинтус напольный",group:"Отделка",unit:"м.п.",src:EST,est:true,mats:[
-    {k:"skirt",n:"Плинтус 2,5 м",u:"шт",rate:0.4,pack:1,pn:"шт",price:400,waste:8},
-    {k:"skirt_clip",n:"Клипсы с дюбелем",u:"шт",rate:2.2,pack:50,pn:"уп. 50 шт",price:250,waste:5},
-    {k:"skirt_acc",n:"Углы, заглушки, соединители",u:"шт",rate:0.3,pack:1,pn:"шт",price:60,waste:0}]},
-
-  /* ---------- Электрика ---------- */
-  sockets:{name:"Розетки и выключатели",group:"Электрика",unit:"точка",src:EST,est:true,tk:"WOHOM ТК-09/22: трассы и маркировка — по проекту.",mats:[
-    {k:"vvg25",n:"Кабель ВВГнг-LS 3×2,5",u:"м",rate:7,pack:1,pn:"м",price:95,waste:10},
-    {k:"podroz",n:"Подрозетник 68 мм",u:"шт",rate:1,pack:1,pn:"шт",price:25,waste:5},
-    {k:"mech",n:"Механизм с рамкой",u:"шт",rate:1,pack:1,pn:"шт",price:450,waste:0},
-    {k:"gofra16",n:"Гофра ПВХ 16 мм",u:"м",rate:6,pack:1,pn:"м",price:12,waste:10},
-    {k:"wago",n:"Клемма Wago 221",u:"шт",rate:2,pack:1,pn:"шт",price:35,waste:10}]},
-  lights:{name:"Точки освещения",group:"Электрика",unit:"точка",src:EST,est:true,mats:[
-    {k:"vvg15",n:"Кабель ВВГнг-LS 3×1,5",u:"м",rate:8,pack:1,pn:"м",price:70,waste:10},
-    {k:"gofra16",n:"Гофра ПВХ 16 мм",u:"м",rate:8,pack:1,pn:"м",price:12,waste:10},
-    {k:"wago",n:"Клемма Wago 221",u:"шт",rate:3,pack:1,pn:"шт",price:35,waste:10}]},
-  panel:{name:"Электрощит в сборе",group:"Электрика",unit:"шт",src:EST,est:true,mats:[
-    {k:"box24",n:"Щит встраиваемый 24 модуля",u:"шт",rate:1,pack:1,pn:"шт",price:2500,waste:0},
-    {k:"ab1p",n:"Автомат 1P 10–16 А",u:"шт",rate:10,pack:1,pn:"шт",price:350,waste:0},
-    {k:"difab",n:"Дифавтомат 16 А 30 мА",u:"шт",rate:4,pack:1,pn:"шт",price:1800,waste:0}]},
-
-  /* ---------- Сантехника ---------- */
-  water_points:{name:"Точки водоснабжения",group:"Сантехника",unit:"точка",src:EST,est:true,tk:"WOHOM ТК-08: теплоизоляция, заглушки и маркировка выводов.",mats:[
-    {k:"ppr20",n:"Труба PPR 20 мм",u:"м",rate:6,pack:1,pn:"м",price:90,waste:10},
-    {k:"ppr_fit",n:"Фитинги PPR 20 мм",u:"шт",rate:5,pack:1,pn:"шт",price:70,waste:10},
-    {k:"vodoroz",n:"Водорозетка 1/2\"",u:"шт",rate:1,pack:1,pn:"шт",price:450,waste:0},
-    {k:"insul20",n:"Теплоизоляция для трубы 20 мм",u:"м",rate:6,pack:1,pn:"м",price:25,waste:10}]},
-  sewer_points:{name:"Точки канализации",group:"Сантехника",unit:"точка",src:EST,est:true,tk:"WOHOM ТК-08: уклон DN40–50 ≈ 30 мм/м, DN75–100 ≈ 20 мм/м.",mats:[
-    {k:"pipe50",n:"Труба канализационная 50 мм, 1 м",u:"шт",rate:3,pack:1,pn:"шт",price:160,waste:0},
-    {k:"elbow50",n:"Отвод 50 мм 45°",u:"шт",rate:2,pack:1,pn:"шт",price:60,waste:0},
-    {k:"clamp50",n:"Хомут 50 мм",u:"шт",rate:2,pack:1,pn:"шт",price:90,waste:0}]},
 };
-const BASE_GROUPS=["Черновые","Малярные (FARBIG)","Отделка","Электрика","Сантехника"];
+const BASE_GROUPS=["Черновые","Малярные (FARBIG)"];
+const OLD_GROUPS=["Отделка","Электрика","Сантехника"];
 const DOC_GROUP="Из документа";
 /* Цены работ по умолчанию — из сметы FARBIG «Организация отделочных работ» (₽ за единицу) */
 const LABOR_DEF={fb_sand_plaster:150,fb_primer:50,fb_pigment:100,fb_corner:250,fb_base:250,fb_sand_base:100,fb_glass:210,fb_finish:260,fb_sand_finish:150,fb_primer_paint:200,paint_walls:350};
 let SET=(()=>{let v;try{v=JSON.parse(localStorage.getItem("msm2-settings")||"null")}catch{} return Object.assign({groups:[],works:{},over:{},labor:{},mo:{},lib:{}},v||{})})();
 const saveSet=()=>{try{localStorage.setItem("msm2-settings",JSON.stringify(SET))}catch{}};
+/* Отделы: SET.glist — порядок и названия; SET.gren — переименование стандартных отделов */
+if(!SET.gren) SET.gren={};
+if(!Array.isArray(SET.glist)) SET.glist=[...BASE_GROUPS,...(SET.groups||[]).filter(g=>!BASE_GROUPS.includes(g))];
+if(!SET.malyarOnly){ SET.malyarOnly=1; SET.glist=SET.glist.filter(g=>!OLD_GROUPS.includes(g)||(SET.groups||[]).includes(g)||Object.values(SET.works).some(c=>c.group===g)); }
 let CAT={}, GROUPS=[];
 /* Справочник материалов: свойства материала общие для всех работ (название, ед., упаковка, цена) */
 const MAT_PROPS=["n","u","pack","pn"];
@@ -602,8 +573,9 @@ function buildCatalog(){
     const b=SET.lib[m.k]||BASE_MAT[m.k];
     return {...m,...pickMat(b),...(b&&b.price!=null?{price:b.price}:{}),...pickMat(SET.mo[m.k])};
   });
-  GROUPS=[...BASE_GROUPS,...SET.groups.filter(g=>!BASE_GROUPS.includes(g)),DOC_GROUP];
-  for(const c of Object.values(CAT)) if(!GROUPS.includes(c.group)) GROUPS.splice(GROUPS.length-1,0,c.group);
+  for(const c of Object.values(CAT)) c.group=SET.gren[c.group]??c.group;
+  GROUPS=[...SET.glist.filter(g=>g!==DOC_GROUP),DOC_GROUP];
+  for(const c of Object.values(CAT)) if(!GROUPS.includes(c.group)){ GROUPS.splice(GROUPS.length-1,0,c.group); SET.glist.push(c.group); }
 }
 const workGroups=()=>GROUPS.filter(g=>g!==DOC_GROUP);
 const laborPrice=id=>{const v=SET.labor[id]; return v!=null?v:(LABOR_DEF[id]??0)};
@@ -637,7 +609,7 @@ const EXAMPLE={isExample:true,object:"Пример: малярные работ�
     {type:"fb_primer",room:"Стены, перед окраской",qty:226,p:150},
     {type:"fb_primer_paint",room:"Стены",qty:226},
     {type:"paint_walls",room:"Стены",qty:226,p:2},
-    {type:"other",room:"Молдинги",qty:54.5,name:"Покраска молдингов в цвет стен, м.п.",note:"нет в справочнике"}],
+    {type:"paint_molding",room:"Молдинги",qty:54.5,p:2,name:"Покраска молдингов в цвет стен, м.п."}],
   docMats:[],warnings:[]};
 /* Проекты: несколько объектов, каждый со своими работами */
 let P=store.get("msm2-projects",null);
@@ -750,7 +722,7 @@ function renderRoomsTot(){
 function renderRooms(){
   S.rooms.forEach(r=>r.id||(r.id=uid()));
   $("#rooms").innerHTML=S.rooms.length?S.rooms.map(roomRow).join(""):`<p class="hint">Помещений пока нет. Нажмите «+ Помещение».</p>`;
-  renderRoomsTot(); renderRoomLists();
+  renderRoomsTot(); renderRoomLists(); renderLm();
 }
 const r2=x=>Math.round(x*100)/100;
 function recalcRoom(r,f){
@@ -779,6 +751,90 @@ document.querySelectorAll("[data-o]").forEach(el=>el.addEventListener("input",()
   if(el.dataset.o==="height"){ S.rooms.forEach(r=>{if(!(num(r.height)>0)) recalcRoom(r,"obj")}); renderRooms(); }
   save();
 }));
+/* --- Калькулятор погонных метров --- */
+const LM_MODES=[["gkl","Швы ГКЛ"],["perim","Плинтус / молдинг"],["segs","Свои отрезки"]];
+function lmState(){ if(!S.lm) S.lm={mode:"gkl",area:"",w:"1,2",l:"2,5",h:"",layers:"1",per:"",doors:"",dw:"0,9",segs:[{name:"",len:"",cnt:"1"}]}; return S.lm; }
+function lmCalc(){
+  const L=lmState(); const n=x=>{const v=num(x);return v>0?v:0};
+  if(L.mode==="gkl"){
+    const A=n(L.area), W=n(L.w)||1.2, Ls=n(L.l)||2.5, H=n(L.h)||n(S.height), lay=Math.max(1,Math.round(n(L.layers)||1));
+    const vert=A/W; const rows=H>0?Math.ceil(H/Ls-1e-9):0; const hor=H>0?A*(rows-1)/H:A/Ls;
+    const tot=vert+hor;
+    return {total:r2(tot),work:"fb_joints_m",lines:[
+      `Продольные швы (заводская кромка): <b>${fmt(vert,1)} м.п.</b>`,
+      `Торцевые швы (поперёк листа): <b>${fmt(hor,1)} м.п.</b>${H>0?` <small>— ${rows>1?`${rows-1} ряд(а) стыков при высоте ${fmt(H)} м`:`нет: лист ${fmt(Ls)} м перекрывает высоту ${fmt(H)} м`}</small>`:` <small>— высота стены не указана, считаю один торцевой стык на лист</small>`}`,
+      lay>1?`<small>Внутренние слои (${lay-1}): ещё ${fmt(tot*(lay-1),1)} м.п. — их заполняют шпаклёвкой без ленты, в итог не входят.</small>`:"",
+      `<small>Листов ≈ ${Math.ceil(A*lay/(W*Ls)*1.05)} шт (${fmt(W)}×${fmt(Ls)} м, с запасом 5%). Внутренние и внешние углы считайте отдельно.</small>`]};
+  }
+  if(L.mode==="perim"){
+    const P=n(L.per), d=n(L.doors), dw=n(L.dw)||0.9; const tot=Math.max(0,P-d*dw);
+    return {total:r2(tot),work:"paint_molding",lines:[`Периметр ${fmt(P)} м − двери ${fmt(d,0)} × ${fmt(dw)} м = <b>${fmt(tot,1)} м.п.</b>`]};
+  }
+  const tot=(L.segs||[]).reduce((s,x)=>s+n(x.len)*(n(x.cnt)||0),0);
+  return {total:r2(tot),work:"fb_corner",lines:[`Сумма отрезков: <b>${fmt(tot,1)} м.п.</b>`]};
+}
+function lmResult(){
+  const r=lmCalc();
+  return `<div class="lm-res" id="lm-res"><span>Итого: <b class="big">${fmt(r.total,1)} м.п.</b></span>${r.lines.filter(Boolean).map(x=>`<span>${x}</span>`).join("")}</div>`;
+}
+function renderLm(){
+  const L=lmState(); const el=$("#lm"); if(!el) return;
+  const inp=(f,label,ph,extra="")=>`<label>${label}<input data-lm="${f}" inputmode="decimal" value="${esc(L[f]??"")}" placeholder="${esc(ph)}"${extra}></label>`;
+  let h=`<div class="lm-modes" role="group" aria-label="Что считаем">${LM_MODES.map(([k,t])=>`<button class="mini" data-lm-mode="${k}" aria-pressed="${L.mode===k}">${t}</button>`).join("")}</div>`;
+  const t=roomsTotal();
+  if(L.mode==="gkl"){
+    h+=`<p class="hint">Длина швов на стенах или потолке из ГКЛ: вертикальные стыки по длинной кромке листа + горизонтальные торцевые стыки, если лист короче высоты стены.</p>
+    <div class="lm-grid">${inp("area","Площадь ГКЛ, м²","50")}
+      <label>Ширина листа, м<input data-lm="w" list="lm-w" inputmode="decimal" value="${esc(L.w)}"><datalist id="lm-w"><option value="1,2"><option value="0,6"></datalist></label>
+      <label>Длина листа, м<input data-lm="l" list="lm-l" inputmode="decimal" value="${esc(L.l)}"><datalist id="lm-l"><option value="2,5"><option value="2,7"><option value="3"><option value="2"><option value="1,5"></datalist></label>
+      ${inp("h","Высота стены, м",num(S.height)>0?String(S.height):"2,7")}
+      <label>Слоёв обшивки<select data-lm="layers"><option${L.layers!="2"?" selected":""}>1</option><option${L.layers=="2"?" selected":""}>2</option></select></label></div>
+    ${t.walls>0?`<div><button class="mini" data-lm-fill="walls">Площадь = стены помещений (${fmt(t.walls)} м²)</button></div>`:""}`;
+  } else if(L.mode==="perim"){
+    h+=`<p class="hint">Плинтус, молдинг, потолочный бордюр: периметр помещений минус дверные проёмы.</p>
+    <div class="lm-grid">${inp("per","Периметр, м","32")}${inp("doors","Дверей, шт","3")}${inp("dw","Ширина двери, м","0,9")}</div>
+    ${t.perimeter>0?`<div><button class="mini" data-lm-fill="perimeter">Периметр = все помещения (${fmt(t.perimeter)} м)</button></div>`:""}`;
+  } else {
+    h+=`<p class="hint">Углы, откосы, молдинги, примыкания — впишите длину и количество одинаковых отрезков.</p>
+    ${(L.segs||[]).map((x,i)=>`<div class="lm-seg" data-i="${i}">
+      <label>Что<input data-seg="name" value="${esc(x.name)}" placeholder="Угол наружный"></label>
+      <label>Длина, м<input data-seg="len" inputmode="decimal" value="${esc(x.len)}" placeholder="2,7"></label>
+      <label>Кол-во<input data-seg="cnt" inputmode="decimal" value="${esc(x.cnt)}" placeholder="1"></label>
+      <button class="x" data-seg-del aria-label="Удалить отрезок">×</button></div>`).join("")}
+    <div><button class="mini" data-seg-add>+ Отрезок</button></div>`;
+  }
+  const r=lmCalc();
+  const opts=Object.entries(CAT).filter(([,c])=>c.unit==="м.п.");
+  h+=lmResult()+`<div class="lm-add">
+    <label>Добавить в работы как<select id="lm-work">${opts.map(([id,c])=>`<option value="${id}"${id===r.work?" selected":""}>${esc(c.name)}</option>`).join("")}</select></label>
+    <label>Помещение<input id="lm-room" list="room-names" placeholder="Все помещения"></label>
+    <button class="dark" data-lm-add>+ В работы</button></div>
+    <p class="hint">Нужной работы нет в списке? Создайте вид работ с единицей «м.п.» в «Настройках».</p>`;
+  el.innerHTML=h;
+}
+function lmRefresh(){ const r=$("#lm-res"); if(r) r.outerHTML=lmResult(); }
+$("#lm").addEventListener("input",e=>{
+  const L=lmState(), t=e.target;
+  if(t.dataset.lm){ L[t.dataset.lm]=t.value; }
+  else if(t.dataset.seg){ L.segs[+t.closest(".lm-seg").dataset.i][t.dataset.seg]=t.value; }
+  else return;
+  save(); lmRefresh();
+});
+$("#lm").addEventListener("change",e=>{ if(e.target.tagName==="SELECT"&&e.target.dataset.lm){ lmState()[e.target.dataset.lm]=e.target.value; save(); lmRefresh(); } });
+$("#lm").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b) return; const L=lmState();
+  if(b.dataset.lmMode){ L.mode=b.dataset.lmMode; save(); renderLm(); }
+  else if(b.dataset.lmFill){ const t=roomsTotal(); if(b.dataset.lmFill==="walls") L.area=String(r2(t.walls)); else L.per=String(r2(t.perimeter)); save(); renderLm(); }
+  else if(b.hasAttribute("data-seg-add")){ L.segs.push({name:"",len:"",cnt:"1"}); save(); renderLm(); $("#lm").querySelector(".lm-seg:last-of-type input")?.focus(); }
+  else if(b.hasAttribute("data-seg-del")){ L.segs.splice(+b.closest(".lm-seg").dataset.i,1); if(!L.segs.length) L.segs.push({name:"",len:"",cnt:"1"}); save(); renderLm(); }
+  else if(b.hasAttribute("data-lm-add")){
+    const r=lmCalc(); if(!(r.total>0)){toast("Сначала заполните данные — итог пока 0 м.п.");return}
+    const type=$("#lm-work").value; const room=$("#lm-room").value.trim();
+    const segNote=L.mode==="segs"?(L.segs.filter(x=>num(x.len)>0).map(x=>`${x.name||"отрезок"} ${x.len}×${x.cnt||1}`).join(", ")):"";
+    S.works.push({id:uid(),type,room,qty:r.total,p:CAT[type]?.param?.def,note:"из калькулятора погонных метров"+(segNote?": "+segNote:"")});
+    dropExample(); save(); renderWorks(); renderMaterials(); toast(`Добавлено в работы: ${CAT[type].name} — ${fmt(r.total,1)} м.п.`);
+  }
+});
 /* Подсказка помещений в работах и перенос объёма */
 const ALL_ROOMS="Все помещения";
 function renderRoomLists(){
@@ -1060,7 +1116,7 @@ let delWorkArmed=false;
 $("#set-body").addEventListener("click",e=>{
   const b=e.target.closest("[data-act]"); if(!b) return; const act=b.dataset.act;
   if(act==="new-work"){editNew=true;editId=null;renderSettings();$("#e-name").focus()}
-  else if(act==="edit-work"){editId=b.dataset.id;editNew=false;renderSettings()}
+  else if(act==="edit-work"){editId=b.dataset.id;editNew=false;setTab="works";renderSettings()}
   else if(act==="back"){editId=null;editNew=false;renderSettings()}
   else if(act==="add-mat"){$("#e-mats").insertAdjacentHTML("beforeend",matRow({pack:1,waste:5},0));$("#e-mats").lastElementChild.querySelector(".m-n").focus()}
   else if(act==="del-mat"){b.closest(".mat-ed").remove()}
@@ -1083,12 +1139,23 @@ $("#set-body").addEventListener("click",e=>{
     const inp=$("#g-new"); const g=inp.value.trim(); const msg=$("#g-err");
     if(!g){msg.textContent="Введите название отдела.";msg.hidden=false;return}
     if(GROUPS.includes(g)){msg.textContent="Такой отдел уже есть.";msg.hidden=false;return}
-    SET.groups.push(g); applyCatalog(); renderSettings(); toast("Отдел добавлен");
+    if(BASE_GROUPS.includes(g)||g===DOC_GROUP){msg.textContent="Это название занято, выберите другое.";msg.hidden=false;return}
+    SET.glist.push(g); applyCatalog(); renderSettings(); toast("Отдел добавлен");
   }
   else if(act==="del-group"){
     const g=b.dataset.g; const n=Object.values(CAT).filter(c=>c.group===g).length;
-    if(n){const msg=$("#g-err");msg.textContent=`В отделе «${g}» есть работы (${n}). Перенесите или удалите их, потом удалите отдел.`;msg.hidden=false;return}
-    SET.groups=SET.groups.filter(x=>x!==g); applyCatalog(); renderSettings(); toast("Отдел удалён");
+    if(workGroups().length<2){toast("Должен остаться хотя бы один отдел");return}
+    if(n){ const box=b.closest(".grow-row").querySelector(".g-move"); box.hidden=false; box.querySelector("select").focus(); return; }
+    SET.glist=SET.glist.filter(x=>x!==g); applyCatalog(); renderSettings(); toast("Отдел удалён");
+  }
+  else if(act==="del-group-move"){
+    const g=b.dataset.g, to=b.closest(".g-move").querySelector("select").value; if(!to) return;
+    remapGroup(g,to); SET.glist=SET.glist.filter(x=>x!==g); applyCatalog(); renderSettings(); toast(`Работы перенесены в «${to}», отдел удалён`);
+  }
+  else if(act==="g-up"||act==="g-down"){
+    const i=SET.glist.indexOf(b.dataset.g), j=act==="g-up"?i-1:i+1; if(i<0||j<0||j>=SET.glist.length) return;
+    [SET.glist[i],SET.glist[j]]=[SET.glist[j],SET.glist[i]]; applyCatalog(); renderSettings();
+    modal.querySelector(`[data-act="${act}"][data-g="${CSS.escape(b.dataset.g)}"]`)?.focus();
   }
   else if(act==="export-set"){
     const data=JSON.stringify({app:"farbig-calc",version:1,settings:SET,prices},null,1);
@@ -1100,21 +1167,22 @@ $("#set-body").addEventListener("change",e=>{
   const t=e.target;
   if(t.id==="wf"){worksFilter=t.value;renderSettings()}
   else if(t.id==="e-hasp"){$("#e-pbox").hidden=!t.checked}
-  else if(t.classList.contains("lp")){ const v=num(t.value); if(t.value.trim()==="") delete SET.labor[t.dataset.id]; else if(v>=0) SET.labor[t.dataset.id]=v; saveSet(); renderWorks(); renderMaterials(); }
+  else if(t.classList.contains("lp")){ const v=num(t.value); if(t.value.trim()==="") delete SET.labor[t.dataset.id]; else if(v>=0) SET.labor[t.dataset.id]=v; saveSet(); renderWorks(); renderMaterials();
+    const sm=t.closest("details.mw")?.querySelector("summary small"); if(sm){const id=t.dataset.id,c=CAT[id],pr=laborPrice(id); sm.textContent=`${c.mats.length} мат. · работа ${pr>0?rub(pr):"—"}/${c.unit}`} }
   else if(t.classList.contains("g-ren")){
     const old=t.dataset.g, g=t.value.trim(); const msg=$("#g-err");
     if(!g||g===old){t.value=old;return}
-    if(GROUPS.includes(g)){msg.textContent="Такой отдел уже есть.";msg.hidden=false;t.value=old;return}
-    SET.groups=SET.groups.map(x=>x===old?g:x);
-    for(const c of Object.values(SET.works)) if(c.group===old) c.group=g;
-    for(const c of Object.values(SET.over)) if(c.group===old) c.group=g;
+    if(GROUPS.includes(g)||g===DOC_GROUP||(BASE_GROUPS.includes(g)&&(SET.gren[g]??g)!==old)){msg.textContent="Такое название уже занято.";msg.hidden=false;t.value=old;return}
+    remapGroup(old,g); SET.glist=SET.glist.map(x=>x===old?g:x);
+    if(worksFilter===old) worksFilter=g;
     applyCatalog(); renderSettings(); toast("Отдел переименован");
   }
   else if(t.id==="imp-file"){
     const f=t.files[0]; if(!f) return;
     f.text().then(txt=>{
       const d=JSON.parse(txt); if(d.app!=="farbig-calc"||!d.settings) throw 0;
-      const st=d.settings; SET={groups:Array.isArray(st.groups)?st.groups:[],works:st.works||{},over:st.over||{},labor:st.labor||{},mo:st.mo||{},lib:st.lib||{}};
+      const st=d.settings; SET={groups:Array.isArray(st.groups)?st.groups:[],works:st.works||{},over:st.over||{},labor:st.labor||{},mo:st.mo||{},lib:st.lib||{},gren:st.gren||{}};
+      SET.glist=Array.isArray(st.glist)?st.glist:[...BASE_GROUPS,...SET.groups.filter(g=>!BASE_GROUPS.includes(g))];
       if(d.prices&&typeof d.prices==="object"){prices=d.prices;store.set("msm2-prices",prices)}
       applyCatalog(); renderSettings(); toast("Настройки загружены");
     }).catch(()=>{const m=$("#imp-err");m.textContent="Это не файл настроек калькулятора. Выберите файл, скачанный на вкладке «Обмен».";m.hidden=false});
@@ -1140,53 +1208,118 @@ function matDir(){
   for(const e of d.values()){ e.lib=!!SET.lib[e.k]; e.price=prices[e.k]??e.def; e.edited=!e.lib&&(!!SET.mo[e.k]||prices[e.k]!=null); }
   return d;
 }
-let matNew=false;
+let matNew=false, openWorks=new Set(), addTo=null;
 function mdMeta(e){
-  return `${e.lib?'<span class="badge gold">свой</span> ':e.edited?'<span class="badge gold">изменён</span> ':''}<small>${e.works.length?"в работах: "+esc(e.works.join(", ")):"пока не используется в работах"}</small>
-    ${e.edited?`<button class="link" data-act="reset-mat">Сбросить</button>`:""}${e.lib?`<button class="link" data-act="del-libmat">Удалить</button>`:""}`;
+  return `${e.lib?'<span class="badge gold">свой</span> ':e.edited?'<span class="badge gold">изменён</span> ':''}<small>${e.works.length>1?"также в: "+esc(e.works.join(", ")):e.works.length?"":"пока не используется в работах"}</small>
+    ${e.edited?`<button class="link" data-act="reset-mat">Сбросить</button>`:""}${e.lib&&!e.works.length?`<button class="link" data-act="del-libmat">Удалить</button>`:""}`;
 }
-function mdRow(e){
-  return `<div class="md-row" data-k="${esc(e.k)}" data-s="${esc((e.n+" "+e.works.join(" ")).toLowerCase())}">
+/* Строка материала; ctx — работа, в которой показан материал (тогда есть поле расхода) */
+function mdRow(e,ctx){
+  const m=ctx?CAT[ctx].mats.find(x=>x.k===e.k):null; const c=ctx?CAT[ctx]:null;
+  const rate=m?(m.per??m.rate):null;
+  return `<div class="md-row${ctx?" in-work":""}" data-k="${esc(e.k)}"${ctx?` data-wid="${ctx}"`:""} data-s="${esc(e.n.toLowerCase())}">
     <label class="mn">Материал<input class="md-n" value="${esc(e.n)}"></label>
+    ${ctx?`<label title="Сколько материала уходит на 1 ${esc(c.unit)} работы">Расход, ${esc(e.u)}/${esc(c.unit)}${m.per!=null?" на 1 "+esc(c.param.unit):""}<input class="md-rate" inputmode="decimal" value="${esc(rate)}"></label>`:""}
     <label>Ед.<input class="md-u" value="${esc(e.u)}"></label>
     <label>В упаковке<input class="md-pack" inputmode="decimal" value="${esc(e.pack)}" title="Сколько единиц материала в упаковке"></label>
     <label>Упаковка<input class="md-pn" value="${esc(e.pn)}"></label>
     <label>Цена упак., ₽<input class="md-price" inputmode="decimal" value="${esc(e.price)}"></label>
+    ${ctx?`<button class="x" data-act="rm-from-work" aria-label="Убрать материал из работы" title="Убрать из этой работы">×</button>`:""}
     <div class="md-meta">${mdMeta(e)}</div></div>`;
 }
+function addForm(wid){
+  const c=CAT[wid];
+  return `<div class="md-new add-form"><b>Добавить материал в «${esc(c.name)}»</b>
+    <p class="hint">Начните вводить название — материал из справочника подставится с упаковкой и ценой. Или впишите новый.</p>
+    <div class="fgrid">
+    <label>Материал<input id="af-n" list="mat-names" placeholder="Например: Грунтовка"></label>
+    <label>Ед.<input id="af-u" placeholder="кг"></label>
+    <label>Расход на 1 ${esc(c.unit)}<input id="af-r" inputmode="decimal" placeholder="0,5"></label>
+    <label>В упаковке<input id="af-pack" inputmode="decimal" value="1"></label>
+    <label>Упаковка<input id="af-pn" placeholder="мешок 25 кг"></label>
+    <label>Цена упак., ₽<input id="af-price" inputmode="decimal" placeholder="0"></label>
+    <label>Запас, %<input id="af-w" inputmode="decimal" value="5"></label></div>
+    ${c.param?`<label class="chk"><input type="checkbox" id="af-per"> Расход на 1 ${esc(c.param.unit)} (${esc(c.param.label)})</label>`:""}
+    <p class="err-msg" id="af-err" hidden></p>
+    <div class="actions"><button class="primary" data-act="save-to-work" data-wid="${wid}">Добавить</button><button class="ghost" data-act="cancel-to-work">Отмена</button></div></div>`;
+}
+function workBlock(id){
+  const c=CAT[id]; const dir=matDir(); const pr=laborPrice(id);
+  const op=openWorks.has(id);
+  return `<details class="mw" data-wid="${id}" data-s="${esc(c.name.toLowerCase())}"${op?" open":""}>
+    <summary><span class="mw-name">${esc(c.name)}</span>${c.custom?' <span class="badge gold">своя</span>':c.edited?' <span class="badge gold">изменена</span>':''}
+      <small>${c.mats.length} мат. · работа ${pr>0?rub(pr):"—"}/${esc(c.unit)}</small></summary>
+    <div class="mw-body">
+      <div class="mw-top"><label>Цена работы, ₽ за ${esc(c.unit)}<input class="lp" data-id="${id}" inputmode="decimal" value="${pr||""}" placeholder="0"></label>
+        <button class="link" data-act="edit-work" data-id="${id}">Нормы, параметр, название…</button></div>
+      ${c.mats.map(m=>mdRow(dir.get(m.k),id)).join("")||'<p class="hint">Материалов пока нет.</p>'}
+      ${addTo===id?addForm(id):`<div class="actions"><button data-act="add-to-work" data-wid="${id}">+ Материал в эту работу</button></div>`}
+    </div></details>`;
+}
 function matsTab(){
-  const d=[...matDir().values()];
-  const gs=[...workGroups(),"Свои материалы"];
-  let h=`<div class="actions"><button class="dark" data-act="new-libmat">+ Новый материал</button>
-    <input id="mf" class="grow" type="search" placeholder="Поиск: название или работа" aria-label="Поиск материала"></div>
-    <p class="hint">Название, упаковка и цена материала общие для всех работ и проектов. Расход на единицу работы задаётся во вкладке «Виды работ». Изменения сохраняются сразу.</p>`;
+  const dir=[...matDir().values()];
+  let h=`<div class="actions"><button class="dark" data-act="new-libmat">+ Новый материал</button><button class="dark" data-act="new-work-m">+ Новый вид работ</button>
+    <input id="mf" class="grow" type="search" placeholder="Поиск: материал или работа" aria-label="Поиск"></div>
+    <p class="hint">Работы разбиты по отделам — откройте работу, чтобы поменять цену работы, расход, упаковку и цены материалов. Название, упаковка и цена материала общие: если материал есть в нескольких работах, он поменяется везде. Всё сохраняется сразу.</p>
+    <datalist id="mat-names">${dir.map(e=>`<option value="${esc(e.n)}">`).join("")}</datalist>`;
   if(matNew) h+=`<div class="md-new"><h3>Новый материал</h3><div class="fgrid">
     <label>Название<input id="nm-n" placeholder="Например: Грунт глубокого проникновения"></label>
     <label>Единица<input id="nm-u" placeholder="л"></label>
     <label>В упаковке<input id="nm-pack" inputmode="decimal" value="1"></label>
     <label>Упаковка<input id="nm-pn" placeholder="канистра 10 л"></label>
-    <label>Цена упаковки, ₽<input id="nm-price" inputmode="decimal" placeholder="0"></label></div>
+    <label>Цена упаковки, ₽<input id="nm-price" inputmode="decimal" placeholder="0"></label>
+    <label>Добавить в работу<select id="nm-w"><option value="">— только в справочник —</option>${workGroups().map(g=>`<optgroup label="${esc(g)}">${Object.entries(CAT).filter(([,c])=>c.group===g).map(([id,c])=>`<option value="${id}">${esc(c.name)}</option>`).join("")}</optgroup>`).join("")}</select></label>
+    <label>Расход на ед. работы<input id="nm-r" inputmode="decimal" placeholder="если выбрана работа"></label></div>
     <p class="err-msg" id="nm-err" hidden></p>
-    <div class="actions"><button class="primary" data-act="add-libmat">Добавить</button><button class="ghost" data-act="cancel-libmat">Отмена</button></div>
-    <p class="hint">Чтобы материал считался, добавьте его в нужный вид работ и укажите расход.</p></div>`;
-  for(const g of gs){
-    const rs=d.filter(e=>e.group===g); if(!rs.length) continue;
-    h+=`<div class="md-grp"><h3>${esc(g)} <small class="badge">${rs.length}</small></h3>${rs.map(mdRow).join("")}</div>`;
+    <div class="actions"><button class="primary" data-act="add-libmat">Добавить</button><button class="ghost" data-act="cancel-libmat">Отмена</button></div></div>`;
+  for(const g of workGroups()){
+    const ids=Object.keys(CAT).filter(id=>CAT[id].group===g);
+    h+=`<div class="md-grp" data-g="${esc(g)}"><h3>${esc(g)} <small class="badge">${ids.length} работ</small></h3>${ids.length?ids.map(workBlock).join(""):'<p class="hint">В этом отделе пока нет работ.</p>'}</div>`;
   }
+  const free=dir.filter(e=>!e.works.length);
+  if(free.length) h+=`<div class="md-grp"><h3>Материалы вне работ <small class="badge">${free.length}</small></h3><p class="hint">Есть в справочнике, но не добавлены ни в одну работу — поэтому не считаются.</p>${free.map(e=>mdRow(e)).join("")}</div>`;
   return h+`<p class="hint" id="mf-empty" hidden>Ничего не найдено.</p>
     <div class="actions"><button class="link" data-act="reset-mats">Сбросить все цены и изменения материалов</button></div>`;
 }
-function refreshMdRow(row){ const e=matDir().get(row.dataset.k); if(e) row.querySelector(".md-meta").innerHTML=mdMeta(e); }
+/* Исходное определение работы (без подстановки справочника) и его сохранение */
+function rawDef(id){ const c=CAT[id]; return structuredClone(c.custom?SET.works[id]:(SET.over[id]||BASE_CAT[id])); }
+function putDef(id,def){
+  if(CAT[id].custom) SET.works[id]=def;
+  else { if(!SET.over[id]&&def.src&&!def.src.includes("изменено")) def.src+=" · изменено вручную"; SET.over[id]=def; }
+}
+function refreshMdRows(k){
+  const e=matDir().get(k); if(!e) return;
+  for(const r of document.querySelectorAll(`.md-row[data-k="${CSS.escape(k)}"]`)){
+    r.querySelector(".md-n").value=e.n; r.querySelector(".md-u").value=e.u; r.querySelector(".md-pack").value=e.pack;
+    r.querySelector(".md-pn").value=e.pn; r.querySelector(".md-price").value=e.price;
+    r.querySelector(".md-meta").innerHTML=mdMeta(e); r.dataset.s=e.n.toLowerCase();
+  }
+}
+function refreshWorkBlock(id){ const d=document.querySelector(`details.mw[data-wid="${id}"]`); if(d) d.outerHTML=workBlock(id); }
+$("#set-body").addEventListener("toggle",e=>{
+  const d=e.target; if(!d.classList?.contains("mw")) return;
+  if(d.open) openWorks.add(d.dataset.wid); else openWorks.delete(d.dataset.wid);
+},true);
 $("#set-body").addEventListener("input",e=>{
   if(e.target.id!=="mf") return; const q=e.target.value.trim().toLowerCase(); let any=false;
   for(const g of document.querySelectorAll(".md-grp")){ let vis=0;
-    for(const r of g.querySelectorAll(".md-row")){ const ok=!q||r.dataset.s.includes(q); r.hidden=!ok; vis+=ok; }
-    g.hidden=!vis; any=any||vis>0; }
-  $("#mf-empty").hidden=any;
+    for(const d of g.querySelectorAll("details.mw")){
+      let rows=0; for(const r of d.querySelectorAll(".md-row")){ const ok=!q||r.dataset.s.includes(q); r.hidden=!ok&&!d.dataset.s.includes(q); rows+=ok; }
+      const ok=!q||d.dataset.s.includes(q)||rows>0; d.hidden=!ok; if(q&&rows&&!d.dataset.s.includes(q)) d.open=true; vis+=ok;
+    }
+    for(const r of g.querySelectorAll(":scope > .md-row")){ const ok=!q||r.dataset.s.includes(q); r.hidden=!ok; vis+=ok; }
+    g.hidden=!vis&&!!q; any=any||vis>0; }
+  $("#mf-empty").hidden=any||!q;
 });
 $("#set-body").addEventListener("change",e=>{
   const t=e.target, row=t.closest(".md-row"); if(!row||t.tagName!=="INPUT") return;
   const k=row.dataset.k, v=t.value.trim(), cur=matDir().get(k);
+  if(t.classList.contains("md-rate")){
+    const wid=row.dataset.wid, n=num(v); const m0=CAT[wid].mats.find(x=>x.k===k);
+    if(!(n>0)){t.value=m0.per??m0.rate;toast("Расход должен быть больше нуля");return}
+    const def=rawDef(wid); const m=def.mats.find(x=>x.k===k); if(m.per!=null) m.per=n; else m.rate=n; delete m.nt;
+    putDef(wid,def); applyCatalog(); toast("Расход сохранён"); return;
+  }
   if(t.classList.contains("md-price")){
     const n=num(v);
     if(v===""){delete prices[k]} else if(n>=0){ if(n===cur.def) delete prices[k]; else prices[k]=n; } else {t.value=cur.price;toast("Цена должна быть числом");return}
@@ -1199,27 +1332,59 @@ $("#set-body").addEventListener("change",e=>{
     if(SET.lib[k]) SET.lib[k][prop]=val;
     else { const o={...(SET.mo[k]||{})}; const base=BASE_MAT[k]; if(base&&base[prop]===val) delete o[prop]; else o[prop]=val;
       if(Object.keys(o).length) SET.mo[k]=o; else delete SET.mo[k]; }
-    if(prop==="n") row.dataset.s=(val+" "+cur.works.join(" ")).toLowerCase();
   }
-  applyCatalog(); refreshMdRow(row);
+  applyCatalog(); refreshMdRows(k);
+  for(const d of document.querySelectorAll("details.mw")){ const s=d.querySelector("summary small"); const c=CAT[d.dataset.wid]; const pr=laborPrice(d.dataset.wid); if(s&&c) s.textContent=`${c.mats.length} мат. · работа ${pr>0?rub(pr):"—"}/${c.unit}`; }
+});
+/* Автоподстановка в форме «материал в работу» */
+$("#set-body").addEventListener("change",e=>{
+  if(e.target.id!=="af-n") return; const v=e.target.value.trim().toLowerCase();
+  const hit=[...matDir().values()].find(x=>x.n.toLowerCase()===v); if(!hit) return;
+  $("#af-u").value=hit.u; $("#af-pack").value=hit.pack; $("#af-pn").value=hit.pn; $("#af-price").value=hit.price; $("#af-r").focus();
 });
 $("#set-body").addEventListener("click",e=>{
   const b=e.target.closest("[data-act]"); if(!b) return; const act=b.dataset.act; const row=b.closest(".md-row");
   if(act==="new-libmat"){matNew=true;renderSettings();$("#nm-n").focus()}
+  else if(act==="new-work-m"){setTab="works";editNew=true;editId=null;renderSettings();$("#e-name").focus()}
   else if(act==="cancel-libmat"){matNew=false;renderSettings()}
   else if(act==="add-libmat"){
     const err=t=>{const m=$("#nm-err");m.textContent=t;m.hidden=false};
     const n=$("#nm-n").value.trim(), u=$("#nm-u").value.trim(), pack=num($("#nm-pack").value), price=num($("#nm-price").value);
+    const wid=$("#nm-w").value, r=num($("#nm-r").value);
     if(!n) return err("Укажите название материала.");
     if(!u) return err("Укажите единицу, например кг или л.");
     if(!(pack>0)) return err("Количество в упаковке должно быть больше нуля.");
+    if(wid&&!(r>0)) return err("Укажите расход на единицу выбранной работы.");
     const k="c:"+n.toLowerCase()+"|"+u;
     if(matDir().has(k)||[...matDir().values()].some(x=>x.n.toLowerCase()===n.toLowerCase())) return err("Такой материал уже есть в справочнике.");
-    SET.lib[k]={n,u,pack,pn:$("#nm-pn").value.trim()||`${String(pack).replace(".",",")} ${u}`,price:price>0?price:0};
-    matNew=false; saveSet(); renderSettings(); toast("Материал добавлен в справочник");
+    const pn=$("#nm-pn").value.trim()||`${String(pack).replace(".",",")} ${u}`;
+    SET.lib[k]={n,u,pack,pn,price:price>0?price:0};
+    if(wid){ const def=rawDef(wid); def.mats.push({k,n,u,rate:r,pack,pn,price:price>0?price:0,waste:5}); putDef(wid,def); openWorks.add(wid); }
+    matNew=false; applyCatalog(); renderSettings(); toast(wid?"Материал добавлен в работу «"+CAT[wid].name+"»":"Материал добавлен в справочник");
   }
-  else if(act==="reset-mat"){ const k=row.dataset.k; delete SET.mo[k]; delete prices[k]; store.set("msm2-prices",prices); applyCatalog();
-    const e2=matDir().get(k); if(e2) row.outerHTML=mdRow(e2); toast("Материал сброшен к стандарту"); }
+  else if(act==="add-to-work"){ addTo=b.dataset.wid; openWorks.add(addTo); refreshWorkBlock(addTo); $("#af-n").focus(); }
+  else if(act==="cancel-to-work"){ const w=addTo; addTo=null; refreshWorkBlock(w); }
+  else if(act==="save-to-work"){
+    const wid=b.dataset.wid, c=CAT[wid]; const err=t=>{const m=$("#af-err");m.textContent=t;m.hidden=false};
+    const n=$("#af-n").value.trim(), u=$("#af-u").value.trim(), r=num($("#af-r").value), pack=num($("#af-pack").value), price=num($("#af-price").value);
+    if(!n) return err("Укажите материал.");
+    if(!u) return err("Укажите единицу.");
+    if(!(r>0)) return err("Расход должен быть больше нуля.");
+    if(!(pack>0)) return err("Количество в упаковке должно быть больше нуля.");
+    const hit=[...matDir().values()].find(x=>x.n.toLowerCase()===n.toLowerCase());
+    const k=hit?hit.k:"c:"+n.toLowerCase()+"|"+u;
+    if(c.mats.some(m=>m.k===k)) return err("Этот материал уже есть в работе — поменяйте его расход в списке выше.");
+    const m={k,n,u,pack,pn:$("#af-pn").value.trim()||`${String(pack).replace(".",",")} ${u}`,price:price>=0?price:0,waste:num($("#af-w").value)||0};
+    if($("#af-per")?.checked&&c.param) m.per=r; else m.rate=r;
+    const def=rawDef(wid); def.mats.push(m); putDef(wid,def); syncMat(m); store.set("msm2-prices",prices);
+    addTo=null; applyCatalog(); refreshWorkBlock(wid); toast("Материал добавлен в работу");
+  }
+  else if(act==="rm-from-work"){
+    if(b.dataset.armed!=="1"){b.dataset.armed="1";b.textContent="?";b.title="Нажмите ещё раз, чтобы убрать";setTimeout(()=>{b.dataset.armed="";b.textContent="×"},3000);return}
+    const wid=row.dataset.wid, k=row.dataset.k; const def=rawDef(wid); def.mats=def.mats.filter(m=>m.k!==k); putDef(wid,def);
+    applyCatalog(); refreshWorkBlock(wid); toast("Материал убран из работы");
+  }
+  else if(act==="reset-mat"){ const k=row.dataset.k; delete SET.mo[k]; delete prices[k]; store.set("msm2-prices",prices); applyCatalog(); refreshMdRows(k); toast("Материал сброшен к стандарту"); }
   else if(act==="del-libmat"){ const k=row.dataset.k; const e2=matDir().get(k);
     if(e2?.works.length){toast("Материал используется в работах: "+e2.works.join(", ")+". Сначала уберите его оттуда.");return}
     delete SET.lib[k]; delete prices[k]; store.set("msm2-prices",prices); saveSet(); row.remove(); toast("Материал удалён"); }
@@ -1250,13 +1415,25 @@ function laborList(){
 }
 
 /* --- Отделы --- */
+function remapGroup(old,nw){
+  for(const b of BASE_GROUPS) if((SET.gren[b]??b)===old){ if(b===nw) delete SET.gren[b]; else SET.gren[b]=nw; }
+  for(const c of [...Object.values(SET.works),...Object.values(SET.over)]) if((SET.gren[c.group]??c.group)===old||c.group===old) c.group=nw;
+}
 function groupsList(){
-  let h=`<p class="hint">Отделы — разделы, по которым сгруппированы работы и материалы. Стандартные отделы не удаляются; свои можно переименовать или удалить, если в них нет работ.</p>`;
-  for(const g of BASE_GROUPS){ const n=Object.values(CAT).filter(c=>c.group===g).length;
-    h+=`<div class="srow"><div class="grow"><b>${esc(g)}</b> <span class="badge">стандартный</span><br><small>работ: ${n}</small></div></div>`; }
-  for(const g of SET.groups){ const n=Object.values(CAT).filter(c=>c.group===g).length;
-    h+=`<div class="srow"><input class="g-ren grow" data-g="${esc(g)}" value="${esc(g)}" aria-label="Название отдела"><small>работ: ${n}</small><button class="link" data-act="del-group" data-g="${esc(g)}">Удалить</button></div>`; }
-  h+=`<h3>Новый отдел</h3><div class="actions"><input id="g-new" class="grow" placeholder="Например: Декоративные покрытия"><button class="dark" data-act="add-group">+ Добавить отдел</button></div>
+  const gs=workGroups();
+  let h=`<p class="hint">Отделы — разделы, по которым сгруппированы работы и материалы в калькуляторе и в Excel. Любой отдел можно переименовать, поднять или опустить в списке и удалить. Если в отделе есть работы, при удалении их нужно перенести в другой отдел.</p>`;
+  gs.forEach((g,i)=>{ const n=Object.values(CAT).filter(c=>c.group===g).length;
+    h+=`<div class="srow grow-row">
+      <span class="g-ord"><button class="g-arrow" data-act="g-up" data-g="${esc(g)}" aria-label="Выше"${i===0?" disabled":""}>↑</button><button class="g-arrow" data-act="g-down" data-g="${esc(g)}" aria-label="Ниже"${i===gs.length-1?" disabled":""}>↓</button></span>
+      <input class="g-ren grow" data-g="${esc(g)}" value="${esc(g)}" aria-label="Название отдела">
+      <small>работ: ${n}</small>
+      <button class="link" data-act="del-group" data-g="${esc(g)}">Удалить</button>
+      <div class="g-move" hidden>Перенести ${n} работ в
+        <select aria-label="Куда перенести работы">${gs.filter(x=>x!==g).map(x=>`<option>${esc(x)}</option>`).join("")}</select>
+        <button class="dark" data-act="del-group-move" data-g="${esc(g)}">Перенести и удалить</button></div>
+    </div>`; });
+  h+=`<p class="hint">Название меняется, когда вы выходите из поля.</p>
+    <h3>Новый отдел</h3><div class="actions"><input id="g-new" class="grow" placeholder="Например: Декоративные покрытия"><button class="dark" data-act="add-group">+ Добавить отдел</button></div>
     <p class="err-msg" id="g-err" hidden></p>`;
   return h;
 }
