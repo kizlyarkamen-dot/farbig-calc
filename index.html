@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Материалы по смете</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Open+Sans:wght@400;600;700&display=swap">
+<style>
+/* Layout: фирменный стиль FARBIG — графитовая шапка, золотые заголовки «ШАГ N:», тёмные плашки разделов, итог закреплён снизу */
+:root{
+  --bg:#FFFFFF; --surface:#F7F5F2; --ink:#292929; --muted:#6E6963; --line:#E4E0DA;
+  --gold:#CBA265; --gold-text:#94703A; --band:#292929; --band-2:#3A3A3A; --on-band:#FFFFFF; --on-band-muted:#BDB7AE;
+  --warn:#8A5A12; --warn-soft:#FBF1DE; --bad:#B3261E; --ok:#2F7A4B;
+  --f-display:"Oswald","Arial Narrow",Impact,sans-serif;
+  --f-body:"Open Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1C1C1C; --surface:#252525; --ink:#F1EEE9; --muted:#A8A299; --line:#383633;
+  --gold:#CBA265; --gold-text:#D8B57B; --band:#121212; --band-2:#2C2C2C; --on-band:#FFFFFF; --on-band-muted:#A8A299;
+  --warn:#E9B866; --warn-soft:#33291A; --bad:#F2867E; --ok:#7FCB99; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1C1C1C; --surface:#252525; --ink:#F1EEE9; --muted:#A8A299; --line:#383633;
+  --gold:#CBA265; --gold-text:#D8B57B; --band:#121212; --band-2:#2C2C2C; --on-band:#FFFFFF; --on-band-muted:#A8A299;
+  --warn:#E9B866; --warn-soft:#33291A; --bad:#F2867E; --ok:#7FCB99; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body);padding-bottom:calc(86px + env(safe-area-inset-bottom,0px))}
+.wrap{max-width:1000px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* Top bar like the deck: logo left, label centre, gold mark right */
+.topbar{border-bottom:1px solid var(--line);background:var(--bg)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:12px}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink)}
+.logo svg{width:22px;height:56px;display:block}
+.logo b{font:700 22px/1 var(--f-display);letter-spacing:.01em}
+.topbar .lbl{font-size:13px;color:var(--muted)}
+.topbar .mark{font:700 20px/1 var(--f-display);color:var(--gold);border-bottom:3px solid var(--gold);padding-bottom:4px}
+
+.hero{background:var(--band);color:var(--on-band)}
+.hero .wrap{padding-block:36px 32px;display:grid;gap:14px}
+.hero h1{margin:0;font:700 clamp(34px,8vw,64px)/1 var(--f-display);text-transform:uppercase;letter-spacing:.005em;text-wrap:balance}
+.hero h1 .g{color:var(--gold);display:block}
+.hero p{margin:0;max-width:60ch;color:var(--on-band-muted)}
+.hero .src{display:flex;flex-wrap:wrap;gap:8px}
+.hero .src span{font-size:12px;border:1px solid var(--band-2);background:var(--band-2);padding:3px 10px;border-radius:2px;color:var(--on-band)}
+
+main .wrap{display:grid;gap:40px;padding-block:32px 8px}
+section{display:grid;gap:16px}
+h2{margin:0;font:700 clamp(24px,5vw,34px)/1.05 var(--f-display);text-transform:uppercase;color:var(--gold-text)}
+h2 .step{color:var(--gold)}
+.lead{margin:-6px 0 0;color:var(--muted);max-width:62ch}
+.panel{background:var(--bg);border:1px solid var(--line)}
+
+/* Upload */
+.drop{display:grid;gap:14px;padding:18px;border:2px dashed var(--line);background:var(--surface);transition:border-color .15s}
+.drop.over{border-color:var(--gold)}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.hint{color:var(--muted);font-size:13px;margin:0}
+.files{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 6px 4px 10px;border:1px solid var(--line);background:var(--bg);font-size:13px;max-width:100%}
+.chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.chip em{font-style:normal;font-size:11px;color:var(--muted)}
+.chip button{border:0;background:none;color:var(--muted);font-size:17px;line-height:1;padding:2px 6px;cursor:pointer}
+.chip button:hover{color:var(--bad)}
+.opts{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.opts label{display:inline-flex;gap:6px;align-items:center;cursor:pointer}
+.opts input{accent-color:var(--gold)}
+.status{font-size:13px;padding:10px 12px;background:var(--bg);border:1px solid var(--line);display:flex;gap:10px;align-items:center}
+.status.err{background:var(--warn-soft);border-color:transparent;color:var(--warn)}
+.status.done{color:var(--ok)}
+.spin{width:14px;height:14px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--gold);animation:sp .8s linear infinite;flex:none}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation-duration:3s}}
+
+button,.btn{font:600 14px var(--f-body);cursor:pointer;padding:10px 16px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:0}
+button:hover{border-color:var(--ink)}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.primary{background:var(--gold);border-color:var(--gold);color:#1B1B1B;font-family:var(--f-display);font-weight:500;font-size:16px;letter-spacing:.04em;text-transform:uppercase}
+.primary:hover{filter:brightness(1.06);border-color:var(--gold)}
+.dark{background:var(--band);border-color:var(--band);color:var(--on-band)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.ghost{background:transparent}
+.link{border:0;background:none;color:var(--gold-text);padding:4px 0;font-weight:600}
+
+.banner{padding:12px 14px;background:var(--surface);border-left:4px solid var(--gold);font-size:13px}
+.warns{display:grid;gap:6px;margin:0;padding:12px 14px 12px 30px;background:var(--warn-soft);color:var(--warn);font-size:13px}
+
+.obj{display:grid;gap:8px;padding:16px}
+.obj label{font:500 12px var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.obj input{font:600 17px var(--f-body);border:0;border-bottom:2px solid var(--line);background:transparent;color:var(--ink);padding:4px 0;width:100%}
+details summary{cursor:pointer;color:var(--muted);font-size:13px}
+.tbl-x{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+th{font:500 12px var(--f-display);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+
+/* Works */
+.work{display:grid;grid-template-columns:minmax(0,2.3fr) minmax(0,1.3fr) 130px 130px 36px;gap:8px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line)}
+.work:last-child{border-bottom:0}
+.work.other{background:var(--warn-soft)}
+.work select,.work input{width:100%;font:14px var(--f-body);padding:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);min-width:0;border-radius:0}
+.unitbox{display:flex;align-items:center;gap:6px;min-width:0}
+.unitbox input{font-variant-numeric:tabular-nums;text-align:right}
+.unitbox span{font-size:12px;color:var(--muted);white-space:nowrap}
+.work .del{padding:6px;width:36px;height:36px;color:var(--muted);background:transparent;border-color:transparent;font-size:19px;line-height:1}
+.work .del:hover{color:var(--bad);border-color:var(--line)}
+.work .note{grid-column:1/-1;font-size:12px;color:var(--muted);margin-top:-2px}
+.work .note:empty{display:none}
+.work .note b{color:var(--gold-text);font-weight:600}
+.works-foot{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;padding:12px;border-top:1px solid var(--line);background:var(--surface)}
+.empty{padding:24px 16px;color:var(--muted);text-align:center}
+@media (max-width:720px){
+  .work{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 36px}
+  .work .w-type{grid-column:1/3}
+  .work .w-room{grid-column:1/-1;order:3}
+  .work .q{order:4}.work .p{order:5}
+  .work .del{grid-column:3;grid-row:1}
+  .work .note{order:6}
+}
+
+/* Materials */
+.mat-tools{display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.mat-tools input[type=range]{accent-color:var(--gold);width:140px}
+.num{font-variant-numeric:tabular-nums}
+.g-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:12px 14px;background:var(--band);color:var(--gold)}
+.g-head h3{margin:0;font:700 18px/1 var(--f-display);text-transform:uppercase;letter-spacing:.02em}
+.g-head span{font:500 16px var(--f-display);color:var(--on-band)}
+.group{border:1px solid var(--line);border-top:0}
+.groups{display:grid;gap:12px}
+.mrow{display:grid;grid-template-columns:minmax(0,1fr) 110px 140px 110px 110px;gap:10px;align-items:center;padding:9px 14px;font-size:14px}
+.mrow + .mrow{border-top:1px solid var(--line)}
+.mrow.hdr{font:500 11px var(--f-display);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-block:6px;background:var(--surface)}
+.mname{min-width:0}
+.mname b{font-weight:600;display:block}
+.mname small{color:var(--muted);font-size:12px;display:block}
+.r{text-align:right}
+.mrow .price{width:100%;text-align:right;font:13px var(--f-body);padding:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:0}
+.sum{font-weight:700}
+.lbl{display:none}
+@media (max-width:720px){
+  .mrow.hdr{display:none}
+  .mrow{grid-template-columns:1fr 1fr;gap:4px 12px}
+  .mname{grid-column:1/-1}
+  .lbl{display:block;font:500 10.5px var(--f-display);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .r{text-align:left}
+  .mrow .price{text-align:left;max-width:140px}
+}
+
+/* Norms */
+.norm-group{display:grid;gap:10px}
+.norm-group h3{margin:8px 0 0;font:700 18px var(--f-display);text-transform:uppercase;color:var(--ink)}
+.norms{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:10px}
+.norm{padding:12px 14px;font-size:13px;border:1px solid var(--line);background:var(--surface);display:grid;gap:6px;align-content:start}
+.norm h4{margin:0;font:600 14px var(--f-body)}
+.norm ul{margin:0;padding-left:16px;color:var(--muted)}
+.norm .num{color:var(--ink)}
+.norm .src{font-size:12px;color:var(--gold-text);font-weight:600}
+.norm .tk{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:6px}
+.tag-est{font-size:11px;padding:1px 6px;background:var(--warn-soft);color:var(--warn);font-weight:600}
+
+/* Bottom bar */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--band);color:var(--on-band);padding-bottom:env(safe-area-inset-bottom,0px)}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:12px}
+.total small{display:block;font:500 11px var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--on-band-muted)}
+.total b{font:700 clamp(22px,5vw,28px)/1.05 var(--f-display);color:var(--gold)}
+.bar .acts{display:flex;gap:10px;align-items:center}
+.toast{font-size:13px;color:var(--on-band-muted)}
+footer .wrap{padding-block:16px 28px;font-size:12px;color:var(--muted)}
+</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+
+<div class="topbar">
+  <div class="wrap">
+    <span class="logo" aria-label="FARBIG">
+      <svg viewBox="1400 450 1200 3100" aria-hidden="true"><g transform="translate(0 4000) scale(1 -1)">
+        <path fill="#CBA265" transform="translate(1466.48 500)" d="M763.54 322.9C687.79 327.19 610.86 329.43 532.93 329.43C455 329.43 376.83 327.19 300.55 322.78C197.97 316.84 97.63 307.08 0 293.72L0 .18C169.74 23.82 348.31 36.52 532.93 36.52C717.55 36.52 897 23.76 1067.03 0L1067.03 293.55C968.46 307.08 867.12 316.96 763.54 322.9Z"/>
+        <path fill="#CBA265" transform="translate(2230.03 940.58)" d="M303.49 452.11L303.49 0C204.91 13.53 103.57 23.41 0 29.35L0 452.11Z"/>
+        <path fill="currentColor" transform="translate(2230.03 1544.38)" d="M59.4 .59L0 1955.62L303.49 1955.62L244.08 0Z"/>
+        <path fill="currentColor" transform="translate(1466.48 940.76)" d="M300.55 2088.72L300.55 1618.19L641.68 1618.19L641.68 1147.67L300.55 1147.67L300.55 29.05C197.97 23.11 97.63 13.35 0 0L0 2559.24L656.97 2559.24L656.97 2088.72Z"/>
+      </g></svg>
+      <b>FARBIG</b>
+    </span>
+    <span class="lbl">Калькулятор материалов</span>
+    <span class="mark">ТК</span>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <h1><span class="g">Расчёт материалов</span>по смете и проекту</h1>
+    <p>Введите объёмы работ по смете или проекту — калькулятор посчитает материал по нормам из техкарт: с запасом, упаковками и ценой. Результат можно скачать в Excel.</p>
+    <div class="src"><span>ИЭСН-2013 КНАУФ</span><span>Альбом потолков КНАУФ</span><span>Экспресс К3 FARBIG</span><span>Техкарты WOHOM 2026</span></div>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+
+  <section aria-labelledby="h-obj">
+    <h2 id="h-obj"><span class="step">Шаг 1:</span> объект</h2>
+    <div class="banner" id="example-banner" hidden><b>Пример.</b> Малярные работы на 204 м² стен по смете из презентации FARBIG «Организация отделочных работ». Замените работы на свои или нажмите «Очистить всё».</div>
+    <ul class="warns" id="warns" hidden></ul>
+    <div class="panel obj">
+      <label for="obj-name">Название объекта</label>
+      <input id="obj-name" placeholder="Например: квартира 54 м², ЖК «Северный»">
+      <details id="rooms-box">
+        <summary id="rooms-sum">Помещения</summary>
+        <div class="tbl-x"><table id="rooms"></table></div>
+      </details>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-works">
+    <h2 id="h-works"><span class="step">Шаг 2:</span> объёмы работ</h2>
+    <p class="lead" id="works-count"></p>
+    <div class="panel">
+      <div id="works"></div>
+      <div class="works-foot">
+        <button id="btn-add">+ Добавить работу</button>
+        <button class="link" id="btn-clear">Очистить всё</button>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-mat">
+    <h2 id="h-mat"><span class="step">Шаг 3:</span> материалы</h2>
+    <div class="mat-tools">
+      <label for="reserve">Доп. запас сверх норм</label>
+      <input type="range" id="reserve" min="0" max="20" step="1" value="0">
+      <span class="num" id="reserve-v">0%</span>
+      <span>Цены можно поправить — они запомнятся в этом браузере.</span>
+    </div>
+    <div class="groups" id="mats"></div>
+  </section>
+
+  <section aria-labelledby="h-norms">
+    <details>
+      <summary><h2 id="h-norms" style="display:inline">Нормы и источники</h2></summary>
+      <p class="lead" style="margin-top:12px">У каждой нормы указан источник. Пометка <span class="tag-est">оценка</span> — в ваших документах цифры нет, взято типовое значение; проверьте по ТДС производителя.</p>
+      <div id="norms" style="display:grid;gap:18px;margin-top:8px"></div>
+    </details>
+  </section>
+
+</div>
+</main>
+<footer><div class="wrap">Нормы КНАУФ — ИЭСН-2013 (на 100 м², пересчитаны на 1 м²) и альбом 1.045.9-2.08. Технология и толщины слоёв малярки — техкарта «Экспресс К3» FARBIG. Составы, толщины, слои и допуски — техкарты WOHOM 2026. Цены ориентировочные.</div></footer>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="total"><small>Итого материалы</small><b id="total">0 ₽</b></div>
+    <div class="acts">
+      <span class="toast" id="toast" aria-live="polite"></span>
+      <button class="primary" id="btn-xlsx">Скачать Excel</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+"use strict";
+/* ================= Справочник: работы, нормы на единицу работы, источники ================= */
+const EST="оценка";
+const IESN="ИЭСН-2013 КНАУФ, табл. ";
+const ALB="Альбом КНАУФ 1.045.9-2.08, табл. 17";
+const K3="Техкарта «Экспресс К3» FARBIG";
+// общие материалы (одинаковый ключ — суммируются между работами)
+const M={
+  tiefen:{k:"tiefen",n:"Грунтовка КНАУФ-Тифенгрунд",u:"кг",pack:10,pn:"канистра 10 кг",price:1400,waste:0},
+  betok:{k:"betok",n:"Грунтовка КНАУФ-Бетоконтакт",u:"кг",pack:20,pn:"ведро 20 кг",price:2700,waste:0},
+  grund:{k:"grund",n:"Грунтовка КНАУФ-Грундирмиттель",u:"кг",pack:10,pn:"канистра 10 кг",price:1900,waste:0},
+  fugen:{k:"fugen",n:"Шпаклёвка КНАУФ-Фуген",u:"кг",pack:25,pn:"мешок 25 кг",price:850,waste:0},
+  tape:{k:"tape",n:"Лента армирующая бумажная",u:"м",pack:75,pn:"рулон 75 м",price:320,waste:0},
+  gkl:{k:"gkl",n:"ГКЛ 12,5 мм 2500×1200 (3 м²)",u:"лист",pack:1,pn:"лист",price:480,waste:5},
+  tn25:{k:"tn25",n:"Шуруп TN 3,5×25",u:"шт",pack:1000,pn:"уп. 1000 шт",price:650,waste:0},
+  tn35:{k:"tn35",n:"Шуруп TN 3,5×35",u:"шт",pack:1000,pn:"уп. 1000 шт",price:750,waste:0},
+  ln9:{k:"ln9",n:"Шуруп LN 3,5×9",u:"шт",pack:1000,pn:"уп. 1000 шт",price:550,waste:0},
+  k650:{k:"k650",n:"Дюбель анкерный К 6×50",u:"шт",pack:100,pn:"уп. 100 шт",price:420,waste:0},
+  sep50:{k:"sep50",n:"Лента разделительная 50 мм",u:"м",pack:50,pn:"рулон 50 м",price:250,waste:0},
+  wool50:{k:"wool50",n:"Плита минераловатная 50 мм",u:"м²",pack:6,pn:"уп. 6 м²",price:950,waste:0},
+  pp60:{k:"pp60",n:"Профиль ПП 60×27, 3 м",u:"шт",pack:1,pn:"шт",price:330,waste:0},
+  pn28:{k:"pn28",n:"Профиль ПН 28×27, 3 м",u:"шт",pack:1,pn:"шт",price:220,waste:0},
+  hang:{k:"hang",n:"Подвес прямой для ПП 60×27",u:"шт",pack:1,pn:"шт",price:15,waste:0},
+  seal30:{k:"seal30",n:"Лента уплотнительная 30 мм",u:"м",pack:30,pn:"рулон 30 м",price:300,waste:0},
+  anch:{k:"anch",n:"Дюбель анкерный металлический 6×40",u:"шт",pack:50,pn:"уп. 50 шт",price:400,waste:0},
+  beacon:{k:"beacon",n:"Профиль маячковый ПМ, 3 м",u:"шт",pack:1,pn:"шт",price:45,waste:0},
+  primer:{k:"primer",n:"Грунтовка глубокого проникновения (готовая)",u:"л",pack:10,pn:"канистра 10 л",price:850,waste:5},
+  ggp:{k:"ggp",n:"Грунт глубокого проникновения, концентрат 1:3",u:"л",pack:10,pn:"канистра 10 л",price:3500,waste:5},
+  finpaste:{k:"finpaste",n:"Шпаклёвка финишная полимерная (F / PS / FC)",u:"кг",pack:25,pn:"ведро 25 кг",price:3600,waste:5},
+  damper:{k:"damper",n:"Демпферная лента 10 мм",u:"м",pack:25,pn:"рулон 25 м",price:450,waste:5},
+  primer_paint:{k:"primer_paint",n:"Грунт под окраску (Primer)",u:"л",pack:10,pn:"ведро 10 л",price:6500,waste:5},
+};
+const use=(key,o)=>({...M[key],...o});
+const CAT={
+  /* ---------- Черновые ---------- */
+  partition_aerated:{name:"Перегородки из газобетона D500, 100 мм",group:"Черновые",unit:"м²",src:"WOHOM ТК-05 (состав, армирование); расход — "+EST,est:true,
+    tk:"ТК-05: перевязка ≥150 мм; базальтовая сетка 25×25 через каждый второй ряд; связи со стенами через 2–3 ряда; верхний шов ~20 мм минватой.",mats:[
+    {k:"aer100",n:"Блок газобетонный D500 625×250×100",u:"шт",rate:6.4,pack:1,pn:"шт",price:160,waste:5},
+    {k:"aerglue",n:"Клей для газобетона",u:"кг",rate:1.6,pack:25,pn:"мешок 25 кг",price:450,waste:5,est:true},
+    {k:"basmesh",n:"Сетка базальтовая 25×25 мм (полоса в шов)",u:"м",rate:2.0,pack:50,pn:"рулон 50 м",price:1500,waste:5},
+    {k:"aertie",n:"Гибкая связь для газобетона",u:"шт",rate:0.5,pack:1,pn:"шт",price:25,waste:0,est:true}]},
+  partition_pgp:{name:"Перегородки из ПГП 80 мм",group:"Черновые",unit:"м²",src:EST,est:true,mats:[
+    {k:"pgp80",n:"Пазогребневая плита 667×500×80",u:"шт",rate:3.0,pack:1,pn:"шт",price:330,waste:5},
+    {k:"glue_gyps",n:"Клей монтажный гипсовый",u:"кг",rate:1.5,pack:25,pn:"мешок 25 кг",price:600,waste:5}]},
+  partition_gkl:{name:"Перегородка ГКЛ С111 (1 слой с двух сторон)",group:"Черновые",unit:"м²",src:IESN+"01-1.1-01-01",
+    tk:"WOHOM ТК-12: шаг стоек — по системе и проекту, без универсального «всегда 600 мм».",mats:[
+    {k:"pn75",n:"Профиль ПН 75×40, 3 м",u:"шт",rate:0.324,pack:1,pn:"шт",price:380,waste:0,nt:"0,972 м/м²"},
+    {k:"ps75",n:"Профиль ПС 75×50, 3 м",u:"шт",rate:0.687,pack:1,pn:"шт",price:450,waste:0,nt:"2,06 м/м²"},
+    use("k650",{rate:1.39}),
+    {k:"seal70",n:"Лента уплотнительная 70 мм",u:"м",rate:0.81,pack:30,pn:"рулон 30 м",price:420,waste:0},
+    use("sep50",{rate:0.667}), use("wool50",{rate:1.0}),
+    use("gkl",{rate:0.667,nt:"2,0 м²/м²"}), use("tn25",{rate:34.29}),
+    use("tiefen",{rate:0.0114}), use("fugen",{rate:0.887}), use("tape",{rate:2.775})]},
+  partition_gkl2:{name:"Перегородка ГКЛ С112 (2 слоя с двух сторон)",group:"Черновые",unit:"м²",src:IESN+"01-1.1-02-01",mats:[
+    {k:"pn75",n:"Профиль ПН 75×40, 3 м",u:"шт",rate:0.179,pack:1,pn:"шт",price:380,waste:0,nt:"0,536 м/м²"},
+    {k:"ps75",n:"Профиль ПС 75×50, 3 м",u:"шт",rate:0.687,pack:1,pn:"шт",price:450,waste:0,nt:"2,06 м/м²"},
+    use("k650",{rate:1.39}),
+    {k:"seal70",n:"Лента уплотнительная 70 мм",u:"м",rate:0.81,pack:30,pn:"рулон 30 м",price:420,waste:0},
+    use("sep50",{rate:0.667}), use("wool50",{rate:1.0}),
+    use("gkl",{rate:1.333,nt:"4,0 м²/м²"}), use("tn25",{rate:11.07}), use("tn35",{rate:29.52}),
+    use("tiefen",{rate:0.0229}), use("fugen",{rate:1.289}), use("tape",{rate:2.775})]},
+  lining_gkl:{name:"Облицовка стен ГКЛ по каркасу С623",group:"Черновые",unit:"м²",src:IESN+"01-2.1-01-01",mats:[
+    use("pn28",{rate:0.27,nt:"0,81 м/м²"}), use("pp60",{rate:0.573,nt:"1,718 м/м²"}), use("hang",{rate:2.14}),
+    {k:"ppconn",n:"Соединитель (удлинитель) ПП 60×27",u:"шт",rate:0.36,pack:1,pn:"шт",price:20,waste:0},
+    use("k650",{rate:3.53}), use("seal30",{rate:0.938}), use("sep50",{rate:0.333}), use("ln9",{rate:4.29}),
+    use("wool50",{rate:1.0}), use("gkl",{rate:0.333,nt:"1,0 м²/м²"}), use("tn25",{rate:16.67}),
+    use("tiefen",{rate:0.0057}), use("fugen",{rate:0.414}), use("tape",{rate:1.3})]},
+  lining_glue:{name:"Облицовка стен ГКЛ на клею С611А",group:"Черновые",unit:"м²",src:IESN+"01-03-01-01",mats:[
+    use("betok",{rate:0.155}), use("tiefen",{rate:0.0033}), use("fugen",{rate:1.178,nt:"1,178 кг/м² (приклейка + швы)"}),
+    {k:"gkl3000",n:"ГКЛ 12,5 мм 3000×1200 (3,6 м²)",u:"лист",rate:0.278,pack:1,pn:"лист",price:580,waste:5,nt:"1,0 м²/м²"},
+    use("tape",{rate:1.05})]},
+  ceiling_gkl:{name:"Потолок ГКЛ П113 (одноуровневый каркас)",group:"Черновые",unit:"м²",src:IESN+"01-4.1-02-01",mats:[
+    use("pn28",{rate:0.22,nt:"0,66 м/м²"}), use("pp60",{rate:0.927,nt:"2,78 м/м²"}),
+    {k:"cross1",n:"Соединитель одноуровневый «краб» ПП 60×27",u:"шт",rate:1.78,pack:1,pn:"шт",price:18,waste:0},
+    {k:"ppconn",n:"Соединитель (удлинитель) ПП 60×27",u:"шт",rate:0.16,pack:1,pn:"шт",price:20,waste:0},
+    use("hang",{rate:0.65}),
+    {k:"d640",n:"Дюбель пластмассовый 6×40",u:"шт",rate:1.48,pack:100,pn:"уп. 100 шт",price:250,waste:0},
+    use("anch",{rate:0.65}), use("ln9",{rate:1.29}), use("seal30",{rate:0.693}), use("sep50",{rate:0.661}),
+    use("gkl",{rate:0.333,nt:"1,0 м²/м²"}), use("tn25",{rate:22.93}), use("fugen",{rate:0.584}), use("tape",{rate:1.319})]},
+  ceiling_gkl2:{name:"Потолок ГКЛ П112 (двухуровневый каркас)",group:"Черновые",unit:"м²",src:IESN+"01-4.1-01-01",mats:[
+    use("pp60",{rate:1.237,nt:"3,71 м/м²"}),
+    {k:"cross2",n:"Соединитель двухуровневый ПП 60×27",u:"шт",rate:3.07,pack:1,pn:"шт",price:16,waste:0},
+    {k:"ppconn",n:"Соединитель (удлинитель) ПП 60×27",u:"шт",rate:0.62,pack:1,pn:"шт",price:20,waste:0},
+    use("hang",{rate:1.41}), use("anch",{rate:1.41}), use("ln9",{rate:2.82}), use("seal30",{rate:0.085}), use("sep50",{rate:0.687}),
+    use("gkl",{rate:0.333,nt:"1,0 м²/м²"}), use("tn25",{rate:16.8}), use("fugen",{rate:0.513}), use("tape",{rate:1.083})]},
+  plaster_walls:{name:"Штукатурка гипсовая КНАУФ-Ротбанд (вручную)",group:"Черновые",unit:"м²",param:{label:"слой",unit:"мм",def:15},src:IESN+"03-01-01-02",
+    tk:"WOHOM ТК-06: маяки с шагом ≤1500 мм; плоскость ≤1,5 мм под правилом 2 м; сетка на стыках разнородных материалов полосой ≥200 мм.",mats:[
+    use("betok",{rate:0.35,nt:"0,35 кг/м² (по бетону)"}),
+    {k:"rotband",n:"Штукатурка КНАУФ-Ротбанд",u:"кг",per:0.8653,pack:30,pn:"мешок 30 кг",price:560,waste:0},
+    use("beacon",{rate:0.383,nt:"1,15 м/м²"})]},
+  plaster_mp75:{name:"Штукатурка гипсовая машинная КНАУФ-МП 75",group:"Черновые",unit:"м²",param:{label:"слой",unit:"мм",def:10},src:IESN+"03-03-01-01",
+    tk:"WOHOM ТК-06: маяки с шагом ≤1500 мм; плоскость ≤1,5 мм под правилом 2 м.",mats:[
+    use("betok",{rate:0.35,nt:"0,35 кг/м² (по бетону)"}),
+    {k:"mp75",n:"Штукатурка КНАУФ-МП 75",u:"кг",per:1.029,pack:30,pn:"мешок 30 кг",price:520,waste:0},
+    use("beacon",{rate:0.383,nt:"1,15 м/м²"})]},
+  plaster_cement:{name:"Штукатурка цементная КНАУФ-Грюнбанд (по кирпичу)",group:"Черновые",unit:"м²",param:{label:"слой",unit:"мм",def:15},src:IESN+"03-02-01-01",mats:[
+    {k:"grunband",n:"Штукатурка КНАУФ-Грюнбанд",u:"кг",per:1.282,pack:25,pn:"мешок 25 кг",price:520,waste:0}]},
+  screed:{name:"Полусухая стяжка пола (ЦПС)",group:"Черновые",unit:"м²",param:{label:"толщина",unit:"мм",def:50},src:"Толщина 50 мм — WOHOM ТК-11; расход ЦПС ≈ 2 кг/м² на 1 мм — "+EST,est:true,
+    tk:"ТК-11: базово 50 мм, не менее 40 мм; над трубами — диаметр + 45 мм; деформационные швы на ½ толщины; плоскость ≤2 мм / 2 м.",mats:[
+    {k:"cps",n:"Пескобетон / ЦПС М300",u:"кг",per:2.0,pack:40,pn:"мешок 40 кг",price:330,waste:5},
+    {k:"fiber",n:"Фиброволокно полипропиленовое",u:"кг",per:0.0018,pack:0.6,pn:"пакет 0,6 кг",price:250,waste:0},
+    use("damper",{rate:0.4,est:true})]},
+  self_level:{name:"Наливная стяжка КНАУФ-Боден 15",group:"Черновые",unit:"м²",param:{label:"толщина",unit:"мм",def:5},src:IESN+"02-02-01",mats:[
+    use("grund",{rate:0.113}),
+    {k:"boden15",n:"Смесь КНАУФ-Боден 15",u:"кг",per:1.6,pack:25,pn:"мешок 25 кг",price:700,waste:4}]},
+  dry_screed:{name:"Сухая сборная стяжка (ЭП по керамзитовой засыпке)",group:"Черновые",unit:"м²",param:{label:"засыпка",unit:"мм",def:50},src:IESN+"02-1.1-01-01",mats:[
+    {k:"pefilm",n:"Плёнка полиэтиленовая 200 мкм",u:"м²",rate:1.19,pack:50,pn:"рулон 50 м²",price:900,waste:0},
+    {k:"keramzit",n:"Песок керамзитовый 0–4 мм",u:"м³",per:0.001,pack:0.05,pn:"мешок 50 л",price:260,waste:0},
+    {k:"ep",n:"Элемент пола КНАУФ (ЭП) 1200×600",u:"шт",rate:1.389,pack:1,pn:"шт",price:780,waste:0,nt:"1,0 м²/м²"},
+    {k:"edgetape",n:"Лента кромочная",u:"м",rate:1.266,pack:25,pn:"рулон 25 м",price:600,waste:0},
+    {k:"epglue",n:"Клей для фальцев ЭП",u:"кг",rate:0.05,pack:1,pn:"флакон 1 кг",price:450,waste:0},
+    {k:"mn19",n:"Шуруп для ЭП 3,9×22",u:"шт",rate:12.18,pack:1000,pn:"уп. 1000 шт",price:700,waste:0}]},
+  waterproof:{name:"Гидроизоляция мокрых зон (обмазочная)",group:"Черновые",unit:"м²",param:{label:"слоёв",unit:"сл.",def:2},src:"Слои и завод на стены — WOHOM ТК-13; расход — "+EST,est:true,
+    tk:"ТК-13: не менее 2 полноценных слоёв; завод на стены ≥200 мм — включите эту полосу в площадь.",mats:[
+    {k:"wp_mastic",n:"Гидроизоляция обмазочная",u:"кг",per:0.75,pack:15,pn:"ведро 15 кг",price:2600,waste:5,est:true},
+    {k:"wp_tape",n:"Лента гидроизоляционная для углов",u:"м",rate:0.8,pack:10,pn:"рулон 10 м",price:1100,waste:5,est:true},
+    use("primer",{rate:0.15,est:true})]},
+
+  /* ---------- Малярные (FARBIG) ---------- */
+  fb_cover:{name:"Укрывка: пол, окна, двери",group:"Малярные (FARBIG)",unit:"м²",src:"WOHOM ТК-02, презентация FARBIG «Укрывка»; расход — "+EST,est:true,
+    tk:"Обязательная укрывка поверхностей, особенно окон и подоконников. Площадь — по полу.",mats:[
+    {k:"kraft",n:"Укрывной картон / крафт-бумага",u:"м²",rate:1.1,pack:25,pn:"рулон 25 м²",price:1300,waste:0},
+    {k:"film",n:"Укрывная плёнка",u:"м²",rate:0.6,pack:20,pn:"рулон 4×5 м",price:350,waste:0},
+    {k:"masktape",n:"Малярная лента 50 мм",u:"м",rate:1.2,pack:50,pn:"рулон 50 м",price:220,waste:0}]},
+  fb_sand_plaster:{name:"Шлифование штукатурки под правило",group:"Малярные (FARBIG)",unit:"м²",src:"Зерно — «Подбор абразива» FARBIG, К3; расход кругов — "+EST,est:true,
+    tk:"Гипсовая штукатурка: Р40 по умолчанию (Р36/Р60 — по желанию мастера), мягкие штукатурки — Р80. Для круга 150 мм — зерно на ступень выше.",mats:[
+    {k:"disc225_40",n:"Шлифкруг 225 мм Р40 (керамика)",u:"шт",rate:0.03,pack:1,pn:"шт",price:160,waste:0}]},
+  fb_primer:{name:"Грунт глубокого проникновения (концентрат 1:3)",group:"Малярные (FARBIG)",unit:"м²",param:{label:"раствор",unit:"мл/м²",def:150},src:K3+": «Базис 1:3, 150 мл/м²»",
+    tk:"Раствор 1:3 → концентрата 1/4 от расхода раствора.",mats:[
+    use("ggp",{per:0.00025,nt:"раствор × ¼ (150 мл/м² → 0,0375 л)"})]},
+  fb_pigment:{name:"Пигментированный праймер (СуКуш) по ГКЛ/ГСП",group:"Малярные (FARBIG)",unit:"м²",src:"Применение — "+K3+"; расход — "+EST,est:true,
+    tk:"Через 2 часа после ГГП: выравнивает впитываемость, защищает ГСП.",mats:[
+    {k:"sukush",n:"Пигментированный грунт СуКуш",u:"л",rate:0.12,pack:10,pn:"ведро 10 л",price:6000,waste:5,est:true}]},
+  fb_joints:{name:"Заделка стыков ГКЛ (Унифлот + стеклолента)",group:"Малярные (FARBIG)",unit:"м²",src:"Технология — "+K3+" (ГКЛ); расход — "+ALB,
+    tk:"Обрезные кромки — Унифлот/Пуфас в 2 слоя; заводские стыки — с усиленной стеклолентой и накрывкой.",mats:[
+    {k:"uniflot",n:"Шпаклёвка КНАУФ-Унифлот",u:"кг",rate:0.4,pack:25,pn:"мешок 25 кг",price:2600,waste:5},
+    {k:"fibafuse",n:"Лента стекловолоконная FibaFuse Max",u:"м",rate:1.2,pack:75,pn:"рулон 75 м",price:1500,waste:5}]},
+  fb_corner:{name:"Малярный уголок: армирование углов лентой",group:"Малярные (FARBIG)",unit:"м.п.",src:"Ленты — «Применение армирующих лент»; отводка 50–60 см в 2 слоя — "+K3+"; расход — расчёт",
+    tk:"Композитные ленты клеятся только на полимерные составы. Внутренние углы — Tuff-Tape, наружные — Uno Bead / Original.",mats:[
+    {k:"tufftape",n:"Лента композитная Tuff-Tape 57 мм",u:"м",rate:1.05,pack:30,pn:"рулон 30 м",price:3900,waste:0},
+    {k:"tapeglue",n:"Клей для лент (полимерный, Промикс J / Семин CE78)",u:"кг",rate:0.15,pack:25,pn:"ведро 25 кг",price:3800,waste:5,est:true},
+    use("finpaste",{rate:1.1,nt:"отводка 2×0,55 м, 2 слоя по ~0,3 мм"})]},
+  fb_base:{name:"Базовое шпаклевание полимерной базой (2 слоя)",group:"Малярные (FARBIG)",unit:"м²",param:{label:"толщина",unit:"мм",def:1.0},src:"2 слоя за 1 день — презентация FARBIG; плотность 1,7 кг/л — "+EST,est:true,mats:[
+    {k:"basepaste",n:"Шпаклёвка базовая полимерная",u:"кг",per:1.7,pack:25,pn:"ведро 25 кг",price:3200,waste:5}]},
+  fb_sand_base:{name:"Шлифование базового слоя",group:"Малярные (FARBIG)",unit:"м²",src:"Зерно — «Подбор абразива» FARBIG; расход — "+EST,est:true,
+    tk:"Полимерная база — Р100–Р180; под стеклохолст на шпатлёвку — Р80, под холст на клей — Р150–Р180. Гипсовые составы — не выше Р150.",mats:[
+    {k:"disc225_120",n:"Шлифкруг 225 мм Р120",u:"шт",rate:0.03,pack:1,pn:"шт",price:150,waste:0}]},
+  fb_glass:{name:"Стеклохолст на шпатлёвку (Экспресс К3)",group:"Малярные (FARBIG)",unit:"м²",src:K3+": слои 0,75 мм (+20% клея Бетон) и 0,3–0,4 мм; плотность 1,7 кг/л — "+EST,
+    tk:"Условие К3: отклонение основания до 2 мм на 2 м. Холст выдавливают шпателем 800 мм, накрывка — перпендикулярно.",mats:[
+    {k:"fillerglas",n:"Стеклохолст «Арматура» Филлерглас 1×50 м",u:"м²",rate:1.05,pack:50,pn:"рулон 50 м²",price:5200,waste:0},
+    use("finpaste",{rate:1.62,nt:"0,75 мм ×80% + 0,35 мм накрывка"}),
+    {k:"beton",n:"Клей «Бетон» (добавка 20% в шпаклёвку)",u:"кг",rate:0.26,pack:10,pn:"ведро 10 кг",price:2400,waste:5,est:true}]},
+  fb_glass_glue:{name:"Стеклохолст на клей + СуКуш",group:"Малярные (FARBIG)",unit:"м²",src:"Клеберглас — только на клей («Арматура»); выдержка 2 суток — презентация FARBIG; расход клея — "+EST,est:true,mats:[
+    {k:"kleberglas",n:"Стеклохолст «Арматура» Клеберглас 1×50 м",u:"м²",rate:1.05,pack:50,pn:"рулон 50 м²",price:4800,waste:0},
+    {k:"glassglue",n:"Клей для стеклохолста",u:"кг",rate:0.25,pack:10,pn:"ведро 10 кг",price:2400,waste:5,est:true},
+    {k:"sukush",n:"Пигментированный грунт СуКуш",u:"л",rate:0.12,pack:10,pn:"ведро 10 л",price:6000,waste:5,est:true}]},
+  fb_finish:{name:"Финишное шпаклевание (напыление + срезка, К3)",group:"Малярные (FARBIG)",unit:"м²",param:{label:"сумма слоёв",unit:"мм",def:1.3},src:K3+": 0,7–1 мм + 150–200 мкм + 250–300 мкм; плотность — "+EST,
+    tk:"Наносится в одну смену. Сушка перед шлифовкой ≥12 ч, оптимально 48 ч.",mats:[
+    use("finpaste",{per:1.7})]},
+  fb_sand_finish:{name:"Шлифование финишного слоя",group:"Малярные (FARBIG)",unit:"м²",src:"Зерно — "+K3+" и «Подбор абразива»; расход — "+EST,est:true,
+    tk:"Эксцентриковая 225 мм, Р180/240/320 по задаче. Мягкие пасты — оксид алюминия; керамика — на ступень выше.",mats:[
+    {k:"disc225_240",n:"Шлифкруг 225 мм Р240",u:"шт",rate:0.04,pack:1,pn:"шт",price:150,waste:0}]},
+  fb_primer_paint:{name:"Грунтование Primer перед окраской",group:"Малярные (FARBIG)",unit:"м²",src:EST,est:true,mats:[
+    use("primer_paint",{rate:0.1})]},
+  paint_walls:{name:"Окраска стен",group:"Малярные (FARBIG)",unit:"м²",param:{label:"слоёв",unit:"сл.",def:2},src:"Слои — WOHOM ТК-19; расход на слой — "+EST,est:true,
+    tk:"ТК-19: не менее 2 полноценных финишных слоёв. Приёмка под прожектором до 6000 лм, до 4000 К.",mats:[
+    {k:"paint_wall",n:"Краска интерьерная",u:"л",per:0.11,pack:9,pn:"ведро 9 л",price:7500,waste:5},
+    {k:"masktape",n:"Малярная лента 50 мм",u:"м",rate:0.3,pack:50,pn:"рулон 50 м",price:220,waste:0}]},
+  paint_ceiling:{name:"Окраска потолка",group:"Малярные (FARBIG)",unit:"м²",param:{label:"слоёв",unit:"сл.",def:2},src:"Слои — WOHOM ТК-19; расход на слой — "+EST,est:true,mats:[
+    {k:"paint_ceil",n:"Краска для потолков",u:"л",per:0.12,pack:9,pn:"ведро 9 л",price:5500,waste:5}]},
+
+  /* ---------- Отделка ---------- */
+  wallpaper:{name:"Поклейка обоев (1,06×10 м)",group:"Отделка",unit:"м²",src:EST,est:true,tk:"WOHOM ТК-19: до резки рассчитать повтор рисунка и запас; одна партия.",mats:[
+    {k:"wallpaper",n:"Обои флизелиновые 1,06×10 м",u:"рулон",rate:0.125,pack:1,pn:"рулон",price:2200,waste:5},
+    {k:"wp_glue",n:"Клей для флизелиновых обоев",u:"пачка",rate:0.04,pack:1,pn:"пачка",price:450,waste:0},
+    use("primer",{rate:0.1})]},
+  tile_walls:{name:"Плитка на стены",group:"Отделка",unit:"м²",src:EST,est:true,tk:"WOHOM ТК-15: плоскость ≤2 мм / 2 м; швы ≤1 мм/м; перепад соседних плиток ≤1 мм.",mats:[
+    {k:"tile_wall",n:"Плитка настенная",u:"м²",rate:1,pack:1,pn:"м²",price:1400,waste:10},
+    {k:"tile_glue",n:"Клей плиточный С1",u:"кг",rate:4.5,pack:25,pn:"мешок 25 кг",price:480,waste:5},
+    {k:"grout",n:"Затирка",u:"кг",rate:0.35,pack:2,pn:"уп. 2 кг",price:550,waste:5},
+    {k:"svp",n:"СВП / крестики",u:"шт",rate:20,pack:100,pn:"уп. 100 шт",price:250,waste:10},
+    use("primer",{rate:0.15})]},
+  tile_floor:{name:"Керамогранит на пол",group:"Отделка",unit:"м²",src:EST,est:true,tk:"WOHOM ТК-15: плоскость ≤2 мм / 2 м; швы ≤1 мм/м.",mats:[
+    {k:"tile_floor",n:"Керамогранит напольный",u:"м²",rate:1,pack:1,pn:"м²",price:1800,waste:10},
+    {k:"tile_glue2",n:"Клей для керамогранита С2",u:"кг",rate:6,pack:25,pn:"мешок 25 кг",price:690,waste:5},
+    {k:"grout",n:"Затирка",u:"кг",rate:0.35,pack:2,pn:"уп. 2 кг",price:550,waste:5},
+    {k:"svp",n:"СВП / крестики",u:"шт",rate:20,pack:100,pn:"уп. 100 шт",price:250,waste:10},
+    use("primer",{rate:0.15})]},
+  laminate:{name:"Ламинат / SPC",group:"Отделка",unit:"м²",src:EST,est:true,mats:[
+    {k:"laminate",n:"Ламинат / SPC",u:"м²",rate:1,pack:2.13,pn:"упак. 2,13 м²",price:2000,waste:7},
+    {k:"underlay",n:"Подложка",u:"м²",rate:1,pack:10,pn:"рулон 10 м²",price:700,waste:5}]},
+  skirting:{name:"Плинтус напольный",group:"Отделка",unit:"м.п.",src:EST,est:true,mats:[
+    {k:"skirt",n:"Плинтус 2,5 м",u:"шт",rate:0.4,pack:1,pn:"шт",price:400,waste:8},
+    {k:"skirt_clip",n:"Клипсы с дюбелем",u:"шт",rate:2.2,pack:50,pn:"уп. 50 шт",price:250,waste:5},
+    {k:"skirt_acc",n:"Углы, заглушки, соединители",u:"шт",rate:0.3,pack:1,pn:"шт",price:60,waste:0}]},
+
+  /* ---------- Электрика ---------- */
+  sockets:{name:"Розетки и выключатели",group:"Электрика",unit:"точка",src:EST,est:true,tk:"WOHOM ТК-09/22: трассы и маркировка — по проекту.",mats:[
+    {k:"vvg25",n:"Кабель ВВГнг-LS 3×2,5",u:"м",rate:7,pack:1,pn:"м",price:95,waste:10},
+    {k:"podroz",n:"Подрозетник 68 мм",u:"шт",rate:1,pack:1,pn:"шт",price:25,waste:5},
+    {k:"mech",n:"Механизм с рамкой",u:"шт",rate:1,pack:1,pn:"шт",price:450,waste:0},
+    {k:"gofra16",n:"Гофра ПВХ 16 мм",u:"м",rate:6,pack:1,pn:"м",price:12,waste:10},
+    {k:"wago",n:"Клемма Wago 221",u:"шт",rate:2,pack:1,pn:"шт",price:35,waste:10}]},
+  lights:{name:"Точки освещения",group:"Электрика",unit:"точка",src:EST,est:true,mats:[
+    {k:"vvg15",n:"Кабель ВВГнг-LS 3×1,5",u:"м",rate:8,pack:1,pn:"м",price:70,waste:10},
+    {k:"gofra16",n:"Гофра ПВХ 16 мм",u:"м",rate:8,pack:1,pn:"м",price:12,waste:10},
+    {k:"wago",n:"Клемма Wago 221",u:"шт",rate:3,pack:1,pn:"шт",price:35,waste:10}]},
+  panel:{name:"Электрощит в сборе",group:"Электрика",unit:"шт",src:EST,est:true,mats:[
+    {k:"box24",n:"Щит встраиваемый 24 модуля",u:"шт",rate:1,pack:1,pn:"шт",price:2500,waste:0},
+    {k:"ab1p",n:"Автомат 1P 10–16 А",u:"шт",rate:10,pack:1,pn:"шт",price:350,waste:0},
+    {k:"difab",n:"Дифавтомат 16 А 30 мА",u:"шт",rate:4,pack:1,pn:"шт",price:1800,waste:0}]},
+
+  /* ---------- Сантехника ---------- */
+  water_points:{name:"Точки водоснабжения",group:"Сантехника",unit:"точка",src:EST,est:true,tk:"WOHOM ТК-08: теплоизоляция, заглушки и маркировка выводов.",mats:[
+    {k:"ppr20",n:"Труба PPR 20 мм",u:"м",rate:6,pack:1,pn:"м",price:90,waste:10},
+    {k:"ppr_fit",n:"Фитинги PPR 20 мм",u:"шт",rate:5,pack:1,pn:"шт",price:70,waste:10},
+    {k:"vodoroz",n:"Водорозетка 1/2\"",u:"шт",rate:1,pack:1,pn:"шт",price:450,waste:0},
+    {k:"insul20",n:"Теплоизоляция для трубы 20 мм",u:"м",rate:6,pack:1,pn:"м",price:25,waste:10}]},
+  sewer_points:{name:"Точки канализации",group:"Сантехника",unit:"точка",src:EST,est:true,tk:"WOHOM ТК-08: уклон DN40–50 ≈ 30 мм/м, DN75–100 ≈ 20 мм/м.",mats:[
+    {k:"pipe50",n:"Труба канализационная 50 мм, 1 м",u:"шт",rate:3,pack:1,pn:"шт",price:160,waste:0},
+    {k:"elbow50",n:"Отвод 50 мм 45°",u:"шт",rate:2,pack:1,pn:"шт",price:60,waste:0},
+    {k:"clamp50",n:"Хомут 50 мм",u:"шт",rate:2,pack:1,pn:"шт",price:90,waste:0}]},
+};
+const GROUPS=["Черновые","Малярные (FARBIG)","Отделка","Электрика","Сантехника","Из документа"];
+
+/* ================= Утилиты ================= */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const num=v=>{const n=parseFloat(String(v??"").replace(/\s/g,"").replace(",","."));return isFinite(n)?n:NaN};
+const fmt=(n,d=2)=>(Math.round(n*10**d)/10**d).toLocaleString("ru-RU",{maximumFractionDigits:d});
+const rub=n=>Math.round(n).toLocaleString("ru-RU")+" ₽";
+const uid=()=>Math.random().toString(36).slice(2,9);
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
+
+/* ================= Состояние ================= */
+const EXAMPLE={isExample:true,object:"Пример: малярные работы, 204 м² стен",rooms:[],
+  works:[
+    {type:"fb_cover",room:"Вся квартира",qty:60},
+    {type:"fb_sand_plaster",room:"Стены",qty:204},
+    {type:"fb_primer",room:"Стены",qty:204,p:150},
+    {type:"fb_pigment",room:"Стены",qty:204},
+    {type:"fb_corner",room:"Углы и примыкания",qty:130},
+    {type:"fb_base",room:"Стены",qty:204,p:1},
+    {type:"fb_sand_base",room:"Стены",qty:204},
+    {type:"fb_primer",room:"Стены, перед холстом",qty:204,p:150},
+    {type:"fb_glass",room:"Стены",qty:204},
+    {type:"other",room:"Откосы",qty:43,name:"Комплексные работы с откосами, м.п.",note:"нет в справочнике"},
+    {type:"other",room:"Мебель из ГСП",qty:12,name:"Работа со сложными изделиями, м.п.",note:"нет в справочнике"},
+    {type:"fb_finish",room:"Стены",qty:204,p:1.3},
+    {type:"fb_sand_finish",room:"Стены",qty:204},
+    {type:"fb_primer",room:"Стены, перед окраской",qty:226,p:150},
+    {type:"fb_primer_paint",room:"Стены",qty:226},
+    {type:"paint_walls",room:"Стены",qty:226,p:2},
+    {type:"other",room:"Молдинги",qty:54.5,name:"Покраска молдингов в цвет стен, м.п.",note:"нет в справочнике"}],
+  docMats:[],warnings:[]};
+let S=store.get("msm2-project",null)||structuredClone(EXAMPLE);
+S.works.forEach(w=>w.id||(w.id=uid())); (S.docMats||(S.docMats=[])).forEach(m=>m.id||(m.id=uid()));
+let prices=store.get("msm2-prices",{});
+let reserve=store.get("msm-reserve",0);
+const save=()=>store.set("msm2-project",S);
+
+/* ================= Расчёт ================= */
+const shortName=c=>c.name.replace(/\s*\(.*?\)/g,"");
+function calc(){
+  const agg=new Map();
+  for(const w of S.works){
+    const c=CAT[w.type]; const q=num(w.qty); if(!c||!(q>0)) continue;
+    const p=c.param?(num(w.p)>0?num(w.p):c.param.def):1;
+    for(const m of c.mats){
+      const base=q*(m.per!=null?m.per*p:m.rate);
+      let a=agg.get(m.k);
+      if(!a){a={...m,group:c.group,base:0,from:new Set()};agg.set(m.k,a)}
+      a.base+=base; a.from.add(shortName(c));
+    }
+  }
+  const rows=[...agg.values()].map(a=>{
+    const need=a.base*(1+a.waste/100)*(1+reserve/100);
+    const packs=Math.ceil(need/a.pack-1e-9);
+    const price=prices[a.k]??a.price;
+    return {key:a.k,group:a.group,name:a.n,unit:a.u,need,pack:a.pack,pn:a.pn,packs,price,sum:packs*price,
+      note:"для: "+[...a.from].join(", ")+(a.waste?` · запас ${a.waste}%`:""),est:!!a.est};
+  });
+  for(const d of S.docMats){
+    const q=num(d.qty)||0; const price=prices["doc:"+d.name]??(num(d.price)||0);
+    rows.push({key:"doc:"+d.name,group:"Из документа",name:d.name,unit:d.unit||"шт",need:q,pack:1,pn:d.unit||"шт",packs:q,price,sum:q*price,note:"указано в документе"});
+  }
+  return rows;
+}
+
+/* ================= Отрисовка ================= */
+function typeOptions(sel){
+  let h="";
+  for(const g of GROUPS.slice(0,5)){
+    h+=`<optgroup label="${esc(g)}">`;
+    for(const [id,c] of Object.entries(CAT)) if(c.group===g) h+=`<option value="${id}"${id===sel?" selected":""}>${esc(c.name)}</option>`;
+    h+="</optgroup>";
+  }
+  return h+`<option value="other"${sel==="other"?" selected":""}>— Нет в справочнике (не считается)</option>`;
+}
+function workRow(w){
+  const c=CAT[w.type]; const unit=c?c.unit:"";
+  const param=c?.param?`<label class="unitbox p" title="${esc(c.param.label)}"><input id="w-${w.id}-p" data-f="p" inputmode="decimal" value="${esc(w.p??c.param.def)}" aria-label="${esc(c.param.label)}"><span>${esc(c.param.unit)}</span></label>`:`<span class="p"></span>`;
+  const bits=[w.type==="other"&&w.name?`«${esc(w.name)}»`:"", w.name&&w.type!=="other"?`в документе: ${esc(w.name)}`:"", esc(w.note||""), c?.tk?`<b>${esc(c.tk)}</b>`:""].filter(Boolean);
+  return `<div class="work${w.type==="other"?" other":""}" data-id="${w.id}">
+    <select class="w-type" id="w-${w.id}-type" data-f="type" aria-label="Вид работы">${typeOptions(w.type)}</select>
+    <input class="w-room" id="w-${w.id}-room" data-f="room" value="${esc(w.room)}" placeholder="Помещение" aria-label="Помещение">
+    <label class="unitbox q"><input id="w-${w.id}-qty" data-f="qty" inputmode="decimal" value="${esc(w.qty)}" aria-label="Объём"><span>${esc(unit)}</span></label>
+    ${param}
+    <button class="del" data-del aria-label="Удалить работу">×</button>
+    <div class="note">${bits.join(" · ")}</div></div>`;
+}
+function renderWorks(){
+  $("#works").innerHTML=S.works.length?S.works.map(workRow).join(""):`<div class="empty">Работ пока нет. Нажмите «+ Добавить работу».</div>`;
+  const other=S.works.filter(w=>w.type==="other").length;
+  $("#works-count").textContent=S.works.length?`${S.works.length} позиций`+(other?`, из них ${other} нет в справочнике — их материал не считается`:"")+". Поправьте объём, толщину или число слоёв — материалы пересчитаются сразу.":"";
+}
+function renderObject(){
+  $("#obj-name").value=S.object||"";
+  $("#example-banner").hidden=!S.isExample;
+  const w=$("#warns"); w.hidden=!S.warnings?.length; w.innerHTML=(S.warnings||[]).map(x=>`<li>${esc(x)}</li>`).join("");
+  $("#rooms-box").hidden=!S.rooms?.length;
+  $("#rooms-sum").textContent=`Помещения (${S.rooms?.length||0})`;
+  const v=x=>x>0?fmt(x):"—";
+  $("#rooms").innerHTML=`<tr><th>Помещение</th><th class="r">Пол, м²</th><th class="r">Стены, м²</th><th class="r">Периметр, м</th><th class="r">Высота, м</th></tr>`+
+    (S.rooms||[]).map(r=>`<tr><td>${esc(r.name)}</td><td class="n">${v(r.floor)}</td><td class="n">${v(r.walls)}</td><td class="n">${v(r.perimeter)}</td><td class="n">${v(r.height)}</td></tr>`).join("");
+}
+let lastRows=[];
+function renderMaterials(){
+  const rows=lastRows=calc(); const el=$("#mats");
+  if(!rows.length){el.innerHTML=`<div class="panel empty">Здесь появится список материалов, когда будут работы с объёмами.</div>`;$("#total").textContent=rub(0);return}
+  let h="",total=0;
+  for(const g of GROUPS){
+    const rs=rows.filter(r=>r.group===g); if(!rs.length) continue;
+    const sub=rs.reduce((s,r)=>s+r.sum,0); total+=sub;
+    h+=`<div><div class="g-head"><h3>${esc(g)}</h3><span class="num">${rub(sub)}</span></div><div class="group">
+      <div class="mrow hdr"><span>Материал</span><span class="r">Нужно</span><span class="r">Купить</span><span class="r">Цена, ₽</span><span class="r">Сумма</span></div>`;
+    for(const r of rs){
+      h+=`<div class="mrow"><div class="mname"><b>${esc(r.name)}${r.est?` <span class="tag-est">оценка</span>`:""}</b><small>${esc(r.note)}</small></div>
+        <div class="r num"><span class="lbl">Нужно</span>${fmt(r.need,r.need<10?2:1)} ${esc(r.unit)}</div>
+        <div class="r num"><span class="lbl">Купить</span>${fmt(r.packs,2)} × ${esc(r.pn)}</div>
+        <div class="r"><span class="lbl">Цена за ${esc(r.pn)}</span><input class="price" id="pr-${esc(r.key)}" data-k="${esc(r.key)}" inputmode="decimal" value="${r.price}" aria-label="Цена: ${esc(r.name)}"></div>
+        <div class="r num sum"><span class="lbl">Сумма</span>${rub(r.sum)}</div></div>`;
+    }
+    h+="</div></div>";
+  }
+  el.innerHTML=h; $("#total").textContent=rub(total);
+}
+function normText(m,c){ return m.nt || `${fmt(m.per??m.rate,4)} ${m.u}/${c.unit}${m.per!=null?" на 1 "+c.param.unit:""}`; }
+function renderNorms(){
+  $("#norms").innerHTML=GROUPS.slice(0,5).map(g=>`<div class="norm-group"><h3>${esc(g)}</h3><div class="norms">${
+    Object.values(CAT).filter(c=>c.group===g).map(c=>`<div class="norm"><h4>${esc(c.name)}</h4>
+      <div class="src">${esc(c.src)}</div>
+      <ul>${c.mats.map(m=>`<li>${esc(m.n)} — <span class="num">${esc(normText(m,c))}</span>${m.est?` <span class="tag-est">оценка</span>`:""}</li>`).join("")}</ul>
+      ${c.tk?`<div class="tk">${esc(c.tk)}</div>`:""}</div>`).join("")}</div></div>`).join("");
+}
+function renderAll(){renderObject();renderWorks();renderMaterials()}
+
+/* ================= Редактирование ================= */
+const dropExample=()=>{if(S.isExample){S.isExample=false;$("#example-banner").hidden=true}};
+$("#works").addEventListener("input",e=>{
+  const row=e.target.closest(".work"); const f=e.target.dataset.f; if(!row||!f||f==="type") return;
+  const w=S.works.find(x=>x.id===row.dataset.id); w[f]=e.target.value; dropExample(); save(); renderMaterials();
+});
+$("#works").addEventListener("change",e=>{
+  if(e.target.dataset.f!=="type") return;
+  const w=S.works.find(x=>x.id===e.target.closest(".work").dataset.id);
+  w.type=e.target.value; w.p=CAT[w.type]?.param?.def; dropExample(); save(); renderWorks(); renderMaterials();
+});
+$("#works").addEventListener("click",e=>{
+  if(!e.target.closest("[data-del]")) return;
+  const id=e.target.closest(".work").dataset.id; S.works=S.works.filter(w=>w.id!==id); dropExample(); save(); renderWorks(); renderMaterials();
+});
+$("#btn-add").onclick=()=>{
+  S.works.push({id:uid(),type:"paint_walls",room:"",qty:"",p:2}); dropExample(); save(); renderWorks(); renderMaterials();
+  document.getElementById(`w-${S.works.at(-1).id}-type`)?.focus();
+};
+let clearArmed=false;
+$("#btn-clear").onclick=e=>{
+  if(!clearArmed){clearArmed=true;e.target.textContent="Точно очистить?";setTimeout(()=>{clearArmed=false;e.target.textContent="Очистить всё"},3000);return}
+  clearArmed=false;e.target.textContent="Очистить всё";
+  S={isExample:false,object:"",rooms:[],works:[],docMats:[],warnings:[]}; save(); renderAll();
+};
+$("#obj-name").addEventListener("input",e=>{S.object=e.target.value;dropExample();save()});
+$("#mats").addEventListener("change",e=>{
+  const k=e.target.dataset.k; if(!k) return; const v=num(e.target.value);
+  if(v>=0){prices[k]=v}else{delete prices[k]} store.set("msm2-prices",prices); renderMaterials();
+});
+const rv=$("#reserve"); rv.value=reserve; $("#reserve-v").textContent=reserve+"%";
+rv.addEventListener("input",()=>{reserve=+rv.value;$("#reserve-v").textContent=reserve+"%";store.set("msm-reserve",reserve);renderMaterials()});
+
+/* ================= Экспорт ================= */
+function toast(t){const el=$("#toast");el.textContent=t;clearTimeout(toast.t);toast.t=setTimeout(()=>el.textContent="",4000)}
+function matAoa(){
+  const head=["Раздел","Материал","Нужно (с запасом)","Ед.","Упаковка","Кол-во упаковок","Цена за упаковку, ₽","Сумма, ₽","Примечание"];
+  const rows=GROUPS.flatMap(g=>lastRows.filter(r=>r.group===g)).map(r=>[r.group,r.name,+r.need.toFixed(2),r.unit,r.pn,r.packs,r.price,Math.round(r.sum),r.note+(r.est?" · норма — оценка":"")]);
+  return [head,...rows];
+}
+$("#btn-xlsx").onclick=async()=>{
+  const aoa=matAoa();
+  if(!window.XLSX){
+    try{await navigator.clipboard.writeText(aoa.map(r=>r.join("\t")).join("\n"));toast("Таблица скопирована — вставьте в Excel")}catch{toast("Не удалось скопировать")}
+    return;
+  }
+  const wb=XLSX.utils.book_new(); const n=aoa.length;
+  const ws=XLSX.utils.aoa_to_sheet([[S.object||"Ведомость материалов"],[`Доп. запас: ${reserve}%`],[],...aoa]);
+  XLSX.utils.sheet_add_aoa(ws,[["","ИТОГО","","","","","",{t:"n",f:`SUM(H5:H${n+3})`}]],{origin:-1});
+  for(let i=5;i<=n+3;i++) ws[`H${i}`]={t:"n",f:`F${i}*G${i}`,v:aoa[i-4][7]};
+  ws["!cols"]=[{wch:18},{wch:46},{wch:16},{wch:7},{wch:18},{wch:14},{wch:18},{wch:14},{wch:46}];
+  XLSX.utils.book_append_sheet(wb,ws,"Материалы");
+  const wa=[["Помещение","Работа","Объём","Ед.","Параметр","Из документа","Примечание"],...S.works.map(w=>{const c=CAT[w.type];
+    return [w.room,c?c.name:("Нет в справочнике: "+(w.name||"")),num(w.qty)||"",c?c.unit:"",c?.param?`${w.p??c.param.def} ${c.param.unit}`:"",w.name||"",w.note||""]})];
+  const ws2=XLSX.utils.aoa_to_sheet(wa); ws2["!cols"]=[{wch:22},{wch:46},{wch:10},{wch:7},{wch:12},{wch:30},{wch:40}];
+  XLSX.utils.book_append_sheet(wb,ws2,"Работы");
+  const used=[...new Set(S.works.map(w=>w.type))].filter(t=>CAT[t]);
+  const na=[["Работа","Материал","Норма","Источник","Требования техкарт"]];
+  for(const t of used){const c=CAT[t]; c.mats.forEach((m,i)=>na.push([i?"":c.name,m.n,normText(m,c)+(m.est?" (оценка)":""),i?"":c.src,i?"":(c.tk||"")]))}
+  const ws3=XLSX.utils.aoa_to_sheet(na); ws3["!cols"]=[{wch:40},{wch:44},{wch:30},{wch:50},{wch:60}];
+  XLSX.utils.book_append_sheet(wb,ws3,"Нормы и источники");
+  if(S.rooms?.length) XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["Помещение","Пол, м²","Стены, м²","Периметр, м","Высота, м"],...S.rooms.map(r=>[r.name,r.floor||"",r.walls||"",r.perimeter||"",r.height||""])]),"Помещения");
+  const name=((S.object||"Материалы").replace(/[\\/:*?"<>|]+/g," ").trim().slice(0,60)||"Материалы")+".xlsx";
+  try{XLSX.writeFile(wb,name);toast("Файл скачан")}catch{toast("Не удалось сохранить файл")}
+};
+
+renderNorms(); renderAll();
+</script>
+
+</body>
+</html>
