@@ -1,8 +1,8 @@
 // Офлайн-режим: файлы сайта, шрифты и библиотека Excel кладутся в кэш.
 // При изменении файлов сайта увеличьте номер версии, чтобы телефоны получили обновление.
-const VERSION = "farbig-v1";
+const VERSION = "farbig-v2";
 const FILES = [
-  "./", "manifest.webmanifest", "privacy.html",
+  "./", "manifest.webmanifest", "privacy.html", "help/",
   "icons/icon-180.png", "icons/icon-192.png", "icons/icon-512.png",
   "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js",
 ];

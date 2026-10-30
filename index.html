@@ -130,7 +130,7 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .room-ed .x{padding:6px;width:36px;height:36px;color:var(--muted);background:transparent;border-color:transparent;font-size:19px;line-height:1}
 .rooms-tot{margin:4px 0 0;font-size:13px;color:var(--muted)}
 .rooms-tot b{color:var(--ink)}
-@media (max-width:720px){.room-ed{grid-template-columns:repeat(3,minmax(0,1fr))}.room-ed .rn{grid-column:1/3}.room-ed .x{grid-column:3;grid-row:1;justify-self:end}}
+@media (max-width:720px){.room-ed{grid-template-columns:repeat(3,minmax(0,1fr))}.room-ed .rn{grid-column:1/3}.room-ed>.x{grid-column:3;grid-row:1;justify-self:end}}
 /* Сворачиваемые блоки: заголовок-плашка со сводкой */
 details.fold>summary{cursor:pointer;list-style:none}
 details.fold>summary::-webkit-details-marker{display:none}
@@ -145,7 +145,7 @@ details.fold>summary:hover h3{text-decoration:underline;text-underline-offset:4p
 .inst-top{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;background:transparent;color:#CBA265;border:1.5px solid #CBA265;font:600 13px var(--f-body);border-radius:999px;white-space:nowrap;cursor:pointer}
 .inst-top:hover{background:rgba(203,162,101,.12)}
 .inst-top svg{width:16px;height:16px;flex:none}
-@media (max-width:420px){.top-acts{gap:8px}.inst-top span{display:none}.inst-top{padding:6px}}
+@media (max-width:420px){.top-acts{gap:8px}.inst-top span{display:none}.inst-top{padding:6px}.wa-top span{display:none}.wa-top{padding:6px}}
 @media (max-width:420px){.topbar .lbl{display:none}}
 /* Расход по работам и ведомость на объект */
 details.use{margin-top:4px}
@@ -343,6 +343,92 @@ details.mw[open]>summary{border-bottom:1px solid var(--line);background:var(--su
 footer .wrap{padding-block:16px 28px;font-size:12px;color:var(--muted)}
 footer a{color:var(--gold-text)}
 
+/* Отправить в мессенджер */
+.wa-btn{display:inline-flex;align-items:center;gap:6px;background:#1FAF54;border-color:#1FAF54;color:#fff}
+.wa-btn:hover{filter:brightness(1.08);border-color:#1FAF54}
+.wa-btn svg{width:18px;height:18px;flex:none}
+/* Значок «?» — ссылка на раздел инструкции */
+.help-q{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--gold);color:var(--gold-text);font:700 13px/1 var(--f-body);text-decoration:none;vertical-align:middle;margin-left:6px;flex:none}
+.help-q:hover{background:rgba(203,162,101,.15)}
+h2 .help-q{position:relative;top:-3px}
+.help-top{width:30px;height:30px;margin:0;font-size:15px;color:#CBA265;border-color:#CBA265}
+/* Срок работ */
+.term{display:flex;gap:8px 14px;align-items:center;flex-wrap:wrap;font-size:14px;margin-top:-6px}
+.term label{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
+.term input{width:52px;font:600 14px var(--f-body);padding:5px 6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);text-align:center;border-radius:0}
+.term small{color:var(--muted)}
+/* Смета для заказчика */
+.est-box{padding:14px 16px;display:grid;gap:12px}
+.est-opts{display:flex;gap:8px 18px;flex-wrap:wrap;font-size:14px}
+.est-opts label{display:inline-flex;gap:6px;align-items:center;cursor:pointer}
+.est-opts input{accent-color:var(--gold)}
+.est-view{position:fixed;inset:0;z-index:60;background:#6B6B6B;overflow-y:auto;padding:0 0 calc(24px + env(safe-area-inset-bottom,0px))}
+.est-tools{position:sticky;top:0;z-index:2;display:flex;gap:8px;flex-wrap:wrap;padding:calc(10px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 10px max(12px,env(safe-area-inset-left,0px));background:var(--band)}
+.est-tools #est-close{background:transparent;color:var(--on-band);border-color:var(--band-2)}
+.est-tip{margin:10px auto 0;max-width:800px;padding:0 12px;font-size:12px;color:#F1F1F1}
+.est-paper{background:#fff;color:#222;max-width:800px;margin:10px auto 0;padding:32px 30px;font:14px/1.5 var(--f-body);box-shadow:0 6px 24px rgba(0,0,0,.35)}
+.est-paper h1{margin:18px 0 12px;font:700 26px/1.1 var(--f-display);text-transform:uppercase;color:#111}
+.est-paper h2{margin:18px 0 6px;font:600 16px var(--f-display);letter-spacing:.04em;color:#94703A}
+.ep-head{display:flex;justify-content:space-between;gap:12px;padding-bottom:12px;border-bottom:3px solid #CBA265}
+.ep-head span{display:block;color:#555;font-size:13px}
+.ep-name{font:700 18px var(--f-display);text-transform:uppercase;color:#111}
+.ep-date{color:#555;font-size:13px;white-space:nowrap}
+.est-paper table{font-size:13px}
+.est-paper th,.est-paper td{white-space:normal;border-color:#E4E0DA;color:#222}
+.est-paper th{color:#6E6963}
+.ep-info th{width:110px;font:600 13px var(--f-body);text-transform:none;letter-spacing:0}
+.ep-tab td small{display:block;color:#777;font-size:12px}
+.ep-tab td:first-child{width:28px;color:#777}
+.ep-tab tfoot td{font-weight:700;border-bottom:0}
+.est-paper .ep-one td:first-child{width:auto;color:#222}
+.ep-tab td.n,.ep-tab th.n{text-align:right;white-space:nowrap}
+.ep-total{margin-top:18px;display:grid;gap:4px;justify-content:end;text-align:right}
+.ep-total div{display:flex;gap:24px;justify-content:space-between;min-width:260px}
+.ep-total span{color:#555}
+.ep-total .all{border-top:2px solid #CBA265;padding-top:6px;margin-top:4px;font-size:18px}
+.ep-total .all b{font:700 22px var(--f-display);color:#111}
+.ep-term{margin:14px 0 0}
+.ep-note{margin:10px 0 0;color:#555;font-size:13px}
+.ep-sign{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:34px;font-size:13px}
+.ep-foot{margin:26px 0 0;color:#999;font-size:11px;text-align:center}
+@media (max-width:560px){.est-paper{padding:20px 12px;margin-top:8px}.est-paper h1{font-size:21px}.ep-total div{min-width:0}
+  .est-paper table{font-size:12px}.est-paper th,.est-paper td{padding:6px 3px}.est-paper th{font-size:10px;letter-spacing:.02em}.ep-tab td:first-child{width:18px}
+  .est-tools button{padding:8px 10px;font-size:13px}.est-tools .primary{font-size:14px}}
+@media print{
+  @page{margin:14mm}
+  body.est-on{padding:0!important;background:#fff}
+  body.est-on>*:not(#est-view){display:none!important}
+  body.est-on .est-view{position:static;overflow:visible;background:#fff;padding:0}
+  body.est-on .est-tools,body.est-on .est-tip{display:none}
+  body.est-on .est-paper{box-shadow:none;margin:0;max-width:none;padding:0}
+}
+/* Резервная копия проектов */
+.imp-ask{display:grid;gap:8px;padding:10px 12px;border:1px solid var(--gold);background:var(--surface);font-size:14px}
+/* Проёмы по размерам и участки комнаты */
+.room-more{grid-column:1/-1;display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center}
+.room-more .link{font-size:13px;padding:2px 0}
+.room-sub{grid-column:1/-1;min-width:0;display:grid;gap:6px;padding:8px;background:var(--bg);border:1px solid var(--line)}
+.room-sub h4{margin:0;font:600 13px var(--f-display);letter-spacing:.05em;text-transform:uppercase}
+.op-row,.sg-row{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr)) 36px;gap:6px;align-items:end}
+.obj .room-sub select{font:14px var(--f-body);padding:7px 4px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-width:0;width:100%;border-radius:0}
+.room-sub .x{padding:6px;width:36px;height:36px;color:var(--muted);background:transparent;border-color:transparent;font-size:19px;line-height:1}
+.room-sub .mini{font-size:12px;padding:4px 8px}
+.room-sub .res{font-size:13px;color:var(--muted)}
+.room-sub .res b{color:var(--ink)}
+.op-add{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.obj .op-add select{flex:1 1 220px;width:100%;min-width:0}
+.room-sub label{display:grid;gap:3px;font:500 10.5px var(--f-display)!important;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);min-width:0}
+@media (max-width:720px){.op-row,.sg-row{grid-template-columns:minmax(0,1.3fr) repeat(3,minmax(0,1fr)) 30px;gap:4px}.room-sub .x{width:30px}}
+/* Сравнение технологий */
+.cmp{display:grid;gap:8px}
+.cmp table{font-size:13px;background:var(--bg)}
+.cmp td{white-space:normal}
+.cmp tr.cur td{background:rgba(203,162,101,.14);font-weight:600}
+.cmp .up{color:var(--bad)}.cmp .down{color:var(--ok)}
+.cmp .mini{font-size:12px;padding:3px 8px}
+.cmp td.n{white-space:nowrap}
+.cmp .pick-m{display:none;margin-top:4px}
+@media (max-width:720px){.cmp .hm{display:none}.cmp .pick-m{display:inline-block}.cmp table{font-size:12px}.cmp th,.cmp td{padding:7px 4px}}
 /* Cookies: плашка над нижней панелью итога */
 .cookie{position:fixed;left:0;right:0;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:21;padding-inline:max(12px,env(safe-area-inset-left,0px)) max(12px,env(safe-area-inset-right,0px))}
 .cookie .in{max-width:1000px;margin:0 auto;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:10px 14px;background:var(--surface);color:var(--ink);border:1px solid var(--gold);font-size:13px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
@@ -371,6 +457,7 @@ footer a{color:var(--gold-text)}
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.1 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
         <span>Группа</span>
       </a>
+      <a class="help-q help-top" href="help/" target="_blank" rel="noopener" title="Инструкция пользователя" aria-label="Инструкция пользователя">?</a>
       <button class="inst-top" id="btn-install" hidden title="Добавить калькулятор на рабочий стол телефона">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m-5-5 5 5 5-5M5 20h14"/></svg>
         <span>Установить</span>
@@ -392,7 +479,7 @@ footer a{color:var(--gold-text)}
 <div class="wrap">
 
   <section aria-labelledby="h-obj">
-    <h2 id="h-obj"><span class="step">Шаг 1:</span> объект</h2>
+    <h2 id="h-obj"><span class="step">Шаг 1:</span> объект <a class="help-q" href="help/#s-proj" target="_blank" rel="noopener" title="Инструкция: проекты и объект">?</a></h2>
     <div class="banner" id="example-banner" hidden><b>Пример.</b> Малярные работы на 204 м² стен по смете из презентации FARBIG «Организация отделочных работ». Замените работы на свои или создайте новый проект.</div>
     <ul class="warns" id="warns" hidden></ul>
     <div class="projbar">
@@ -411,7 +498,7 @@ footer a{color:var(--gold-text)}
       </div>
       <label for="obj-comment">Комментарий</label>
       <input id="obj-comment" data-o="comment" placeholder="Сроки, условия, особенности объекта">
-      <div class="rooms-head"><h3 id="rooms-sum">Помещения</h3><button id="btn-room">+ Помещение</button></div>
+      <div class="rooms-head"><h3><span id="rooms-sum">Помещения</span> <a class="help-q" href="help/#s-rooms" target="_blank" rel="noopener" title="Инструкция: помещения и размеры">?</a></h3><button id="btn-room">+ Помещение</button></div>
       <p class="hint">Введите длину и ширину — пол, периметр и стены посчитаются сами (стены = периметр × высота − проёмы). Площади можно вписать и вручную.</p>
       <div id="rooms" class="rooms-ed"></div>
       <p class="rooms-tot num" id="rooms-tot"></p>
@@ -421,9 +508,10 @@ footer a{color:var(--gold-text)}
   </section>
 
   <section aria-labelledby="h-works">
-    <h2 id="h-works"><span class="step">Шаг 2:</span> объёмы работ</h2>
+    <h2 id="h-works"><span class="step">Шаг 2:</span> объёмы работ <a class="help-q" href="help/#s-works" target="_blank" rel="noopener" title="Инструкция: работы">?</a></h2>
     <p class="lead" id="works-count"></p>
     <p class="lead works-labor" id="works-labor"></p>
+    <div class="term"><label>Человек в бригаде<input id="crew" inputmode="numeric" value="2"></label><span id="term-txt"></span></div>
     <details class="fold" id="fold-works" data-fold="works">
       <summary class="g-head"><h3 id="works-sum">Работы</h3><span class="num" id="works-sum-r"></span></summary>
       <div class="panel">
@@ -437,7 +525,7 @@ footer a{color:var(--gold-text)}
   </section>
 
   <section aria-labelledby="h-mat">
-    <h2 id="h-mat"><span class="step">Шаг 3:</span> материалы</h2>
+    <h2 id="h-mat"><span class="step">Шаг 3:</span> материалы <a class="help-q" href="help/#s-mats" target="_blank" rel="noopener" title="Инструкция: материалы и цены">?</a></h2>
     <div class="mat-tools">
       <label for="reserve">Доп. запас сверх норм</label>
       <input type="range" id="reserve" min="0" max="20" step="1" value="0">
@@ -447,6 +535,20 @@ footer a{color:var(--gold-text)}
     </div>
     <div class="groups" id="mats"></div>
     <div class="vedom" id="vedom" hidden></div>
+  </section>
+
+  <section aria-labelledby="h-est">
+    <h2 id="h-est"><span class="step">Шаг 4:</span> смета для заказчика <a class="help-q" href="help/#s-est" target="_blank" rel="noopener" title="Инструкция: смета для заказчика">?</a></h2>
+    <p class="lead">Аккуратная смета с вашими данными: работы, материалы и итог. Закупочные цены материалов заказчик не видит.</p>
+    <div class="panel est-box">
+      <p class="hint" id="est-master"></p>
+      <div class="est-opts">
+        <label><input type="checkbox" id="est-mats"> Материалы списком (без цен)</label>
+        <label><input type="checkbox" id="est-unit"> Цены за единицу работ</label>
+        <label><input type="checkbox" id="est-term"> Срок выполнения</label>
+      </div>
+      <div class="actions"><button class="primary" id="btn-est">Смета клиенту</button><button class="wa-btn" id="btn-est-share"></button></div>
+    </div>
   </section>
 
   <section aria-labelledby="h-norms">
@@ -475,14 +577,21 @@ footer a{color:var(--gold-text)}
   </div>
 </div>
 
+<div class="est-view" id="est-view" hidden role="dialog" aria-modal="true" aria-label="Смета для заказчика">
+  <div class="est-tools"><button id="est-close">← Назад</button><button class="primary" id="est-print">Сохранить PDF / печать</button><button class="wa-btn" id="est-share2"></button></div>
+  <p class="est-tip">Чтобы сохранить PDF: «Сохранить PDF / печать» → в окне печати выберите «Сохранить как PDF».</p>
+  <div class="est-paper" id="est-paper"></div>
+</div>
+
 <div class="modal" id="settings" hidden role="dialog" aria-modal="true" aria-labelledby="set-title">
   <div class="sheet">
-    <div class="sheet-head"><h2 id="set-title">Настройки</h2><button id="set-close" aria-label="Закрыть настройки">×</button></div>
+    <div class="sheet-head"><h2 id="set-title">Настройки <a class="help-q" href="help/#s-settings" target="_blank" rel="noopener" title="Инструкция: настройки">?</a></h2><button id="set-close" aria-label="Закрыть настройки">×</button></div>
     <div class="tabs" role="tablist">
       <button role="tab" data-tab="works" aria-selected="true">Виды работ</button>
       <button role="tab" data-tab="mats" aria-selected="false">Материалы</button>
       <button role="tab" data-tab="labor" aria-selected="false">Цены работ</button>
       <button role="tab" data-tab="groups" aria-selected="false">Отделы</button>
+      <button role="tab" data-tab="master" aria-selected="false">Мастер</button>
       <button role="tab" data-tab="share" aria-selected="false">Обмен</button>
     </div>
     <div class="sheet-body" id="set-body"></div>
@@ -580,7 +689,7 @@ const OLD_GROUPS=["Отделка","Электрика","Сантехника"];
 const DOC_GROUP="Из документа";
 /* Цены работ по умолчанию — из сметы FARBIG «Организация отделочных работ» (₽ за единицу) */
 const LABOR_DEF={fb_sand_plaster:150,fb_primer:50,fb_pigment:100,fb_corner:250,fb_base:250,fb_sand_base:100,fb_glass:210,fb_finish:260,fb_sand_finish:150,fb_primer_paint:200,paint_walls:350};
-let SET=(()=>{let v;try{v=JSON.parse(localStorage.getItem("msm2-settings")||"null")}catch{} return Object.assign({groups:[],works:{},over:{},labor:{},mo:{},lib:{}},v||{})})();
+let SET=(()=>{let v;try{v=JSON.parse(localStorage.getItem("msm2-settings")||"null")}catch{} return Object.assign({groups:[],works:{},over:{},labor:{},prod:{},mo:{},lib:{}},v||{})})();
 const saveSet=()=>{try{localStorage.setItem("msm2-settings",JSON.stringify(SET))}catch{}};
 /* Отделы: SET.glist — порядок и названия; SET.gren — переименование стандартных отделов */
 if(!SET.gren) SET.gren={};
@@ -616,6 +725,7 @@ const num=v=>{const n=parseFloat(String(v??"").replace(/\s/g,"").replace(",","."
 const fmt=(n,d=2)=>(Math.round(n*10**d)/10**d).toLocaleString("ru-RU",{maximumFractionDigits:d});
 const rub=n=>Math.round(n).toLocaleString("ru-RU")+" ₽";
 const uid=()=>Math.random().toString(36).slice(2,9);
+const WA_ICON=`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.1 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>`;
 const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
 
 /* ================= Состояние ================= */
@@ -664,9 +774,9 @@ function renderProjects(){
 
 /* ================= Расчёт ================= */
 const shortName=c=>c.name.replace(/\s*\(.*?\)/g,"");
-function calc(){
+function calc(works=S.works){
   const agg=new Map();
-  for(const w of S.works){
+  for(const w of works){
     const c=CAT[w.type]; const q=num(w.qty); if(!c||!(q>0)) continue;
     const p=c.param?(num(w.p)>0?num(w.p):c.param.def):1;
     for(const m of c.mats){
@@ -744,7 +854,48 @@ function roomRow(r){
   return `<div class="room-ed" data-id="${r.id}">
     <label class="rn">Помещение<input data-r="name" value="${esc(r.name||"")}" placeholder="Кухня"></label>
     ${ROOM_F.map(([f,l])=>`<label>${l}<input data-r="${f}" inputmode="decimal" value="${esc(rv2(r[f]))}"${f==="height"&&num(S.height)>0?` placeholder="${esc(S.height)}"`:""}></label>`).join("")}
-    <button class="x" data-del-room aria-label="Удалить помещение">×</button></div>`;
+    <button class="x" data-del-room aria-label="Удалить помещение">×</button>
+    <div class="room-more"><button class="link" data-rt="ops" aria-expanded="${SUB.has(r.id+":ops")}">${SUB.has(r.id+":ops")?"▾":"▸"} Проёмы по размерам${r.ops?.length?` (${r.ops.length})`:""}</button><button class="link" data-rt="segs" aria-expanded="${SUB.has(r.id+":segs")}">${SUB.has(r.id+":segs")?"▾":"▸"} Сложная форма${r.segs?.length?` (${r.segs.length})`:""}</button></div>
+    ${SUB.has(r.id+":ops")?opsBox(r):""}${SUB.has(r.id+":segs")?segsBox(r):""}</div>`;
+}
+/* Раскрытые блоки «Проёмы» и «Сложная форма» (не сохраняются) */
+const SUB=new Set();
+const subIn=(attr,f,label,v,ph)=>`<label>${label}<input data-${attr}="${f}" inputmode="decimal" value="${esc(v??"")}" placeholder="${esc(ph)}"></label>`;
+/* Проёмы: площадь вычитается из стен; откосы = (2 × высота + ширина) × кол-во */
+const OP_PH={"Окно":["1,4","1,5"],"Дверь":["0,9","2,1"],"Проём":["1,2","2,1"]};
+function opsCalc(r){
+  let area=0,slopes=0,any=false;
+  for(const o of r.ops||[]){ const w=num(o.w),h=num(o.h),n=num(o.n)>0?num(o.n):1; if(w>0&&h>0){area+=w*h*n;slopes+=(2*h+w)*n;any=true} }
+  return {area:r2(area),slopes:r2(slopes),any};
+}
+function opsRes(r){ const o=opsCalc(r); return o.any?`Площадь проёмов: <b>${fmt(o.area)} м²</b> — вычитается из стен · откосы: <b>${fmt(o.slopes,1)} м.п.</b>`:"Добавьте окна и двери — площадь проёмов посчитается сама."; }
+function opsBox(r){
+  const opts=Object.entries(CAT).filter(([,c])=>c.unit==="м.п.").map(([id,c])=>`<option value="${id}">${esc(c.name)}</option>`).join("");
+  return `<div class="room-sub" data-sub="ops"><h4>Окна и двери</h4>
+    ${(r.ops||[]).map((o,i)=>{const ph=OP_PH[o.t]||OP_PH["Окно"]; return `<div class="op-row" data-i="${i}">
+      <label>Что<select data-op="t">${Object.keys(OP_PH).map(t=>`<option${t===o.t?" selected":""}>${t}</option>`).join("")}</select></label>
+      ${subIn("op","w","Ширина, м",o.w,ph[0])}${subIn("op","h","Высота, м",o.h,ph[1])}${subIn("op","n","Кол-во",o.n,"1")}
+      <button class="x" data-op-del aria-label="Удалить проём">×</button></div>`}).join("")}
+    <div class="op-add"><button class="mini" data-op-add="Окно">+ Окно</button><button class="mini" data-op-add="Дверь">+ Дверь</button><button class="mini" data-op-add="Проём">+ Проём, арка</button></div>
+    <p class="res" data-res="ops">${opsRes(r)}</p>
+    <div class="op-add"><select data-op-work aria-label="Работа для откосов"><option value="other">Откосы — без расчёта материала</option>${opts}</select><button class="mini dark" data-op-to-works>+ Откосы в работы</button></div></div>`;
+}
+/* Участки: ниша или часть комнаты добавляет площадь, выступ или короб вычитает; периметр растёт на 2 × глубину */
+function segAdd(r){
+  let a=0,p=0;
+  for(const s of r.segs||[]){ const l=num(s.l),d=num(s.d),n=num(s.n)>0?num(s.n):1; if(l>0&&d>0){a+=(s.t==="sub"?-1:1)*l*d*n;p+=2*d*n} }
+  return {a,p};
+}
+function segsRes(r){ const s=segAdd(r); return s.p?`Участки: площадь ${s.a>=0?"+":"−"}${fmt(Math.abs(s.a))} м² · периметр +${fmt(s.p)} м`:"Длина — сторона, которой участок примыкает к комнате, глубина — насколько он уходит в сторону."; }
+function segsBox(r){
+  return `<div class="room-sub" data-sub="segs"><h4>Ниши, выступы, Г-образная часть</h4>
+    ${(r.segs||[]).map((s,i)=>`<div class="sg-row" data-i="${i}">
+      <label>Что<select data-sg="t"><option value="add"${s.t!=="sub"?" selected":""}>Ниша, часть комнаты (+)</option><option value="sub"${s.t==="sub"?" selected":""}>Выступ, короб (−)</option></select></label>
+      ${subIn("sg","l","Длина, м",s.l,"2")}${subIn("sg","d","Глубина, м",s.d,"0,6")}${subIn("sg","n","Кол-во",s.n,"1")}
+      <button class="x" data-sg-del aria-label="Удалить участок">×</button></div>`).join("")}
+    <div class="op-add"><button class="mini" data-sg-add>+ Участок</button></div>
+    <p class="res" data-res="segs">${segsRes(r)}</p>
+    ${!(num(r.len)>0&&num(r.wid)>0)?`<p class="hint">Укажите длину и ширину основной части комнаты — участки прибавятся к ней.</p>`:""}</div>`;
 }
 function roomsTotal(){
   const t=k=>S.rooms.reduce((s,r)=>s+(num(r[k])>0?num(r[k]):0),0);
@@ -762,19 +913,58 @@ function renderRooms(){
 }
 const r2=x=>Math.round(x*100)/100;
 function recalcRoom(r,f){
-  const L=num(r.len),W=num(r.wid),H=num(r.height)>0?num(r.height):num(S.height),O=num(r.open)>0?num(r.open):0;
+  const L=num(r.len),W=num(r.wid),H=num(r.height)>0?num(r.height):num(S.height);
   const ch=[];
-  if((f==="len"||f==="wid")&&L>0&&W>0){r.floor=r2(L*W);r.perimeter=r2(2*(L+W));ch.push("floor","perimeter")}
-  if(["len","wid","height","open","perimeter","obj"].includes(f)&&num(r.perimeter)>0&&H>0){r.walls=r2(Math.max(0,num(r.perimeter)*H-O));ch.push("walls")}
+  if((f==="len"||f==="wid"||f==="seg")&&L>0&&W>0){const s=segAdd(r);r.floor=r2(Math.max(0,L*W+s.a));r.perimeter=r2(2*(L+W)+s.p);ch.push("floor","perimeter")}
+  if(f==="ops"){const o=opsCalc(r); if(o.any){r.open=o.area;ch.push("open")}}
+  const O=num(r.open)>0?num(r.open):0;
+  if(["len","wid","height","open","perimeter","obj","seg","ops"].includes(f)&&num(r.perimeter)>0&&H>0){r.walls=r2(Math.max(0,num(r.perimeter)*H-O));ch.push("walls")}
   return ch;
 }
+/* Пересчёт комнаты после правки проёмов/участков: поля строки и подписи обновляются без перерисовки */
+function roomChanged(r,row,f){
+  for(const k of recalcRoom(r,f)){const i=row.querySelector(`[data-r="${k}"]`); if(i){i.value=rv2(r[k]); i.classList.add("calc")}}
+  const ro=row.querySelector('[data-res="ops"]'); if(ro) ro.innerHTML=opsRes(r);
+  const rs=row.querySelector('[data-res="segs"]'); if(rs) rs.innerHTML=segsRes(r);
+  dropExample(); save(); renderRoomsTot(); techChanged();
+}
+function rerenderRoom(r,focusSel,last=false){
+  const row=document.querySelector(`.room-ed[data-id="${r.id}"]`); if(!row) return;
+  row.outerHTML=roomRow(r);
+  if(!focusSel) return;
+  const els=document.querySelectorAll(`.room-ed[data-id="${r.id}"] ${focusSel}`); els[last?els.length-1:0]?.focus();
+}
 $("#rooms").addEventListener("input",e=>{
-  const f=e.target.dataset.r; const row=e.target.closest(".room-ed"); if(!f||!row) return;
+  const t=e.target, row=t.closest(".room-ed"); if(!row) return;
+  if(t.dataset.op||t.dataset.sg){
+    const r=S.rooms.find(x=>x.id===row.dataset.id), isOp=!!t.dataset.op, list=isOp?r.ops:r.segs;
+    const it=list[+t.closest("[data-i]").dataset.i]; it[isOp?t.dataset.op:t.dataset.sg]=t.value;
+    if(isOp&&t.dataset.op==="t"){ const ph=OP_PH[t.value]; const rw=t.closest(".op-row"); rw.querySelector('[data-op="w"]').placeholder=ph[0]; rw.querySelector('[data-op="h"]').placeholder=ph[1]; }
+    roomChanged(r,row,isOp?"ops":"seg"); return;
+  }
+  const f=t.dataset.r; if(!f) return;
   const r=S.rooms.find(x=>x.id===row.dataset.id); r[f]=e.target.value;
   for(const k of recalcRoom(r,f)){const i=row.querySelector(`[data-r="${k}"]`); i.value=rv2(r[k]); i.classList.add("calc")}
   dropExample(); save(); renderRoomsTot(); renderRoomLists(); techChanged();
 });
 $("#rooms").addEventListener("click",e=>{
+  const s=e.target.closest("button"), row=s?.closest(".room-ed"); if(!s||!row) return;
+  const r=S.rooms.find(x=>x.id===row.dataset.id);
+  if(s.dataset.rt){ const k=r.id+":"+s.dataset.rt; if(SUB.has(k)) SUB.delete(k); else SUB.add(k);
+    if(s.dataset.rt==="ops"&&!r.ops?.length&&SUB.has(k)) r.ops=[{t:"Окно",w:"",h:"",n:"1"}];
+    if(s.dataset.rt==="segs"&&!r.segs?.length&&SUB.has(k)) r.segs=[{t:"add",l:"",d:"",n:"1"}];
+    rerenderRoom(r,SUB.has(k)?`[data-sub="${s.dataset.rt}"] input`:`[data-rt="${s.dataset.rt}"]`); return; }
+  if(s.dataset.opAdd){ (r.ops||(r.ops=[])).push({t:s.dataset.opAdd,w:"",h:"",n:"1"}); save(); rerenderRoom(r,'[data-op="w"]',true); return; }
+  if(s.hasAttribute("data-sg-add")){ (r.segs||(r.segs=[])).push({t:"add",l:"",d:"",n:"1"}); save(); rerenderRoom(r,'[data-sg="l"]',true); return; }
+  if(s.hasAttribute("data-op-del")||s.hasAttribute("data-sg-del")){
+    const isOp=s.hasAttribute("data-op-del"); (isOp?r.ops:r.segs).splice(+s.closest("[data-i]").dataset.i,1);
+    if(isOp){ const o=opsCalc(r); r.open=o.any?o.area:""; recalcRoom(r,"open"); } else recalcRoom(r,"seg");
+    rerenderRoom(r); dropExample(); save(); renderRoomsTot(); techChanged(); return; }
+  if(s.hasAttribute("data-op-to-works")){
+    const o=opsCalc(r); if(!(o.slopes>0)){toast("Сначала укажите размеры окон и дверей");return}
+    const type=row.querySelector("[data-op-work]").value;
+    S.works.push(type==="other"?{id:uid(),type:"other",room:r.name||"",qty:o.slopes,name:"Откосы, м.п.",note:"из размеров проёмов"}:{id:uid(),type,room:r.name||"",qty:o.slopes,p:CAT[type]?.param?.def,note:"откосы из размеров проёмов"});
+    dropExample(); save(); renderWorks(); renderMaterials(); toast(`Откосы добавлены в работы: ${fmt(o.slopes,1)} м.п.`); return; }
   const b=e.target.closest("[data-del-room]"); if(!b) return;
   S.rooms=S.rooms.filter(r=>r.id!==b.closest(".room-ed").dataset.id); save(); renderRooms(); renderWorks(); techChanged();
 });
@@ -816,7 +1006,7 @@ function lmResult(){
 function renderLm(){
   const L=lmState(); const el=$("#lm"); if(!el) return;
   const inp=(f,label,ph,extra="")=>`<label>${label}<input data-lm="${f}" inputmode="decimal" value="${esc(L[f]??"")}" placeholder="${esc(ph)}"${extra}></label>`;
-  let h=`<div class="lm-modes" role="group" aria-label="Что считаем">${LM_MODES.map(([k,t])=>`<button class="mini" data-lm-mode="${k}" aria-pressed="${L.mode===k}">${t}</button>`).join("")}</div>`;
+  let h=`<p class="hint">Как пользоваться — <a href="help/#s-lm" target="_blank" rel="noopener">в инструкции</a>.</p><div class="lm-modes" role="group" aria-label="Что считаем">${LM_MODES.map(([k,t])=>`<button class="mini" data-lm-mode="${k}" aria-pressed="${L.mode===k}">${t}</button>`).join("")}</div>`;
   const t=roomsTotal();
   if(L.mode==="gkl"){
     h+=`<p class="hint">Длина швов на стенах или потолке из ГКЛ: вертикальные стыки по длинной кромке листа + горизонтальные торцевые стыки, если лист короче высоты стены.</p>
@@ -918,8 +1108,8 @@ function techVolumes(){
   for(const r of S.rooms){ const H=num(r.height)>0?num(r.height):num(S.height); if(H>0&&num(r.walls)>0) corners+=4*H+(num(r.perimeter)>0?num(r.perimeter):0); }
   return {W:r2(t.walls),F:r2(t.floor),C:r2(corners),P:r2(t.perimeter)};
 }
-function buildTechWorks(){
-  const T=techState(), V=techVolumes();
+function buildTechWorks(T=techState()){
+  const V=techVolumes();
   const steps=[...(TECH_SCHEMES[T.scheme]||TECH_SCHEMES.k3).steps];
   if(T.gkl){ const i=steps.findIndex(s=>s[0]==="fb_primer")+1;
     steps.splice(i,0,["fb_joints","W","Стены (ГКЛ)"],...(steps.some(s=>s[0]==="fb_pigment")?[]:[["fb_pigment","W","Стены (ГКЛ)"]])); }
@@ -931,7 +1121,7 @@ function buildTechWorks(){
 }
 /* В режиме «Авто» работы схемы пересобираются; добавленные вручную строки остаются после них */
 function applyTech(){ if(techState().auto) S.works=[...buildTechWorks(),...S.works.filter(w=>!w.auto)]; }
-function techChanged(){ renderTechSum(); if(!techState().auto) return; applyTech(); save(); renderWorks(); renderMaterials(); }
+function techChanged(){ renderTechSum(); renderCmp(); if(!techState().auto) return; applyTech(); save(); renderWorks(); renderMaterials(); }
 function autoOff(){
   const T=techState(); if(!T.auto) return;
   T.auto=false; S.works.forEach(w=>delete w.auto); renderTech();
@@ -946,7 +1136,7 @@ function renderTechSum(){
 function renderTech(){
   const T=techState();
   const chk=(k,l)=>`<label><input type="checkbox" data-t="${k}"${T[k]?" checked":""}> ${l}</label>`;
-  $("#tech").innerHTML=`<div class="tech-head"><h3>Технология</h3><span class="tech-state${T.auto?" on":""}">${T.auto?"Авто: работы считаются сами":"Ручной режим"}</span></div>
+  $("#tech").innerHTML=`<div class="tech-head"><h3>Технология <a class="help-q" href="help/#s-tech" target="_blank" rel="noopener" title="Инструкция: технология и сравнение">?</a></h3><span class="tech-state${T.auto?" on":""}">${T.auto?"Авто: работы считаются сами":"Ручной режим"}</span></div>
     <div class="tech-grid">
       <label>Стены<select data-t="scheme">${Object.entries(TECH_SCHEMES).map(([k,s])=>`<option value="${k}"${k===T.scheme?" selected":""}>${esc(s.n)}</option>`).join("")}</select></label>
       <label>Покраска, слоёв<input type="text" data-t="coats" inputmode="numeric" value="${esc(T.coats)}"></label>
@@ -954,8 +1144,28 @@ function renderTech(){
     <div class="tech-opts">${chk("ceil","Потолок")}${chk("gkl","Стены из ГКЛ (заделка швов)")}${chk("mold","Покраска молдингов и плинтусов")}</div>
     <p class="hint" id="tech-sum"></p>
     <div class="actions">${T.auto?`<button class="link" data-t-act="off">Выключить авто и править работы вручную</button>`
-      :`<button class="dark" data-t-act="on">Рассчитать работы автоматически</button>`}</div>`;
-  renderTechSum();
+      :`<button class="dark" data-t-act="on">Рассчитать работы автоматически</button>`}
+      <button class="link" data-t-act="cmp" aria-expanded="${cmpOpen}">${cmpOpen?"▾":"▸"} Сравнить технологии</button></div>
+    <div class="cmp" id="cmp"${cmpOpen?"":" hidden"}></div>`;
+  renderTechSum(); renderCmp();
+}
+/* Сравнение технологий: все схемы стен на тех же помещениях; текущий проект не меняется */
+let cmpOpen=false;
+function renderCmp(){
+  const el=$("#cmp"); if(!el||!cmpOpen) return;
+  if(!S.rooms.length||!(techVolumes().W>0)){el.innerHTML=`<p class="hint">Добавьте помещения с размерами — сравнение посчитается по ним.</p>`;return}
+  const T=techState(), extra=T.auto?S.works.filter(w=>!w.auto):[];
+  const res=Object.entries(TECH_SCHEMES).map(([k,s])=>{
+    const ws=[...buildTechWorks({...T,scheme:k}),...extra];
+    const mat=calc(ws).reduce((a,r)=>a+r.sum,0), lab=laborSum(ws);
+    return {k,n:s.n,mat,lab,all:mat+lab,days:termCalc(ws).days};
+  });
+  const cur=res.find(x=>x.k===T.scheme)||res[0];
+  el.innerHTML=`<div class="tbl-x"><table><thead><tr><th>Технология стен</th><th class="n hm">Материалы</th><th class="n hm">Работы</th><th class="n">Итого</th><th class="n">Разница</th><th class="n hm">Срок</th><th class="hm"></th></tr></thead><tbody>
+    ${res.map(x=>{const d=x.all-cur.all; return `<tr${x.k===cur.k?' class="cur"':""}><td>${esc(x.n)}${x.k===cur.k?"":`<br><button class="mini pick-m" data-t-pick="${x.k}">Выбрать</button>`}</td><td class="n hm">${rub(x.mat)}</td><td class="n hm">${rub(x.lab)}</td><td class="n"><b>${rub(x.all)}</b></td>
+      <td class="n ${d>0?"up":d<0?"down":""}">${x.k===cur.k?"текущая":(d>0?"+":"−")+rub(Math.abs(d))}</td><td class="n hm">${x.days?`≈ ${x.days} дн.`:"—"}</td>
+      <td class="hm">${x.k===cur.k?"":`<button class="mini" data-t-pick="${x.k}">Выбрать</button>`}</td></tr>`}).join("")}</tbody></table></div>
+    <p class="hint">Считается по вашим помещениям, ценам и галочкам выше${T.auto?"":". В ручном режиме ваш список работ не меняется — сравниваются только схемы технологии"}. Чтобы объяснить заказчику разницу, покажите ему эту таблицу.</p>`;
 }
 let techArmed=false;
 $("#tech").addEventListener("change",e=>{
@@ -964,7 +1174,10 @@ $("#tech").addEventListener("change",e=>{
 });
 $("#tech").addEventListener("input",e=>{ if(e.target.dataset.t==="coats"){ techState().coats=e.target.value; save(); techChanged(); } });
 $("#tech").addEventListener("click",e=>{
+  const pick=e.target.dataset.tPick;
+  if(pick){ const T=techState(); T.scheme=pick; dropExample(); save(); renderTech(); techChanged(); toast(`Технология: ${TECH_SCHEMES[pick].n}${T.auto?"":" — включите авто, чтобы пересчитать работы"}`); return; }
   const a=e.target.dataset.tAct; if(!a) return; const T=techState();
+  if(a==="cmp"){ cmpOpen=!cmpOpen; renderTech(); return; }
   if(a==="off"){ autoOff(); save(); renderWorks(); return; }
   const manual=S.works.some(w=>w.type!=="other");
   if(manual&&!techArmed){ techArmed=true; e.target.textContent="Текущие работы заменятся — нажмите ещё раз";
@@ -1018,7 +1231,7 @@ function renderVedom(rows,total){
     <tbody>${list.map(r=>`<tr><td>${esc(r.name)}</td><td class="n">${esc(numU(r.need,r.unit))}</td><td class="n">${fmt(r.packs,2)} × ${esc(r.pn)}</td><td class="n">${rub(r.sum)}</td></tr>`).join("")}</tbody>
     <tfoot><tr><td colspan="3">Итого материалы</td><td class="n">${rub(total)}</td></tr></tfoot></table></div>
     </details>
-    <div class="works-foot"><span class="hint">Расход — с учётом запаса. Позиций: ${list.length}.</span><button class="dark" id="btn-copy-list">Скопировать список</button></div>`;
+    <div class="works-foot"><span class="hint">Расход — с учётом запаса. Позиций: ${list.length}.</span><span class="actions"><button class="dark" id="btn-copy-list">Скопировать список</button><button class="wa-btn" id="btn-share-list">${WA_ICON}Отправить</button></span></div>`;
 }
 /* Сворачивание: работы и отделы материалов по умолчанию свёрнуты, ведомость открыта; выбор запоминается */
 const FOLD=store.get("fold",{});
@@ -1045,10 +1258,11 @@ function vedomText(){
     `Итого материалы: ${rub(lastMat)}`].filter((x,i)=>x!==""||i>1).join("\n");
 }
 $("#vedom").addEventListener("click",async e=>{
+  if(e.target.closest("#btn-share-list")){ shareText(vedomText(),"Ведомость материалов"); return; }
   if(e.target.id!=="btn-copy-list") return;
   try{await navigator.clipboard.writeText(vedomText());toast("Список скопирован — вставьте в мессенджер")}catch{toast("Не удалось скопировать")}
 });
-function laborSum(){return S.works.reduce((s,w)=>{const c=CAT[w.type],q=num(w.qty);return s+(c&&q>0?laborPrice(w.type)*q:0)},0)}
+function laborSum(works=S.works){return works.reduce((s,w)=>{const c=CAT[w.type],q=num(w.qty);return s+(c&&q>0?laborPrice(w.type)*q:0)},0)}
 let lastMat=0;
 function renderTotals(mat){
   lastMat=mat; const lab=laborSum();
@@ -1056,7 +1270,103 @@ function renderTotals(mat){
   $("#total-split").textContent=`материалы ${rub(mat)} · работы ${rub(lab)}`;
   $("#works-sum-r").textContent=rub(lab);
   const wl=$("#works-labor"); if(wl) wl.textContent=lab>0?`Стоимость работ: ${rub(lab)}`:"Цены работ можно задать в «Настройках»";
+  renderTerm(); renderCmp();
 }
+/* ================= Срок работ: выработка на 1 человека в день + сушка между этапами (типовые значения — оценка) ================= */
+const PROD_DEF={fb_cover:150,fb_sand_plaster:60,fb_primer:300,fb_pigment:250,fb_joints:40,fb_joints_m:60,fb_corner:40,fb_base:40,fb_sand_base:60,
+  fb_glass:35,fb_glass_glue:40,fb_finish:50,fb_sand_finish:60,fb_primer_paint:250,paint_walls:120,paint_ceiling:90,paint_molding:80};
+/* Сушка, рабочих дней: считается один раз на вид работ */
+const DRY_DEF={fb_base:1,fb_glass:1,fb_glass_glue:2,fb_finish:1,fb_joints:1,fb_joints_m:1};
+const prodRate=id=>{const v=SET.prod?.[id]; return v!=null?v:(PROD_DEF[id]??0)};
+function termCalc(works=S.works){
+  let md=0, dry=0, miss=0; const seen=new Set();
+  for(const w of works){
+    const c=CAT[w.type], q=num(w.qty); if(!c||!(q>0)) continue;
+    const pr=prodRate(w.type); if(!(pr>0)){miss++;continue}
+    /* Покраска: выработка указана на один слой */
+    const k=PAINT_TYPES.includes(w.type)?(num(w.p)>0?num(w.p):(c.param?.def||1)):1;
+    md+=q*k/pr;
+    if(!seen.has(w.type)){seen.add(w.type); dry+=DRY_DEF[w.type]||0}
+  }
+  const crew=Math.max(1,Math.round(num(S.crew)||2));
+  return {days:md>0?Math.ceil(md/crew+dry):0,md,dry,crew,miss};
+}
+function renderTerm(){
+  const el=$("#term-txt"); if(!el) return; const t=termCalc();
+  const ci=$("#crew"); if(ci&&document.activeElement!==ci) ci.value=S.crew??2;
+  el.innerHTML=t.days?`Срок: <b>≈ ${t.days} раб. ${dayWord(t.days)}</b> <small>(${fmt(t.md,1)} чел.-дн. ÷ ${t.crew} чел. + сушка ${fmt(t.dry,1)} дн.)${t.miss?` · без нормы выработки: ${t.miss} поз.`:""} <span class="tag-est">оценка</span></small>`
+    :`<small>Срок появится, когда будут работы с объёмами.</small>`;
+}
+const dayWord=n=>{const a=n%10,b=n%100; return a===1&&b!==11?"день":a>=2&&a<=4&&(b<12||b>14)?"дня":"дней"};
+$("#crew").addEventListener("input",e=>{S.crew=e.target.value; save(); renderTerm();});
+
+/* ================= Смета для заказчика ================= */
+let MASTER=store.get("master",{});
+const EST_DEF={mats:false,unit:true,term:true};
+let ESTO=Object.assign({},EST_DEF,store.get("est-opts",{}));
+function renderEstBox(){
+  const m=MASTER; const who=[m.name,m.phone].filter(Boolean).join(", ");
+  $("#est-master").innerHTML=who?`Мастер в смете: <b>${esc(who)}</b> · <button class="link" data-open-master>изменить</button>`
+    :`Ваше имя и телефон в смете: <button class="link" data-open-master>заполнить данные мастера</button>`;
+  for(const k of ["mats","unit","term"]) $("#est-"+k).checked=!!ESTO[k];
+}
+function estRows(){
+  return S.works.map(w=>{const c=CAT[w.type],q=num(w.qty); if(!c||!(q>0)) return null; const pr=laborPrice(w.type);
+    return {name:shortName(c),room:w.room||"",qty:q,unit:c.unit,price:pr,sum:pr*q}}).filter(Boolean);
+}
+function estHTML(){
+  const m=MASTER, rows=estRows(), lab=laborSum(), mat=lastMat, t=termCalc();
+  const date=new Date().toLocaleDateString("ru-RU");
+  const info=[["Объект",S.object],["Адрес",S.address],["Заказчик",S.client]].filter(x=>String(x[1]??"").trim());
+  const mats=GROUPS.flatMap(g=>lastRows.filter(r=>r.group===g));
+  return `<header class="ep-head"><div><b class="ep-name">${esc(m.name||"Мастер-маляр")}</b>${m.phone?`<span>${esc(m.phone)}</span>`:""}${m.city?`<span>${esc(m.city)}</span>`:""}</div><div class="ep-date">${date}</div></header>
+  <h1>Смета на малярные работы</h1>
+  ${info.length?`<table class="ep-info">${info.map(([k,v])=>`<tr><th>${k}</th><td>${esc(v)}</td></tr>`).join("")}</table>`:""}
+  <h2>Работы</h2>
+  <table class="ep-tab"><thead><tr><th>№</th><th>Работа</th><th class="n">Объём</th>${ESTO.unit?`<th class="n">Цена</th>`:""}<th class="n">Сумма</th></tr></thead><tbody>
+  ${rows.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.name)}${r.room?`<small>${esc(r.room)}</small>`:""}</td><td class="n">${fmt(r.qty)} ${esc(r.unit)}</td>${ESTO.unit?`<td class="n">${r.price>0?rub(r.price):"—"}</td>`:""}<td class="n">${r.sum>0?rub(r.sum):"—"}</td></tr>`).join("")}
+  </tbody><tfoot><tr><td colspan="${ESTO.unit?4:3}">Итого работы</td><td class="n">${rub(lab)}</td></tr></tfoot></table>
+  <h2>Материалы</h2>
+  ${ESTO.mats&&mats.length?`<table class="ep-tab"><thead><tr><th>№</th><th>Материал</th><th class="n">Количество</th></tr></thead><tbody>
+    ${mats.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.name)}</td><td class="n">${fmt(r.packs,2)} × ${esc(r.pn)}</td></tr>`).join("")}</tbody>
+    <tfoot><tr><td colspan="2">Итого материалы</td><td class="n">${rub(mat)}</td></tr></tfoot></table>`
+    :`<table class="ep-tab ep-one"><tbody><tr><td>Материалы по расчёту на объект (${mats.length} поз.)</td><td class="n">${rub(mat)}</td></tr></tbody></table>`}
+  <div class="ep-total"><div><span>Работы</span><b>${rub(lab)}</b></div><div><span>Материалы</span><b>${rub(mat)}</b></div><div class="all"><span>Всего</span><b>${rub(lab+mat)}</b></div></div>
+  ${ESTO.term&&t.days?`<p class="ep-term">Срок выполнения: <b>около ${t.days} ${t.days%10===1&&t.days%100!==11?"рабочего дня":"рабочих дней"}</b> (бригада ${t.crew} чел.)</p>`:""}
+  ${S.comment?`<p class="ep-note">${esc(S.comment)}</p>`:""}
+  <p class="ep-note">${esc(m.note||"Расчёт предварительный. Окончательная стоимость — после осмотра объекта.")}</p>
+  <div class="ep-sign"><span>Мастер ____________________</span><span>Заказчик ____________________</span></div>
+  <p class="ep-foot">Рассчитано в калькуляторе материалов FARBIG по технологии «Экспресс К3»</p>`;
+}
+function estText(){
+  const m=MASTER, rows=estRows(), lab=laborSum(), t=termCalc();
+  return [`Смета на малярные работы${S.object?` — ${S.object}`:""}`,S.address?`Адрес: ${S.address}`:"","","Работы:",
+    ...rows.map((r,i)=>`${i+1}. ${r.name}${r.room?` (${r.room})`:""} — ${fmt(r.qty)} ${r.unit}${r.sum>0?(ESTO.unit?` × ${rub(r.price)}`:"")+` = ${rub(r.sum)}`:""}`),"",
+    `Работы: ${rub(lab)}`,`Материалы: ${rub(lastMat)}`,`Всего: ${rub(lab+lastMat)}`,
+    ESTO.term&&t.days?`Срок: ≈ ${t.days} раб. ${dayWord(t.days)}`:"","",
+    m.note||"Расчёт предварительный. Окончательная стоимость — после осмотра объекта.",
+    [m.name,m.phone].filter(Boolean).join(", ")].join("\n").replace(/\n{3,}/g,"\n\n").trim();
+}
+function openEst(){
+  if(!estRows().length){toast("Добавьте работы — смета пока пустая");return}
+  try{ym(113898791,"reachGoal","estimate")}catch{}
+  $("#est-paper").innerHTML=estHTML(); $("#est-view").hidden=false; document.body.classList.add("est-on"); $("#est-view").scrollTop=0; $("#est-close").focus();
+}
+function closeEst(){ $("#est-view").hidden=true; document.body.classList.remove("est-on"); $("#btn-est").focus(); }
+$("#btn-est").onclick=openEst;
+$("#est-close").onclick=closeEst;
+$("#est-print").onclick=()=>window.print();
+for(const id of ["#btn-est-share","#est-share2"]){ const b=$(id); b.innerHTML=WA_ICON+"Отправить"; b.onclick=()=>{ if(!estRows().length){toast("Добавьте работы — смета пока пустая");return} shareText(estText(),"Смета"); }; }
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("#est-view").hidden) closeEst(); });
+document.querySelector(".est-opts").addEventListener("change",e=>{ const k=e.target.id.replace("est-",""); ESTO[k]=e.target.checked; store.set("est-opts",ESTO); });
+$("#est-master").addEventListener("click",e=>{ if(e.target.closest("[data-open-master]")) openSettings("master"); });
+function masterTab(){
+  const f=(k,l,ph)=>`<label>${l}<input class="m-f" data-m="${k}" value="${esc(MASTER[k]||"")}" placeholder="${esc(ph)}"></label>`;
+  return `<p class="hint">Эти данные печатаются в шапке сметы для заказчика. Хранятся только в этом браузере и в файл настроек не попадают.</p>
+  <div class="fgrid">${f("name","Имя или название бригады","Иван Петров")}${f("phone","Телефон","+7 900 000-00-00")}${f("city","Город","Москва")}</div>
+  <label class="mlab">Примечание внизу сметы<textarea class="m-f" data-m="note" placeholder="Расчёт предварительный. Окончательная стоимость — после осмотра объекта.">${esc(MASTER.note||"")}</textarea></label>`;
+}
+$("#set-body").addEventListener("input",e=>{ const k=e.target.dataset?.m; if(!k||!e.target.classList.contains("m-f")) return; MASTER[k]=e.target.value.trim(); store.set("master",MASTER); renderEstBox(); });
 function normText(m,c){ return m.nt || `${fmt(m.per??m.rate,4)} ${m.u}/${c.unit}${m.per!=null?" на 1 "+c.param.unit:""}`; }
 function renderNorms(){
   $("#norms").innerHTML=workGroups().map(g=>`<div class="norm-group"><h3>${esc(g)}</h3><div class="norms">${
@@ -1133,6 +1443,13 @@ async function saveFile(name,blob){
   const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=name; document.body.append(a); a.click(); a.remove();
   setTimeout(()=>URL.revokeObjectURL(a.href),4000); toast("Файл скачан"); return true;
 }
+/* «Отправить»: системное меню «Поделиться» на телефоне, иначе WhatsApp с готовым текстом */
+async function shareText(text,title){
+  try{ym(113898791,"reachGoal","share")}catch{}
+  if(navigator.share){ try{await navigator.share({title,text});return}catch(e){ if(e?.name==="AbortError") return; } }
+  const w=window.open("https://wa.me/?text="+encodeURIComponent(text),"_blank");
+  if(w) w.opener=null; else { try{await navigator.clipboard.writeText(text);toast("Текст скопирован — вставьте в мессенджер")}catch{toast("Не удалось отправить")} }
+}
 function toast(t){const el=$("#toast");el.textContent=t;clearTimeout(toast.t);toast.t=setTimeout(()=>el.textContent="",4000)}
 function matAoa(){
   const head=["Раздел","Материал","Нужно (с запасом)","Ед.","Упаковка","Кол-во упаковок","Цена за упаковку, ₽","Сумма, ₽","Примечание"];
@@ -1190,7 +1507,7 @@ $("#btn-xlsx").onclick=async()=>{
   XLSX.utils.book_append_sheet(wb,ws3,"Нормы и источники");
   if(S.rooms?.length){const nv=x=>num(x)>0?num(x):"";const t=roomsTotal();
     XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["Помещение","Длина, м","Ширина, м","Высота, м","Проёмы, м²","Пол, м²","Периметр, м","Стены, м²"],...S.rooms.map(r=>[r.name||"",nv(r.len),nv(r.wid),nv(r.height)||nv(S.height),nv(r.open),nv(r.floor),nv(r.perimeter),nv(r.walls)]),["Итого","","","","",r2(t.floor),r2(t.perimeter),r2(t.walls)]]),"Помещения");}
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["Итог по объекту",S.object||""],...[["Адрес",S.address],["Заказчик",S.client],["Высота потолков, м",S.height],["Комментарий",S.comment]].filter(x=>String(x[1]??"").trim()),["Материалы, ₽",Math.round(lastMat)],["Работы, ₽",Math.round(laborSum())],["Всего, ₽",Math.round(lastMat+laborSum())]]),"Итог");
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["Итог по объекту",S.object||""],...[["Адрес",S.address],["Заказчик",S.client],["Высота потолков, м",S.height],["Комментарий",S.comment]].filter(x=>String(x[1]??"").trim()),["Материалы, ₽",Math.round(lastMat)],["Работы, ₽",Math.round(laborSum())],["Всего, ₽",Math.round(lastMat+laborSum())],...(termCalc().days?[["Срок, рабочих дней (оценка)",termCalc().days],["Человек в бригаде",termCalc().crew]]:[])]),"Итог");
   const buf=XLSX.write(wb,{bookType:"xlsx",type:"array"});
   const name=((S.object||"Материалы").replace(/[\\/:*?"<>|]+/g," ").trim().slice(0,60)||"Материалы")+".xlsx";
   await saveFile(name,new Blob([buf],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}));
@@ -1218,6 +1535,7 @@ function renderSettings(){
   else if(setTab==="mats") body.innerHTML=matsTab();
   else if(setTab==="labor") body.innerHTML=laborList();
   else if(setTab==="groups") body.innerHTML=groupsList();
+  else if(setTab==="master") body.innerHTML=masterTab();
   else body.innerHTML=shareTab();
 }
 
@@ -1369,13 +1687,35 @@ $("#set-body").addEventListener("click",e=>{
     saveFile("Настройки калькулятора FARBIG.json",new Blob([data],{type:"application/json"}));
   }
   else if(act==="reset-labor"){ SET.labor={}; applyCatalog(); renderSettings(); toast("Цены работ сброшены"); }
+  else if(act==="reset-prod"){ SET.prod={}; saveSet(); renderSettings(); renderTerm(); toast("Выработка сброшена к типовой"); }
+  else if(act==="export-proj"){
+    save(); const d=new Date().toLocaleDateString("ru-RU");
+    const data=JSON.stringify({app:"farbig-calc",kind:"projects",version:1,saved:new Date().toISOString(),projects:P.list},null,1);
+    saveFile(`Проекты FARBIG ${d}.json`,new Blob([data],{type:"application/json"}));
+    try{ym(113898791,"reachGoal","backup")}catch{}
+  }
+  else if(act==="imp-proj-add"||act==="imp-proj-replace"){
+    if(!pendingProj) return;
+    const have=new Set(P.list.map(p=>JSON.stringify(p.data)));
+    const items=pendingProj.map(p=>({id:"p"+uid(),data:p.data}));
+    let added=0;
+    if(act==="imp-proj-replace"){ P={current:items[0].id,list:items}; added=items.length; }
+    else for(const it of items){ if(have.has(JSON.stringify(it.data))) continue; P.list.push(it); added++; }
+    pendingProj=null; useProject(P.current); save(); renderAll(); renderSettings();
+    toast(act==="imp-proj-replace"?`Проекты заменены: ${added}`:added?`Добавлено проектов: ${added}`:"Все проекты из файла уже есть");
+  }
 });
+/* Резервная копия проектов: файл ждёт выбора «добавить» или «заменить» */
+let pendingProj=null;
 $("#set-body").addEventListener("change",e=>{
   const t=e.target;
   if(t.id==="wf"){worksFilter=t.value;renderSettings()}
   else if(t.id==="e-hasp"){$("#e-pbox").hidden=!t.checked}
   else if(t.classList.contains("lp")){ const v=num(t.value); if(t.value.trim()==="") delete SET.labor[t.dataset.id]; else if(v>=0) SET.labor[t.dataset.id]=v; saveSet(); renderWorks(); renderMaterials();
     const sm=t.closest("details.mw")?.querySelector("summary small"); if(sm){const id=t.dataset.id,c=CAT[id],pr=laborPrice(id); sm.textContent=`${c.mats.length} мат. · работа ${pr>0?rub(pr):"—"}/${c.unit}`} }
+  else if(t.classList.contains("pd")){ const id=t.dataset.id, v=num(t.value);
+    if(t.value.trim()===""||v===PROD_DEF[id]) delete SET.prod[id]; else if(v>0) SET.prod[id]=v; else {t.value=prodRate(id)||"";toast("Выработка должна быть больше нуля");return}
+    saveSet(); renderTerm(); }
   else if(t.classList.contains("g-ren")){
     const old=t.dataset.g, g=t.value.trim(); const msg=$("#g-err");
     if(!g||g===old){t.value=old;return}
@@ -1384,11 +1724,21 @@ $("#set-body").addEventListener("change",e=>{
     if(worksFilter===old) worksFilter=g;
     applyCatalog(); renderSettings(); toast("Отдел переименован");
   }
+  else if(t.id==="imp-proj"){
+    const f=t.files[0]; if(!f) return; const err=$("#imp-proj-err"); err.hidden=true;
+    f.text().then(txt=>{
+      const d=JSON.parse(txt); if(d.app!=="farbig-calc"||d.kind!=="projects"||!Array.isArray(d.projects)) throw 0;
+      const list=d.projects.filter(p=>p&&p.data&&typeof p.data==="object"); if(!list.length) throw 0;
+      pendingProj=list;
+      $("#imp-proj-info").textContent=`В файле проектов: ${list.length} (${list.slice(0,3).map(p=>projTitle(p.data)).join(", ")}${list.length>3?"…":""}). Что сделать?`;
+      $("#imp-proj-ask").hidden=false;
+    }).catch(()=>{pendingProj=null;err.textContent="Это не файл проектов. Выберите файл, сохранённый кнопкой «Сохранить проекты в файл».";err.hidden=false});
+  }
   else if(t.id==="imp-file"){
     const f=t.files[0]; if(!f) return;
     f.text().then(txt=>{
       const d=JSON.parse(txt); if(d.app!=="farbig-calc"||!d.settings) throw 0;
-      const st=d.settings; SET={groups:Array.isArray(st.groups)?st.groups:[],works:st.works||{},over:st.over||{},labor:st.labor||{},mo:st.mo||{},lib:st.lib||{},gren:st.gren||{}};
+      const st=d.settings; SET={groups:Array.isArray(st.groups)?st.groups:[],works:st.works||{},over:st.over||{},labor:st.labor||{},prod:st.prod||{},mo:st.mo||{},lib:st.lib||{},gren:st.gren||{}};
       SET.glist=Array.isArray(st.glist)?st.glist:[...BASE_GROUPS,...SET.groups.filter(g=>!BASE_GROUPS.includes(g))];
       if(d.prices&&typeof d.prices==="object"){prices=d.prices;store.set("msm2-prices",prices)}
       applyCatalog(); renderSettings(); toast("Настройки загружены");
@@ -1611,14 +1961,16 @@ $("#set-body").addEventListener("change",e=>{
 
 /* --- Цены работ --- */
 function laborList(){
-  let h=`<p class="hint">Цена работы за единицу. Сумма работ считается по объёмам на «Шаге» с работами и попадает в итог и Excel. Стандартные цены малярных работ взяты из сметы FARBIG «Организация отделочных работ».</p>`;
+  let h=`<p class="hint">Цена работы за единицу. Сумма работ считается по объёмам на «Шаге» с работами и попадает в итог и Excel. Стандартные цены малярных работ взяты из сметы FARBIG «Организация отделочных работ».</p>
+    <p class="hint"><b>Выработка</b> — сколько единиц работы делает один человек за рабочий день (для покраски — за один слой). По ней считается срок работ. Стандартные значения — типовая оценка, поправьте под свою бригаду.</p>`;
   for(const g of workGroups()){
     const items=Object.entries(CAT).filter(([,c])=>c.group===g); if(!items.length) continue;
-    h+=`<h3>${esc(g)}</h3><div class="tbl-x"><table class="ltable"><tbody>`;
-    for(const [id,c] of items) h+=`<tr><td>${esc(c.name)}</td><td class="n">${esc(c.unit)}</td><td class="n"><input class="lp" data-id="${id}" inputmode="decimal" value="${laborPrice(id)||""}" placeholder="0" aria-label="Цена работы: ${esc(c.name)}"> ₽</td></tr>`;
+    h+=`<h3>${esc(g)}</h3><div class="tbl-x"><table class="ltable"><thead><tr><th>Работа</th><th class="n">Ед.</th><th class="n">Цена</th><th class="n">Выработка в день</th></tr></thead><tbody>`;
+    for(const [id,c] of items) h+=`<tr><td>${esc(c.name)}</td><td class="n">${esc(c.unit)}</td><td class="n"><input class="lp" data-id="${id}" inputmode="decimal" value="${laborPrice(id)||""}" placeholder="0" aria-label="Цена работы: ${esc(c.name)}"> ₽</td>
+      <td class="n"><input class="pd" data-id="${id}" inputmode="decimal" value="${prodRate(id)||""}" placeholder="—" aria-label="Выработка в день: ${esc(c.name)}"> ${esc(c.unit)}</td></tr>`;
     h+=`</tbody></table></div>`;
   }
-  return h+`<div class="actions"><button class="link" data-act="reset-labor">Сбросить цены работ к стандартным</button></div>`;
+  return h+`<div class="actions"><button class="link" data-act="reset-labor">Сбросить цены работ к стандартным</button><button class="link" data-act="reset-prod">Сбросить выработку к типовой</button></div>`;
 }
 
 /* --- Отделы --- */
@@ -1647,7 +1999,15 @@ function groupsList(){
 
 /* --- Обмен --- */
 function shareTab(){
-  return `<p class="hint">Виды работ, материалы и их цены, отделы и цены работ хранятся в этом браузере. Чтобы у сотрудников были такие же настройки, скачайте файл и отправьте им — они загрузят его здесь у себя.</p>
+  return `<h3>Проекты</h3>
+  <p class="hint">Проекты хранятся только в этом браузере. Сохраните их в файл, чтобы не потерять при очистке браузера или перенести на другой телефон.</p>
+  <div class="actions"><button class="dark" data-act="export-proj">Сохранить проекты в файл</button><small class="hint">Проектов: ${P.list.length}</small></div>
+  <label class="mlab">Загрузить проекты из файла<input type="file" id="imp-proj" accept=".json,application/json"></label>
+  <div class="imp-ask" id="imp-proj-ask" hidden><span id="imp-proj-info"></span>
+    <div class="actions"><button class="dark" data-act="imp-proj-add">Добавить к текущим</button><button data-act="imp-proj-replace">Заменить все проекты</button></div></div>
+  <p class="err-msg" id="imp-proj-err" hidden></p>
+  <h3>Настройки</h3>
+  <p class="hint">Виды работ, материалы и их цены, отделы и цены работ хранятся в этом браузере. Чтобы у сотрудников были такие же настройки, скачайте файл и отправьте им — они загрузят его здесь у себя.</p>
   <div class="actions"><button class="dark" data-act="export-set">Скачать файл настроек</button></div>
   <h3>Загрузить настройки</h3>
   <p class="hint">Текущие настройки этого браузера заменятся настройками из файла.</p>
@@ -1655,7 +2015,7 @@ function shareTab(){
   <p class="err-msg" id="imp-err" hidden></p>`;
 }
 
-renderNorms(); renderAll();
+renderNorms(); renderAll(); renderEstBox();
 </script>
 
 </body>
