@@ -69,6 +69,8 @@ body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body);padding-
 .hero p{margin:0;max-width:60ch;color:var(--on-band-muted)}
 .hero .src{display:flex;flex-wrap:wrap;gap:8px}
 .hero .src span{font-size:12px;border:1px solid var(--band-2);background:var(--band-2);padding:3px 10px;border-radius:2px;color:var(--on-band)}
+/* На телефоне — только заголовок в одну строку, чтобы сразу был виден «Шаг 1» */
+@media (max-width:600px){.hero .wrap{padding-block:12px 10px}.hero h1{font-size:17px}.hero h1 .g{display:inline}.hero h1 .g::after{content:" "}.hero p,.hero .src{display:none}}
 
 main .wrap{display:grid;gap:40px;padding-block:32px 8px}
 section{display:grid;gap:16px}
@@ -384,7 +386,8 @@ h2 .help-q{position:relative;top:-3px}
 .ep-tab td.n,.ep-tab th.n{text-align:right;white-space:nowrap}
 .ep-total{margin-top:18px;display:grid;gap:4px;justify-content:end;text-align:right}
 .ep-total div{display:flex;gap:24px;justify-content:space-between;min-width:260px}
-.ep-total span{color:#555}
+.ep-total span{color:#555;text-align:left}
+.ep-total b{white-space:nowrap}
 .ep-total .all{border-top:2px solid #CBA265;padding-top:6px;margin-top:4px;font-size:18px}
 .ep-total .all b{font:700 22px var(--f-display);color:#111}
 .ep-term{margin:14px 0 0}
@@ -429,6 +432,33 @@ h2 .help-q{position:relative;top:-3px}
 .cmp td.n{white-space:nowrap}
 .cmp .pick-m{display:none;margin-top:4px}
 @media (max-width:720px){.cmp .hm{display:none}.cmp .pick-m{display:inline-block}.cmp table{font-size:12px}.cmp th,.cmp td{padding:7px 4px}}
+/* Цвет стен помещения */
+.room-more .rc{display:inline-flex;align-items:center;gap:6px}
+.obj .room-more .rc input{width:130px;padding:4px 6px}
+/* Надбавки и накладные */
+.extras{padding:12px 14px;display:grid;gap:10px}
+.ex-cx{display:flex;gap:8px 18px;flex-wrap:wrap;font-size:14px}
+.ex-cx label{display:inline-flex;gap:6px;align-items:center;cursor:pointer}
+.ex-cx input{accent-color:var(--gold)}
+.ex-cx b{color:var(--gold-text)}
+.ex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.ex-grid label,.est-disc label{display:grid;gap:3px;font:500 10.5px var(--f-display);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ex-grid input,.est-disc input,.est-disc select{font:14px var(--f-body);padding:7px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-width:0;width:100%;border-radius:0}
+.est-disc{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.est-disc label{display:inline}
+.est-disc input{width:90px}.est-disc select{width:auto}
+/* Этапы работ */
+.stages{padding:12px 14px;display:grid;gap:10px}
+.stg-list{display:grid;gap:4px}
+.stg{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;padding:8px 10px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:14px}
+.stg input{accent-color:var(--gold);margin-top:3px}
+.stg small{display:block;color:var(--muted);font-size:12px}
+.stg .d{color:var(--gold-text);white-space:nowrap}
+.stg.on{border-color:var(--gold)}
+.stg.on span{color:var(--muted)}
+/* Смета: аванс и помещения */
+.ep-adv{margin:10px 0 0;padding:8px 10px;background:#F7F2EA;border-left:3px solid #CBA265;font-size:13px}
+.est-paper .ep-rooms td:first-child{width:auto;color:#222}
 /* Cookies: плашка над нижней панелью итога */
 .cookie{position:fixed;left:0;right:0;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:21;padding-inline:max(12px,env(safe-area-inset-left,0px)) max(12px,env(safe-area-inset-right,0px))}
 .cookie .in{max-width:1000px;margin:0 auto;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:10px 14px;background:var(--surface);color:var(--ink);border:1px solid var(--gold);font-size:13px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
@@ -512,6 +542,10 @@ h2 .help-q{position:relative;top:-3px}
     <p class="lead" id="works-count"></p>
     <p class="lead works-labor" id="works-labor"></p>
     <div class="term"><label>Человек в бригаде<input id="crew" inputmode="numeric" value="2"></label><span id="term-txt"></span></div>
+    <details class="fold" data-fold="extras">
+      <summary class="g-head"><h3>Надбавки и накладные</h3><span class="num" id="extras-sum"></span></summary>
+      <div class="panel extras" id="extras-body"></div>
+    </details>
     <details class="fold" id="fold-works" data-fold="works">
       <summary class="g-head"><h3 id="works-sum">Работы</h3><span class="num" id="works-sum-r"></span></summary>
       <div class="panel">
@@ -521,6 +555,10 @@ h2 .help-q{position:relative;top:-3px}
           <button class="link" id="btn-clear">Очистить всё</button>
         </div>
       </div>
+    </details>
+    <details class="fold" data-fold="stages">
+      <summary class="g-head"><h3 id="stages-sum">Этапы и акт</h3><span class="num" id="stages-sum-r"></span></summary>
+      <div class="panel stages" id="stages"></div>
     </details>
   </section>
 
@@ -546,7 +584,10 @@ h2 .help-q{position:relative;top:-3px}
         <label><input type="checkbox" id="est-mats"> Материалы списком (без цен)</label>
         <label><input type="checkbox" id="est-unit"> Цены за единицу работ</label>
         <label><input type="checkbox" id="est-term"> Срок выполнения</label>
+        <label><input type="checkbox" id="est-rooms"> Разбить по помещениям</label>
       </div>
+      <div class="est-disc"><label for="disc">Скидка заказчику</label><input id="disc" inputmode="decimal" placeholder="0"><select id="disc-t" aria-label="Скидка в процентах или рублях"><option value="pct">%</option><option value="rub">₽</option></select></div>
+      <p class="hint" id="est-cond"></p>
       <div class="actions"><button class="primary" id="btn-est">Смета клиенту</button><button class="wa-btn" id="btn-est-share"></button></div>
     </div>
   </section>
@@ -600,7 +641,7 @@ h2 .help-q{position:relative;top:-3px}
 
 <div class="bar">
   <div class="wrap">
-    <div class="total"><small>Итого: материалы + работы</small><b id="total">0 ₽</b><span class="split" id="total-split"></span></div>
+    <div class="total"><small>Итого по смете</small><b id="total">0 ₽</b><span class="split" id="total-split"></span></div>
     <div class="acts">
       <span class="toast" id="toast" aria-live="polite"></span>
       <button class="primary" id="btn-xlsx">Скачать Excel</button>
@@ -683,12 +724,30 @@ const BASE_CAT={
     {k:"masktape",n:"Малярная лента 50 мм",u:"м",rate:2,pack:50,pn:"рулон 50 м",price:220,waste:0}]},
   paint_ceiling:{name:"Окраска потолка",group:"Малярные (FARBIG)",unit:"м²",param:{label:"слоёв",unit:"сл.",def:2},src:"Слои — WOHOM ТК-19; расход на слой — "+EST,est:true,mats:[
     {k:"paint_ceil",n:"Краска для потолков",u:"л",per:0.12,pack:9,pn:"ведро 9 л",price:5500,waste:5}]},
+  /* Подготовительные работы: цены и расход — типовая оценка */
+  prep_wallpaper:{name:"Снятие старых обоев",group:"Подготовительные",unit:"м²",src:"Цена и выработка — "+EST,est:true,
+    tk:"Виниловые и флизелиновые — снять верхний слой, подложку размочить. Бумажные — размочить водой с моющим средством.",mats:[]},
+  prep_paint:{name:"Снятие старой краски (шлифовка)",group:"Подготовительные",unit:"м²",src:"Зерно — «Подбор абразива» FARBIG; расход кругов — "+EST,est:true,
+    tk:"Отслаивающуюся краску снять полностью, прочную — прошлифовать до матовости Р40–Р60.",mats:[
+    {k:"disc225_40",n:"Шлифкруг 225 мм Р40 (керамика)",u:"шт",rate:0.06,pack:1,pn:"шт",price:160,waste:0}]},
+  prep_cracks:{name:"Расшивка и заделка трещин",group:"Подготовительные",unit:"м.п.",src:"Расход — "+EST,est:true,
+    tk:"Расшить трещину на 3–5 мм, обеспылить, загрунтовать, заполнить и проармировать стеклолентой.",mats:[
+    {k:"uniflot",n:"Шпаклёвка КНАУФ-Унифлот",u:"кг",rate:0.3,pack:25,pn:"мешок 25 кг",price:2600,waste:5},
+    {k:"fibafuse",n:"Лента стекловолоконная FibaFuse Max",u:"м",rate:1.1,pack:75,pn:"рулон 75 м",price:1500,waste:5}]},
+  prep_antisept:{name:"Обработка антисептиком",group:"Подготовительные",unit:"м²",src:"Расход — "+EST,est:true,
+    tk:"Места с плесенью и грибком: очистить, обработать в 2 слоя, выдержать до высыхания.",mats:[
+    {k:"antisept",n:"Антисептик для стен",u:"л",rate:0.2,pack:5,pn:"канистра 5 л",price:1500,waste:5,est:true}]},
+  prep_plinth_off:{name:"Демонтаж плинтуса",group:"Подготовительные",unit:"м.п.",src:"Цена и выработка — "+EST,est:true,mats:[]},
+  prep_plinth_on:{name:"Монтаж плинтуса",group:"Подготовительные",unit:"м.п.",src:"Цена и выработка — "+EST,est:true,
+    tk:"Длину посчитайте в «Калькуляторе погонных метров»: периметр минус дверные проёмы.",mats:[]},
 };
-const BASE_GROUPS=["Малярные (FARBIG)"];
+const BASE_GROUPS=["Подготовительные","Малярные (FARBIG)"];
 const OLD_GROUPS=["Отделка","Электрика","Сантехника"];
 const DOC_GROUP="Из документа";
 /* Цены работ по умолчанию — из сметы FARBIG «Организация отделочных работ» (₽ за единицу) */
-const LABOR_DEF={fb_sand_plaster:150,fb_primer:50,fb_pigment:100,fb_corner:250,fb_base:250,fb_sand_base:100,fb_glass:210,fb_finish:260,fb_sand_finish:150,fb_primer_paint:200,paint_walls:350};
+const LABOR_DEF={fb_sand_plaster:150,fb_primer:50,fb_pigment:100,fb_corner:250,fb_base:250,fb_sand_base:100,fb_glass:210,fb_finish:260,fb_sand_finish:150,fb_primer_paint:200,paint_walls:350,
+  /* подготовительные — типовая оценка */
+  prep_wallpaper:120,prep_paint:250,prep_cracks:200,prep_antisept:60,prep_plinth_off:60,prep_plinth_on:250};
 let SET=(()=>{let v;try{v=JSON.parse(localStorage.getItem("msm2-settings")||"null")}catch{} return Object.assign({groups:[],works:{},over:{},labor:{},prod:{},mo:{},lib:{}},v||{})})();
 const saveSet=()=>{try{localStorage.setItem("msm2-settings",JSON.stringify(SET))}catch{}};
 /* Отделы: SET.glist — порядок и названия; SET.gren — переименование стандартных отделов */
@@ -697,6 +756,8 @@ if(!Array.isArray(SET.glist)) SET.glist=[...BASE_GROUPS,...(SET.groups||[]).filt
 if(!SET.malyarOnly){ SET.malyarOnly=1; SET.glist=SET.glist.filter(g=>!OLD_GROUPS.includes(g)||(SET.groups||[]).includes(g)||Object.values(SET.works).some(c=>c.group===g)); }
 /* Черновые работы убраны из справочника: пустой отдел «Черновые» скрываем, если в нём нет своих работ */
 if(!SET.noRough){ SET.noRough=1; SET.glist=SET.glist.filter(g=>g!=="Черновые"||Object.values(SET.works).some(c=>c.group===g)); }
+/* Новый отдел «Подготовительные» — первым в списке */
+if(!SET.prepGrp){ SET.prepGrp=1; if(!SET.glist.includes("Подготовительные")) SET.glist.unshift("Подготовительные"); }
 let CAT={}, GROUPS=[];
 /* Справочник материалов: свойства материала общие для всех работ (название, ед., упаковка, цена) */
 const MAT_PROPS=["n","u","pack","pn"];
@@ -740,8 +801,6 @@ const EXAMPLE={isExample:true,object:"Пример: малярные работ�
     {type:"fb_sand_base",room:"Стены",qty:204},
     {type:"fb_primer",room:"Стены, перед холстом",qty:204,p:150},
     {type:"fb_glass",room:"Стены",qty:204},
-    {type:"other",room:"Откосы",qty:43,name:"Комплексные работы с откосами, м.п.",note:"нет в справочнике"},
-    {type:"other",room:"Мебель из ГСП",qty:12,name:"Работа со сложными изделиями, м.п.",note:"нет в справочнике"},
     {type:"fb_finish",room:"Стены",qty:204,p:1.3},
     {type:"fb_sand_finish",room:"Стены",qty:204},
     {type:"fb_primer",room:"Стены, перед окраской",qty:226,p:150},
@@ -759,6 +818,7 @@ let S;
 function useProject(id){
   const p=P.list.find(x=>x.id===id)||P.list[0]; P.current=p.id; S=p.data;
   S.works=S.works||[]; S.rooms=S.rooms||[]; S.warnings=S.warnings||[];
+  if(S.isExample) S.works=S.works.filter(w=>w.type!=="other");
   S.works.forEach(w=>w.id||(w.id=uid())); (S.docMats||(S.docMats=[])).forEach(m=>m.id||(m.id=uid()));
 }
 useProject(P.current);
@@ -780,22 +840,33 @@ function calc(works=S.works){
     const c=CAT[w.type]; const q=num(w.qty); if(!c||!(q>0)) continue;
     const p=c.param?(num(w.p)>0?num(w.p):c.param.def):1;
     for(const m of c.mats){
-      const rate=m.per!=null?m.per*p:m.rate, base=q*rate;
-      let a=agg.get(m.k);
-      if(!a){a={...m,group:c.group,base:0,from:new Set(),parts:[]};agg.set(m.k,a)}
-      a.base+=base; a.from.add(shortName(c));
-      /* Расшифровка расхода: объём работы × норма = количество материала */
-      a.parts.push({work:shortName(c),room:w.room||"",qty:q,unit:c.unit,rate,base,
-        rateNote:m.per!=null?`${fmt(m.per,4)} × ${fmt(p,3)} ${c.param.unit}`:""});
+      const rate=m.per!=null?m.per*p:m.rate;
+      const shares=PAINT_SPLIT.has(m.k)?colorShares(w,c):null;
+      for(const sh of shares||[{col:null,f:1}]){
+        const key=sh.col==null?m.k:`${m.k}|${sh.col}`, base=q*rate*sh.f;
+        let a=agg.get(key);
+        if(!a){a={...m,k:key,pk:m.k,col:sh.col,n:sh.col==null?m.n:`${m.n} — ${sh.col||"без колеровки"}`,group:c.group,base:0,from:new Set(),parts:[]};agg.set(key,a)}
+        a.base+=base; a.from.add(shortName(c));
+        /* Расшифровка расхода: объём работы × норма = количество материала */
+        a.parts.push({work:shortName(c),room:w.room||"",qty:q*sh.f,unit:c.unit,rate,base,
+          rateNote:m.per!=null?`${fmt(m.per,4)} × ${fmt(p,3)} ${c.param.unit}`:""});
+      }
     }
   }
   const rows=[...agg.values()].map(a=>{
     const need=a.base*(1+a.waste/100)*(1+reserve/100);
     const packs=Math.ceil(need/a.pack-1e-9);
-    const price=prices[a.k]??a.price;
-    return {key:a.k,group:a.group,name:a.n,unit:a.u,need,base:a.base,waste:a.waste,parts:a.parts,pack:a.pack,pn:a.pn,packs,price,sum:packs*price,
+    const price=prices[a.pk]??a.price;
+    return {key:a.k,pk:a.pk,col:a.col,group:a.group,name:a.n,unit:a.u,need,base:a.base,waste:a.waste,parts:a.parts,pack:a.pack,pn:a.pn,packs,price,sum:packs*price,
       note:"для: "+[...a.from].join(", ")+(a.waste?` · запас ${a.waste}%`:""),est:!!a.est};
   });
+  /* Колеровка: за каждую тару краски с цветом */
+  const tinted=rows.filter(r=>r.col);
+  if(tinted.length){
+    const n=tinted.reduce((s,r)=>s+r.packs,0), price=prices.tint??TINT_DEF;
+    rows.push({key:"tint",pk:"tint",group:tinted[0].group,name:"Колеровка краски",unit:"тара",need:n,pack:1,pn:"тара",packs:n,price,sum:n*price,
+      note:"цвета: "+[...new Set(tinted.map(r=>r.col))].join(", ")+" · цена за колеровку одной тары",est:true});
+  }
   for(const d of S.docMats){
     const q=num(d.qty)||0; const price=prices["doc:"+d.name]??(num(d.price)||0);
     rows.push({key:"doc:"+d.name,group:"Из документа",name:d.name,unit:d.unit||"шт",need:q,pack:1,pn:d.unit||"шт",packs:q,price,sum:q*price,note:"указано в документе"});
@@ -855,7 +926,7 @@ function roomRow(r){
     <label class="rn">Помещение<input data-r="name" value="${esc(r.name||"")}" placeholder="Кухня"></label>
     ${ROOM_F.map(([f,l])=>`<label>${l}<input data-r="${f}" inputmode="decimal" value="${esc(rv2(r[f]))}"${f==="height"&&num(S.height)>0?` placeholder="${esc(S.height)}"`:""}></label>`).join("")}
     <button class="x" data-del-room aria-label="Удалить помещение">×</button>
-    <div class="room-more"><button class="link" data-rt="ops" aria-expanded="${SUB.has(r.id+":ops")}">${SUB.has(r.id+":ops")?"▾":"▸"} Проёмы по размерам${r.ops?.length?` (${r.ops.length})`:""}</button><button class="link" data-rt="segs" aria-expanded="${SUB.has(r.id+":segs")}">${SUB.has(r.id+":segs")?"▾":"▸"} Сложная форма${r.segs?.length?` (${r.segs.length})`:""}</button></div>
+    <div class="room-more"><label class="rc">Цвет стен<input data-r="color" list="color-names" value="${esc(r.color||"")}" placeholder="белый"></label><button class="link" data-rt="ops" aria-expanded="${SUB.has(r.id+":ops")}">${SUB.has(r.id+":ops")?"▾":"▸"} Проёмы по размерам${r.ops?.length?` (${r.ops.length})`:""}</button><button class="link" data-rt="segs" aria-expanded="${SUB.has(r.id+":segs")}">${SUB.has(r.id+":segs")?"▾":"▸"} Сложная форма${r.segs?.length?` (${r.segs.length})`:""}</button></div>
     ${SUB.has(r.id+":ops")?opsBox(r):""}${SUB.has(r.id+":segs")?segsBox(r):""}</div>`;
 }
 /* Раскрытые блоки «Проёмы» и «Сложная форма» (не сохраняются) */
@@ -944,6 +1015,7 @@ $("#rooms").addEventListener("input",e=>{
   }
   const f=t.dataset.r; if(!f) return;
   const r=S.rooms.find(x=>x.id===row.dataset.id); r[f]=e.target.value;
+  if(f==="color"){ dropExample(); save(); renderRoomLists(); renderMaterials(); return; }
   for(const k of recalcRoom(r,f)){const i=row.querySelector(`[data-r="${k}"]`); i.value=rv2(r[k]); i.classList.add("calc")}
   dropExample(); save(); renderRoomsTot(); renderRoomLists(); techChanged();
 });
@@ -1066,7 +1138,24 @@ const ALL_ROOMS="Все помещения";
 function renderRoomLists(){
   let dl=$("#room-names"); if(!dl){dl=document.createElement("datalist");dl.id="room-names";document.body.append(dl)}
   dl.innerHTML=[ALL_ROOMS,...S.rooms.map(r=>r.name).filter(Boolean)].map(n=>`<option value="${esc(n)}">`).join("");
+  let dc=$("#color-names"); if(!dc){dc=document.createElement("datalist");dc.id="color-names";document.body.append(dc)}
+  dc.innerHTML=[...new Set(S.rooms.map(r=>roomColor(r)).filter(Boolean))].map(n=>`<option value="${esc(n)}">`).join("");
 }
+/* Цвет стен помещения: одинаковые цвета с разным регистром и пробелами считаются одним */
+const roomColor=r=>String(r.color||"").trim().replace(/\s+/g," ").toLowerCase();
+/* Краска делится по цветам помещений. Работа в конкретном помещении — его цвет;
+   работа на «все помещения» — по долям стен (для м.п. — периметра). */
+const PAINT_SPLIT=new Set(["paint_wall"]);
+function colorShares(w,c){
+  if(!S.rooms.some(r=>roomColor(r))) return null;
+  const nm=String(w.room||"").trim().toLowerCase();
+  const one=S.rooms.filter(r=>nm&&String(r.name||"").trim().toLowerCase()===nm);
+  const list=one.length?one:S.rooms, key=c.unit==="м.п."?"perimeter":"walls";
+  const m=new Map(); let tot=0;
+  for(const r of list){ const v=one.length?1:(num(r[key])>0?num(r[key]):0); if(!(v>0)) continue; const col=roomColor(r); m.set(col,(m.get(col)||0)+v); tot+=v; }
+  return tot>0?[...m].map(([col,v])=>({col,f:v/tot})):null;
+}
+const TINT_DEF=300;
 const SRC_N={walls:"стены",floor:"пол",ceil:"потолок",perimeter:"периметр"};
 function roomVolume(roomName,src){
   const key=src==="ceil"?"floor":src; const nm=String(roomName||"").trim().toLowerCase();
@@ -1197,9 +1286,9 @@ function renderMaterials(){
       <div class="mrow hdr"><span>Материал</span><span class="r">Нужно</span><span class="r">Купить</span><span class="r">Цена, ₽</span><span class="r">Сумма</span></div>`;
     for(const r of rs){
       h+=`<div class="mrow"><div class="mname"><b>${esc(r.name)}${r.est?` <span class="tag-est">оценка</span>`:""}</b><small>${esc(r.note)}</small>${useDetails(r)}</div>
-        <div class="r num"><span class="lbl">Нужно</span>${fmt(r.need,r.need<10?2:1)} ${esc(r.unit)}</div>
+        <div class="r num"><span class="lbl">Нужно</span>${esc(numU(r.need,r.unit))}</div>
         <div class="r num"><span class="lbl">Купить</span>${fmt(r.packs,2)} × ${esc(r.pn)}</div>
-        <div class="r"><span class="lbl">Цена за ${esc(r.pn)}</span><input class="price" id="pr-${esc(r.key)}" data-k="${esc(r.key)}" inputmode="decimal" value="${r.price}" aria-label="Цена: ${esc(r.name)}"></div>
+        <div class="r"><span class="lbl">Цена за ${esc(r.pn)}</span><input class="price" id="pr-${esc(r.key.replace(/\s/g,"_"))}" data-k="${esc(r.pk||r.key)}" inputmode="decimal" value="${r.price}" aria-label="Цена: ${esc(r.name)}"></div>
         <div class="r num sum"><span class="lbl">Сумма</span>${rub(r.sum)}</div></div>`;
     }
     h+="</div></details>";
@@ -1207,7 +1296,8 @@ function renderMaterials(){
   el.innerHTML=h; renderTotals(total); renderVedom(rows,total); renderFoldAll();
 }
 /* Расход по работам: под каждым материалом, свёрнуто */
-const numU=(v,u)=>`${fmt(v,v<10?2:1)} ${u}`;
+/* Штучное показываем целым числом (6,12 шт → 7 шт) */
+const numU=(v,u)=>u==="шт"?`${Math.ceil(v-1e-9)} ${u}`:`${fmt(v,v<10?2:1)} ${u}`;
 function partLine(r,p){
   const where=p.room&&!p.work.toLowerCase().includes(p.room.toLowerCase())?`, ${p.room.toLowerCase()}`:"";
   return `${p.work}${where}: ${fmt(p.qty)} ${p.unit} × ${fmt(p.rate,3)} ${r.unit}/${p.unit}${p.rateNote?` (${p.rateNote})`:""} = ${numU(p.base,r.unit)}`;
@@ -1265,18 +1355,22 @@ $("#vedom").addEventListener("click",async e=>{
 function laborSum(works=S.works){return works.reduce((s,w)=>{const c=CAT[w.type],q=num(w.qty);return s+(c&&q>0?laborPrice(w.type)*q:0)},0)}
 let lastMat=0;
 function renderTotals(mat){
-  lastMat=mat; const lab=laborSum();
-  $("#total").textContent=rub(mat+lab);
-  $("#total-split").textContent=`материалы ${rub(mat)} · работы ${rub(lab)}`;
+  lastMat=mat; const m=money(mat), lab=m.lab, labAll=m.lab+m.cxSum+m.tool, ex=m.deliv+m.trash;
+  $("#total").textContent=rub(m.total);
+  const other=ex-m.disc;
+  $("#total-split").textContent=`материалы ${rub(m.matC)} · работы ${rub(labAll)}`+(Math.round(other)?` · прочее ${signRub(other)}`:"");
+  $("#total-split").title=[ex?`доставка и мусор ${rub(ex)}`:"",m.disc?`скидка −${rub(m.disc)}`:""].filter(Boolean).join(", ");
   $("#works-sum-r").textContent=rub(lab);
-  const wl=$("#works-labor"); if(wl) wl.textContent=lab>0?`Стоимость работ: ${rub(lab)}`:"Цены работ можно задать в «Настройках»";
-  renderTerm(); renderCmp();
+  const wl=$("#works-labor"); if(wl) wl.textContent=lab>0?`Стоимость работ: ${rub(lab)}`+(labAll+ex>lab?` · с надбавками и накладными: ${rub(labAll+ex)}`:""):"Цены работ можно задать в «Настройках»";
+  const xs=$("#extras-sum"); if(xs) xs.textContent=m.cxSum+m.tool+ex>0?"+"+rub(m.cxSum+m.tool+ex):"нет";
+  renderTerm(); renderCmp(); renderStages();
 }
 /* ================= Срок работ: выработка на 1 человека в день + сушка между этапами (типовые значения — оценка) ================= */
 const PROD_DEF={fb_cover:150,fb_sand_plaster:60,fb_primer:300,fb_pigment:250,fb_joints:40,fb_joints_m:60,fb_corner:40,fb_base:40,fb_sand_base:60,
-  fb_glass:35,fb_glass_glue:40,fb_finish:50,fb_sand_finish:60,fb_primer_paint:250,paint_walls:120,paint_ceiling:90,paint_molding:80};
+  fb_glass:35,fb_glass_glue:40,fb_finish:50,fb_sand_finish:60,fb_primer_paint:250,paint_walls:120,paint_ceiling:90,paint_molding:80,
+  prep_wallpaper:40,prep_paint:15,prep_cracks:30,prep_antisept:200,prep_plinth_off:100,prep_plinth_on:40};
 /* Сушка, рабочих дней: считается один раз на вид работ */
-const DRY_DEF={fb_base:1,fb_glass:1,fb_glass_glue:2,fb_finish:1,fb_joints:1,fb_joints_m:1};
+const DRY_DEF={fb_base:1,fb_glass:1,fb_glass_glue:2,fb_finish:1,fb_joints:1,fb_joints_m:1,prep_antisept:1};
 const prodRate=id=>{const v=SET.prod?.[id]; return v!=null?v:(PROD_DEF[id]??0)};
 function termCalc(works=S.works){
   let md=0, dry=0, miss=0; const seen=new Set();
@@ -1302,26 +1396,106 @@ $("#crew").addEventListener("input",e=>{S.crew=e.target.value; save(); renderTer
 
 /* ================= Смета для заказчика ================= */
 let MASTER=store.get("master",{});
-const EST_DEF={mats:false,unit:true,term:true};
+const EST_DEF={mats:false,unit:true,term:true,rooms:false};
 let ESTO=Object.assign({},EST_DEF,store.get("est-opts",{}));
+/* Условия мастера (Настройки → Мастер) и надбавки проекта (шаг 2) */
+const COND_DEF={markup:0,adv:50,kHigh:15,kLive:10,kUrg:20,tool:0};
+const cond=k=>{const v=num(MASTER[k]); return v>=0?v:COND_DEF[k]};
+const CX=[["high","kHigh","Потолки выше 3 м"],["live","kLive","Жилой объект, мебель"],["urg","kUrg","Срочно"]];
+const setv=v=>String(v??"").trim()!=="";
+/* Итог для заказчика: работы + надбавка за сложность + расходник инструмента + доставка + мусор + материалы с наценкой − скидка */
+function money(mat=lastMat,works=S.works){
+  const lab=laborSum(works), cx=S.cx||{};
+  const cxl=CX.filter(([k])=>cx[k]).map(([,ck,l])=>({l,pct:cond(ck)}));
+  const cxPct=cxl.reduce((s,x)=>s+x.pct,0), cxSum=lab*cxPct/100;
+  const toolPct=setv(S.tool)&&num(S.tool)>=0?num(S.tool):cond("tool"), tool=lab*toolPct/100;
+  const deliv=Math.max(0,num(S.deliv)||0), trash=Math.max(0,num(S.trash)||0);
+  const markup=cond("markup"), matC=mat*(1+markup/100);
+  const sub=lab+cxSum+tool+deliv+trash+matC;
+  const dv=Math.max(0,num(S.disc)||0), rubD=S.discT==="rub", disc=Math.min(sub,rubD?dv:sub*dv/100);
+  const total=sub-disc, advPct=Math.min(100,cond("adv")), adv=total*advPct/100;
+  return {lab,cxl,cxPct,cxSum,toolPct,tool,deliv,trash,mat,matC,markup,sub,disc,discPct:rubD?null:dv,total,advPct,adv,rest:total-adv};
+}
+function renderExtras(){
+  const cx=S.cx||{}, el=$("#extras-body"); if(!el) return;
+  el.innerHTML=`<div class="ex-cx">${CX.map(([k,ck,l])=>`<label><input type="checkbox" data-cx="${k}"${cx[k]?" checked":""}> ${l} <b>+${fmt(cond(ck),1)}%</b></label>`).join("")}</div>
+    <div class="ex-grid"><label>Доставка и подъём, ₽<input data-x="deliv" inputmode="decimal" value="${esc(S.deliv??"")}" placeholder="0"></label>
+      <label>Вывоз мусора, ₽<input data-x="trash" inputmode="decimal" value="${esc(S.trash??"")}" placeholder="0"></label>
+      <label>Расходник инструмента, % от работ<input data-x="tool" inputmode="decimal" value="${esc(S.tool??"")}" placeholder="${esc(fmt(cond("tool"),1))}"></label></div>
+    <p class="hint">Надбавки считаются от стоимости работ. Проценты, наценку на материалы и аванс меняйте в <button class="link" data-open-master>«Настройки → Мастер»</button>. Всё попадает в смету и итог.</p>`;
+}
+$("#extras-body").addEventListener("change",e=>{ const k=e.target.dataset.cx; if(!k) return; (S.cx||(S.cx={}))[k]=e.target.checked; dropExample(); save(); renderTotals(lastMat); });
+$("#extras-body").addEventListener("input",e=>{ const k=e.target.dataset.x; if(!k) return; S[k]=e.target.value; dropExample(); save(); renderTotals(lastMat); });
+$("#extras-body").addEventListener("click",e=>{ if(e.target.closest("[data-open-master]")) openSettings("master"); });
 function renderEstBox(){
   const m=MASTER; const who=[m.name,m.phone].filter(Boolean).join(", ");
   $("#est-master").innerHTML=who?`Мастер в смете: <b>${esc(who)}</b> · <button class="link" data-open-master>изменить</button>`
     :`Ваше имя и телефон в смете: <button class="link" data-open-master>заполнить данные мастера</button>`;
-  for(const k of ["mats","unit","term"]) $("#est-"+k).checked=!!ESTO[k];
+  for(const k of ["mats","unit","term","rooms"]) $("#est-"+k).checked=!!ESTO[k];
+  const d=$("#disc"); if(document.activeElement!==d) d.value=S.disc??""; $("#disc-t").value=S.discT==="rub"?"rub":"pct";
+  const cnd=[cond("markup")?`наценка на материалы ${fmt(cond("markup"),1)}%`:"",cond("adv")?`аванс ${fmt(cond("adv"),1)}%`:""].filter(Boolean);
+  $("#est-cond").innerHTML=(cnd.length?`В смете: ${esc(cnd.join(", "))}. `:"")+`<button class="link" data-open-master>Условия мастера</button>`;
 }
+$("#disc").addEventListener("input",e=>{ S.disc=e.target.value; dropExample(); save(); renderTotals(lastMat); });
+$("#disc-t").addEventListener("change",e=>{ S.discT=e.target.value; save(); renderTotals(lastMat); });
+$("#est-cond").addEventListener("click",e=>{ if(e.target.closest("[data-open-master]")) openSettings("master"); });
 function estRows(){
   return S.works.map(w=>{const c=CAT[w.type],q=num(w.qty); if(!c||!(q>0)) return null; const pr=laborPrice(w.type);
-    return {name:shortName(c),room:w.room||"",qty:q,unit:c.unit,price:pr,sum:pr*q}}).filter(Boolean);
+    return {w,c,name:shortName(c),room:w.room||"",qty:q,unit:c.unit,price:pr,sum:pr*q}}).filter(Boolean);
 }
+/* Строки итога: общие для сметы, текста и акта */
+function totalLines(m){
+  return [["Работы",m.lab],
+    m.cxSum?[`Надбавка за сложность +${fmt(m.cxPct,1)}% (${m.cxl.map(x=>x.l.toLowerCase()).join(", ")})`,m.cxSum]:null,
+    m.tool?[`Расходные материалы и инструмент ${fmt(m.toolPct,1)}%`,m.tool]:null,
+    m.deliv?["Доставка и подъём материалов",m.deliv]:null,
+    m.trash?["Вывоз мусора",m.trash]:null,
+    ["Материалы",m.matC],
+    m.disc?[`Скидка${m.discPct!=null?` ${fmt(m.discPct,1)}%`:""}`,-m.disc]:null].filter(Boolean);
+}
+const signRub=v=>v<0?"−"+rub(-v):rub(v);
+/* Разбивка по помещениям: работа в конкретной комнате — целиком ей, работа на все помещения — по долям
+   стен (м.п. — периметра, укрывка и потолок — пола). Материалы — пропорционально работам, ориентировочно. */
+function roomShares(w,c){
+  const nm=String(w.room||"").trim().toLowerCase();
+  const one=S.rooms.findIndex(r=>nm&&String(r.name||"").trim().toLowerCase()===nm);
+  if(one>=0) return S.rooms.map((r,i)=>i===one?1:0);
+  const key=c.unit==="м.п."?"perimeter":(w.type==="fb_cover"||w.type==="paint_ceiling"||/потол/i.test(w.room||""))?"floor":"walls";
+  const v=S.rooms.map(r=>num(r[key])>0?num(r[key]):0), t=v.reduce((a,b)=>a+b,0);
+  return t>0?v.map(x=>x/t):null;
+}
+function roomSplit(m){
+  if(!S.rooms.length) return null;
+  const k=1+(m.cxPct+m.toolPct)/100, lab=S.rooms.map(()=>0);
+  let rest=0;
+  for(const r of estRows()){ const sh=roomShares(r.w,r.c); if(!sh){rest+=r.sum;continue} sh.forEach((f,i)=>lab[i]+=r.sum*f); }
+  const lt=lab.reduce((a,b)=>a+b,0); if(!(lt>0)) return null;
+  /* Работы без привязки к помещениям распределяются так же, как остальные */
+  const rows=S.rooms.map((r,i)=>{const l=(lab[i]+rest*lab[i]/lt)*k, mt=m.matC*lab[i]/lt; return {name:r.name||`Помещение ${i+1}`,lab:l,mat:mt,all:l+mt}});
+  return {rows,common:m.deliv+m.trash-m.disc};
+}
+function roomsHTML(m){
+  const s=roomSplit(m); if(!s) return "";
+  return `<h2>По помещениям</h2><table class="ep-tab ep-rooms"><thead><tr><th>Помещение</th><th class="n">Работы</th><th class="n">Материалы</th><th class="n">Итого</th></tr></thead><tbody>
+    ${s.rows.map(r=>`<tr><td>${esc(r.name)}</td><td class="n">${rub(r.lab)}</td><td class="n">${rub(r.mat)}</td><td class="n"><b>${rub(r.all)}</b></td></tr>`).join("")}
+    ${Math.round(s.common)?`<tr><td colspan="3">Доставка, вывоз мусора, скидка — на весь объект</td><td class="n">${signRub(s.common)}</td></tr>`:""}</tbody>
+    <tfoot><tr><td colspan="3">Всего</td><td class="n">${rub(m.total)}</td></tr></tfoot></table>
+    <p class="ep-note">Работы на всю квартиру разделены по площади помещений, материалы — пропорционально работам. Разбивка ориентировочная.</p>`;
+}
+function roomsText(m){
+  const s=roomSplit(m); if(!s) return [];
+  return ["","По помещениям:",...s.rows.map(r=>`${r.name} — ${rub(r.all)}`),...(Math.round(s.common)?[`Доставка, мусор, скидка — ${signRub(s.common)}`]:[])];
+}
+const advText=m=>m.advPct>0&&m.total>0?`Аванс ${fmt(m.advPct,1)}% — ${rub(m.adv)}. Остаток ${rub(m.rest)} — по этапам работ.`:"";
+const paperHead=m=>`<header class="ep-head"><div><b class="ep-name">${esc(m.name||"Мастер-маляр")}</b>${m.phone?`<span>${esc(m.phone)}</span>`:""}${m.city?`<span>${esc(m.city)}</span>`:""}</div><div class="ep-date">${new Date().toLocaleDateString("ru-RU")}</div></header>`;
+const paperInfo=()=>{const info=[["Объект",S.object],["Адрес",S.address],["Заказчик",S.client]].filter(x=>String(x[1]??"").trim());
+  return info.length?`<table class="ep-info">${info.map(([k,v])=>`<tr><th>${k}</th><td>${esc(v)}</td></tr>`).join("")}</table>`:""};
 function estHTML(){
-  const m=MASTER, rows=estRows(), lab=laborSum(), mat=lastMat, t=termCalc();
-  const date=new Date().toLocaleDateString("ru-RU");
-  const info=[["Объект",S.object],["Адрес",S.address],["Заказчик",S.client]].filter(x=>String(x[1]??"").trim());
+  const m=MASTER, rows=estRows(), mo=money(), lab=mo.lab, mat=mo.matC, t=termCalc();
   const mats=GROUPS.flatMap(g=>lastRows.filter(r=>r.group===g));
-  return `<header class="ep-head"><div><b class="ep-name">${esc(m.name||"Мастер-маляр")}</b>${m.phone?`<span>${esc(m.phone)}</span>`:""}${m.city?`<span>${esc(m.city)}</span>`:""}</div><div class="ep-date">${date}</div></header>
+  return `${paperHead(m)}
   <h1>Смета на малярные работы</h1>
-  ${info.length?`<table class="ep-info">${info.map(([k,v])=>`<tr><th>${k}</th><td>${esc(v)}</td></tr>`).join("")}</table>`:""}
+  ${paperInfo()}
   <h2>Работы</h2>
   <table class="ep-tab"><thead><tr><th>№</th><th>Работа</th><th class="n">Объём</th>${ESTO.unit?`<th class="n">Цена</th>`:""}<th class="n">Сумма</th></tr></thead><tbody>
   ${rows.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.name)}${r.room?`<small>${esc(r.room)}</small>`:""}</td><td class="n">${fmt(r.qty)} ${esc(r.unit)}</td>${ESTO.unit?`<td class="n">${r.price>0?rub(r.price):"—"}</td>`:""}<td class="n">${r.sum>0?rub(r.sum):"—"}</td></tr>`).join("")}
@@ -1331,7 +1505,9 @@ function estHTML(){
     ${mats.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.name)}</td><td class="n">${fmt(r.packs,2)} × ${esc(r.pn)}</td></tr>`).join("")}</tbody>
     <tfoot><tr><td colspan="2">Итого материалы</td><td class="n">${rub(mat)}</td></tr></tfoot></table>`
     :`<table class="ep-tab ep-one"><tbody><tr><td>Материалы по расчёту на объект (${mats.length} поз.)</td><td class="n">${rub(mat)}</td></tr></tbody></table>`}
-  <div class="ep-total"><div><span>Работы</span><b>${rub(lab)}</b></div><div><span>Материалы</span><b>${rub(mat)}</b></div><div class="all"><span>Всего</span><b>${rub(lab+mat)}</b></div></div>
+  <div class="ep-total">${totalLines(mo).map(([l,v])=>`<div><span>${esc(l)}</span><b>${signRub(v)}</b></div>`).join("")}<div class="all"><span>Всего</span><b>${rub(mo.total)}</b></div></div>
+  ${advText(mo)?`<p class="ep-adv">${esc(advText(mo))}</p>`:""}
+  ${ESTO.rooms?roomsHTML(mo):""}
   ${ESTO.term&&t.days?`<p class="ep-term">Срок выполнения: <b>около ${t.days} ${t.days%10===1&&t.days%100!==11?"рабочего дня":"рабочих дней"}</b> (бригада ${t.crew} чел.)</p>`:""}
   ${S.comment?`<p class="ep-note">${esc(S.comment)}</p>`:""}
   <p class="ep-note">${esc(m.note||"Расчёт предварительный. Окончательная стоимость — после осмотра объекта.")}</p>
@@ -1339,24 +1515,90 @@ function estHTML(){
   <p class="ep-foot">Рассчитано в калькуляторе материалов FARBIG по технологии «Экспресс К3»</p>`;
 }
 function estText(){
-  const m=MASTER, rows=estRows(), lab=laborSum(), t=termCalc();
+  const m=MASTER, rows=estRows(), mo=money(), t=termCalc();
   return [`Смета на малярные работы${S.object?` — ${S.object}`:""}`,S.address?`Адрес: ${S.address}`:"","","Работы:",
     ...rows.map((r,i)=>`${i+1}. ${r.name}${r.room?` (${r.room})`:""} — ${fmt(r.qty)} ${r.unit}${r.sum>0?(ESTO.unit?` × ${rub(r.price)}`:"")+` = ${rub(r.sum)}`:""}`),"",
-    `Работы: ${rub(lab)}`,`Материалы: ${rub(lastMat)}`,`Всего: ${rub(lab+lastMat)}`,
+    ...totalLines(mo).map(([l,v])=>`${l}: ${signRub(v)}`),`Всего: ${rub(mo.total)}`,advText(mo),
+    ...(ESTO.rooms?roomsText(mo):[]),
     ESTO.term&&t.days?`Срок: ≈ ${t.days} раб. ${dayWord(t.days)}`:"","",
     m.note||"Расчёт предварительный. Окончательная стоимость — после осмотра объекта.",
     [m.name,m.phone].filter(Boolean).join(", ")].join("\n").replace(/\n{3,}/g,"\n\n").trim();
 }
-function openEst(){
-  if(!estRows().length){toast("Добавьте работы — смета пока пустая");return}
-  try{ym(113898791,"reachGoal","estimate")}catch{}
-  $("#est-paper").innerHTML=estHTML(); $("#est-view").hidden=false; document.body.classList.add("est-on"); $("#est-view").scrollTop=0; $("#est-close").focus();
+/* ================= Этапы работ и акт выполненных работ ================= */
+/* Отметка «сделано» хранится по виду работы и помещению — переживает пересборку работ в режиме «Авто» */
+const stageKey=w=>`${w.type}|${String(w.room||"").trim()}`;
+const isoToRu=d=>{const [y,mo,da]=String(d||"").split("-"); return da?`${da}.${mo}.${y}`:""};
+function doneRows(){ const D=S.done||{}; return estRows().filter(r=>D[stageKey(r.w)]).map(r=>({...r,date:D[stageKey(r.w)]})); }
+function renderStages(){
+  const el=$("#stages"); if(!el) return;
+  const rows=estRows(), D=S.done||{}, done=rows.filter(r=>D[stageKey(r.w)]);
+  const all=rows.reduce((s,r)=>s+r.sum,0), sd=done.reduce((s,r)=>s+r.sum,0);
+  $("#stages-sum").textContent=rows.length?`Этапы: ${done.length} из ${rows.length}`:"Этапы и акт";
+  $("#stages-sum-r").textContent=done.length?`${rub(sd)} · ${Math.round(all>0?sd/all*100:0)}%`:"";
+  if(!rows.length){el.innerHTML=`<p class="hint">Этапы появятся, когда будут работы с объёмами.</p>`;return}
+  el.innerHTML=`<p class="hint">Отмечайте выполненные работы — дата ставится сама. По отметкам собирается акт выполненных работ.</p>
+    <div class="stg-list">${rows.map(r=>{const k=stageKey(r.w), d=D[k]; return `<label class="stg${d?" on":""}"><input type="checkbox" data-stg="${esc(k)}"${d?" checked":""}>
+      <span>${esc(r.name)}<small>${esc(r.room?r.room+" · ":"")}${fmt(r.qty)} ${esc(r.unit)}${r.sum>0?" · "+rub(r.sum):""}</small></span><small class="d">${d?esc(isoToRu(d)):""}</small></label>`}).join("")}</div>
+    <p class="hint">Выполнено работ на <b>${rub(sd)}</b> из ${rub(all)}.</p>
+    <div class="actions"><button class="primary" data-act-open>Акт выполненных работ</button><button class="wa-btn" data-act-share>${WA_ICON}Отправить</button>${done.length?`<button class="link" data-stg-clear>Снять все отметки</button>`:""}</div>`;
 }
-function closeEst(){ $("#est-view").hidden=true; document.body.classList.remove("est-on"); $("#btn-est").focus(); }
+$("#stages").addEventListener("change",e=>{
+  const k=e.target.dataset.stg; if(k==null) return; const D=S.done||(S.done={});
+  if(e.target.checked) D[k]=new Date().toISOString().slice(0,10); else delete D[k];
+  save(); renderStages();
+});
+let stgArmed=false;
+$("#stages").addEventListener("click",e=>{
+  if(e.target.closest("[data-act-open]")) openView("act");
+  else if(e.target.closest("[data-act-share]")){ if(!doneRows().length){toast("Отметьте выполненные работы");return} shareText(actText(),"Акт выполненных работ"); }
+  else if(e.target.closest("[data-stg-clear]")){
+    if(!stgArmed){stgArmed=true;e.target.textContent="Точно снять все отметки?";setTimeout(()=>{stgArmed=false;renderStages()},3000);return}
+    stgArmed=false; S.done={}; save(); renderStages();
+  }
+});
+/* В акт идут отмеченные работы; надбавка и расходник инструмента — в той же доле, что в смете */
+function actMoney(){
+  const rows=doneRows(), mo=money(), lab=rows.reduce((s,r)=>s+r.sum,0);
+  return {rows,lab,cx:lab*mo.cxPct/100,tool:lab*mo.toolPct/100,mo,total:lab*(1+(mo.cxPct+mo.toolPct)/100)};
+}
+function actHTML(){
+  const m=MASTER, a=actMoney();
+  return `${paperHead(m)}
+  <h1>Акт выполненных работ</h1>
+  ${paperInfo()}
+  <table class="ep-tab"><thead><tr><th>№</th><th>Работа</th><th class="n">Объём</th>${ESTO.unit?`<th class="n">Цена</th>`:""}<th class="n">Сумма</th><th class="n">Дата</th></tr></thead><tbody>
+  ${a.rows.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.name)}${r.room?`<small>${esc(r.room)}</small>`:""}</td><td class="n">${fmt(r.qty)} ${esc(r.unit)}</td>${ESTO.unit?`<td class="n">${r.price>0?rub(r.price):"—"}</td>`:""}<td class="n">${r.sum>0?rub(r.sum):"—"}</td><td class="n">${esc(isoToRu(r.date))}</td></tr>`).join("")}
+  </tbody></table>
+  <div class="ep-total"><div><span>Работы</span><b>${rub(a.lab)}</b></div>${a.cx?`<div><span>Надбавка за сложность +${fmt(a.mo.cxPct,1)}%</span><b>${rub(a.cx)}</b></div>`:""}${a.tool?`<div><span>Расходные материалы и инструмент ${fmt(a.mo.toolPct,1)}%</span><b>${rub(a.tool)}</b></div>`:""}
+    <div class="all"><span>Итого по акту</span><b>${rub(a.total)}</b></div></div>
+  <p class="ep-note">Перечисленные работы выполнены полностью. Заказчик претензий по объёму, качеству и срокам не имеет.</p>
+  <div class="ep-sign"><span>Исполнитель ____________________</span><span>Заказчик ____________________</span></div>
+  <p class="ep-foot">Составлено в калькуляторе материалов FARBIG</p>`;
+}
+function actText(){
+  const m=MASTER, a=actMoney();
+  return [`Акт выполненных работ${S.object?` — ${S.object}`:""}`,S.address?`Адрес: ${S.address}`:"","",
+    ...a.rows.map((r,i)=>`${i+1}. ${r.name}${r.room?` (${r.room})`:""} — ${fmt(r.qty)} ${r.unit}${r.sum>0?` = ${rub(r.sum)}`:""} · ${isoToRu(r.date)}`),"",
+    `Работы: ${rub(a.lab)}`,a.cx?`Надбавка за сложность: ${rub(a.cx)}`:"",a.tool?`Расходные материалы и инструмент: ${rub(a.tool)}`:"",`Итого по акту: ${rub(a.total)}`,"",
+    [m.name,m.phone].filter(Boolean).join(", ")].join("\n").replace(/\n{3,}/g,"\n\n").trim();
+}
+/* Окно документа: смета или акт */
+let viewMode="est";
+function openView(mode){
+  if(mode==="act"){ if(!doneRows().length){toast("Отметьте выполненные работы — акт пока пустой");return} }
+  else { if(!estRows().length){toast("Добавьте работы — смета пока пустая");return} try{ym(113898791,"reachGoal","estimate")}catch{} }
+  viewMode=mode; const v=$("#est-view");
+  v.setAttribute("aria-label",mode==="act"?"Акт выполненных работ":"Смета для заказчика");
+  $("#est-paper").innerHTML=mode==="act"?actHTML():estHTML(); v.hidden=false; document.body.classList.add("est-on"); v.scrollTop=0; $("#est-close").focus();
+}
+const openEst=()=>openView("est");
+function closeEst(){ $("#est-view").hidden=true; document.body.classList.remove("est-on"); (viewMode==="act"?document.querySelector("[data-act-open]"):$("#btn-est"))?.focus(); }
 $("#btn-est").onclick=openEst;
 $("#est-close").onclick=closeEst;
 $("#est-print").onclick=()=>window.print();
-for(const id of ["#btn-est-share","#est-share2"]){ const b=$(id); b.innerHTML=WA_ICON+"Отправить"; b.onclick=()=>{ if(!estRows().length){toast("Добавьте работы — смета пока пустая");return} shareText(estText(),"Смета"); }; }
+$("#btn-est-share").innerHTML=WA_ICON+"Отправить"; $("#est-share2").innerHTML=WA_ICON+"Отправить";
+$("#btn-est-share").onclick=()=>{ if(!estRows().length){toast("Добавьте работы — смета пока пустая");return} shareText(estText(),"Смета"); };
+$("#est-share2").onclick=()=>viewMode==="act"?shareText(actText(),"Акт выполненных работ"):shareText(estText(),"Смета");
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("#est-view").hidden) closeEst(); });
 document.querySelector(".est-opts").addEventListener("change",e=>{ const k=e.target.id.replace("est-",""); ESTO[k]=e.target.checked; store.set("est-opts",ESTO); });
 $("#est-master").addEventListener("click",e=>{ if(e.target.closest("[data-open-master]")) openSettings("master"); });
@@ -1364,9 +1606,14 @@ function masterTab(){
   const f=(k,l,ph)=>`<label>${l}<input class="m-f" data-m="${k}" value="${esc(MASTER[k]||"")}" placeholder="${esc(ph)}"></label>`;
   return `<p class="hint">Эти данные печатаются в шапке сметы для заказчика. Хранятся только в этом браузере и в файл настроек не попадают.</p>
   <div class="fgrid">${f("name","Имя или название бригады","Иван Петров")}${f("phone","Телефон","+7 900 000-00-00")}${f("city","Город","Москва")}</div>
-  <label class="mlab">Примечание внизу сметы<textarea class="m-f" data-m="note" placeholder="Расчёт предварительный. Окончательная стоимость — после осмотра объекта.">${esc(MASTER.note||"")}</textarea></label>`;
+  <label class="mlab">Примечание внизу сметы<textarea class="m-f" data-m="note" placeholder="Расчёт предварительный. Окончательная стоимость — после осмотра объекта.">${esc(MASTER.note||"")}</textarea></label>
+  <h3>Условия в смете</h3>
+  <p class="hint">Действуют для всех проектов. Наценка входит в цену материалов в смете — отдельной строкой заказчик её не видит. Надбавки включаются галочками на шаге 2 в каждом проекте.</p>
+  <div class="fgrid">${f("markup","Наценка на материалы, %","0")}${f("adv","Аванс, %","50")}${f("tool","Расходник инструмента, % от работ","0")}
+    ${f("kHigh","Надбавка: потолки выше 3 м, %","15")}${f("kLive","Надбавка: жилой объект, мебель, %","10")}${f("kUrg","Надбавка: срочно, %","20")}</div>`;
 }
-$("#set-body").addEventListener("input",e=>{ const k=e.target.dataset?.m; if(!k||!e.target.classList.contains("m-f")) return; MASTER[k]=e.target.value.trim(); store.set("master",MASTER); renderEstBox(); });
+$("#set-body").addEventListener("input",e=>{ const k=e.target.dataset?.m; if(!k||!e.target.classList.contains("m-f")) return; MASTER[k]=e.target.value.trim(); store.set("master",MASTER); renderEstBox();
+  if(k in COND_DEF){ renderExtras(); renderTotals(lastMat); } });
 function normText(m,c){ return m.nt || `${fmt(m.per??m.rate,4)} ${m.u}/${c.unit}${m.per!=null?" на 1 "+c.param.unit:""}`; }
 function renderNorms(){
   $("#norms").innerHTML=workGroups().map(g=>`<div class="norm-group"><h3>${esc(g)}</h3><div class="norms">${
@@ -1375,7 +1622,7 @@ function renderNorms(){
       <ul>${c.mats.map(m=>`<li>${esc(m.n)} — <span class="num">${esc(normText(m,c))}</span>${m.est?` <span class="tag-est">оценка</span>`:""}</li>`).join("")}</ul>
       ${c.tk?`<div class="tk">${esc(c.tk)}</div>`:""}</div>`).join("")}</div></div>`).join("");
 }
-function renderAll(){if(techState().auto)applyTech();renderProjects();renderObject();renderWorks();renderMaterials()}
+function renderAll(){if(techState().auto)applyTech();renderProjects();renderObject();renderExtras();renderWorks();renderMaterials();renderEstBox()}
 
 /* ================= Редактирование ================= */
 const dropExample=()=>{if(S.isExample){S.isExample=false;$("#example-banner").hidden=true}};
@@ -1507,7 +1754,8 @@ $("#btn-xlsx").onclick=async()=>{
   XLSX.utils.book_append_sheet(wb,ws3,"Нормы и источники");
   if(S.rooms?.length){const nv=x=>num(x)>0?num(x):"";const t=roomsTotal();
     XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["Помещение","Длина, м","Ширина, м","Высота, м","Проёмы, м²","Пол, м²","Периметр, м","Стены, м²"],...S.rooms.map(r=>[r.name||"",nv(r.len),nv(r.wid),nv(r.height)||nv(S.height),nv(r.open),nv(r.floor),nv(r.perimeter),nv(r.walls)]),["Итого","","","","",r2(t.floor),r2(t.perimeter),r2(t.walls)]]),"Помещения");}
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["Итог по объекту",S.object||""],...[["Адрес",S.address],["Заказчик",S.client],["Высота потолков, м",S.height],["Комментарий",S.comment]].filter(x=>String(x[1]??"").trim()),["Материалы, ₽",Math.round(lastMat)],["Работы, ₽",Math.round(laborSum())],["Всего, ₽",Math.round(lastMat+laborSum())],...(termCalc().days?[["Срок, рабочих дней (оценка)",termCalc().days],["Человек в бригаде",termCalc().crew]]:[])]),"Итог");
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["Итог по объекту",S.object||""],...[["Адрес",S.address],["Заказчик",S.client],["Высота потолков, м",S.height],["Комментарий",S.comment]].filter(x=>String(x[1]??"").trim()),["Материалы по закупочным ценам, ₽",Math.round(lastMat)],...(()=>{const mo=money();
+    return [...totalLines(mo).map(([l,v])=>[l+", ₽",Math.round(v)]),["Всего для заказчика, ₽",Math.round(mo.total)],...(mo.advPct>0?[[`Аванс ${fmt(mo.advPct,1)}%, ₽`,Math.round(mo.adv)],["Остаток, ₽",Math.round(mo.rest)]]:[])]})(),...(termCalc().days?[["Срок, рабочих дней (оценка)",termCalc().days],["Человек в бригаде",termCalc().crew]]:[])]),"Итог");
   const buf=XLSX.write(wb,{bookType:"xlsx",type:"array"});
   const name=((S.object||"Материалы").replace(/[\\/:*?"<>|]+/g," ").trim().slice(0,60)||"Материалы")+".xlsx";
   await saveFile(name,new Blob([buf],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}));
