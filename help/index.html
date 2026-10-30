@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FARBIG — инструкция пользователя</title>
+<meta name="theme-color" content="#292929">
+<link rel="icon" type="image/png" sizes="192x192" href="../icons/icon-192.png">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+@page{size:A4;margin:0}
+:root{--bg:#1C1C1C;--gold:#CBA265;--ink:#222;--muted:#6B665E;--line:#E6E0D6;--soft:#F7F3EC}
+*{box-sizing:border-box}
+html,body{margin:0;background:#fff;color:var(--ink);font:10.5pt/1.5 "Open Sans",sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+a{color:#94703A}
+.page{width:210mm;height:297mm;padding:16mm 16mm 14mm;position:relative;overflow:hidden;page-break-after:always;break-after:page}
+.page:last-child{page-break-after:auto;break-after:auto}
+h1,h2,h3{font-family:Oswald,sans-serif;text-transform:uppercase;margin:0;line-height:1.1}
+h2{font-size:22pt;font-weight:700;margin-bottom:5mm}
+h2 .n{color:var(--gold);margin-right:3mm}
+h3{font-size:12.5pt;font-weight:500;margin:4.5mm 0 2mm;color:#111}
+p{margin:0 0 2.5mm}
+ul,ol{margin:0 0 3mm;padding-left:5mm}
+li{margin-bottom:1.2mm}
+.btn{display:inline-block;padding:0 2mm;border:1px solid var(--gold);border-radius:2mm;font-weight:600;font-size:9.5pt;white-space:nowrap;background:var(--soft)}
+.btn.wa{background:#1FAF54;border-color:#1FAF54;color:#fff}
+.new{display:inline-block;margin-left:2mm;padding:0 1.6mm;border-radius:1.5mm;background:var(--gold);color:#fff;font:600 8pt/1.6 "Open Sans",sans-serif;text-transform:none;vertical-align:middle}
+.foot{position:absolute;left:16mm;right:16mm;bottom:8mm;display:flex;justify-content:space-between;font-size:8pt;color:var(--muted);border-top:1px solid var(--line);padding-top:2mm}
+.row{display:flex;gap:8mm;align-items:flex-start}
+.row .txt{flex:1;min-width:0}
+.pics{flex:none;display:grid;gap:4mm}
+.phone{width:58mm;padding:1.6mm;background:#0B0B0B;border-radius:6mm;box-shadow:0 0 0 .4mm #3A3630}
+.phone img{display:block;width:100%;border-radius:4.6mm}
+.phone.sm{width:50mm}
+.cap{font-size:8pt;color:var(--muted);text-align:center;margin-top:1.5mm}
+.note{border-left:1.2mm solid var(--gold);background:var(--soft);padding:3mm 4mm;margin:4mm 0;border-radius:0 2mm 2mm 0}
+.note.warn{border-color:#C9533F;background:#FBF0EE}
+.steps{counter-reset:s;list-style:none;padding:0}
+.steps>li{counter-increment:s;position:relative;padding-left:11mm;margin-bottom:3.2mm}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:-.3mm;width:7.5mm;height:7.5mm;border-radius:50%;background:var(--gold);color:#fff;font:700 11pt/7.5mm Oswald,sans-serif;text-align:center}
+table{width:100%;border-collapse:collapse;font-size:9.5pt;margin:2mm 0 4mm}
+th,td{text-align:left;padding:1.5mm 2mm;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:Oswald,sans-serif;font-weight:500;text-transform:uppercase;font-size:9pt;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:6mm}
+.card{border:1px solid var(--line);border-radius:3mm;padding:3mm 4mm;margin-bottom:3mm}
+.card h3{margin-top:0}
+.cover{background:radial-gradient(ellipse 90% 55% at 50% 30%,#2E2A24 0%,var(--bg) 70%);color:#F1EEE9;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.cover svg{width:34mm;height:auto;color:#F1EEE9}
+.cover .name{font:700 54pt/1 Oswald,sans-serif;letter-spacing:2mm;margin:8mm 0 4mm}
+.cover .sub{font:500 18pt/1.2 Oswald,sans-serif;text-transform:uppercase;color:var(--gold)}
+.cover .sub span{color:#F1EEE9}
+.cover .doc{margin-top:20mm;font:500 26pt/1.1 Oswald,sans-serif;text-transform:uppercase}
+.badge{display:inline-flex;align-items:center;gap:3mm;margin-top:12mm;padding:2.5mm 6mm;border:.6mm solid var(--gold);border-radius:20mm;color:var(--gold);font-weight:700;font-size:12pt}
+.badge::before{content:"";width:3.4mm;height:3.4mm;border-radius:50%;background:var(--gold)}
+.cover .url-c{margin-top:10mm;font-size:12pt;color:#F1EEE9;text-decoration:none}
+.cover .date{position:absolute;bottom:14mm;left:0;right:0;font-size:9pt;color:#A8A299}
+.url{margin:1mm 0 4mm;padding:3mm 4mm;border:.5mm solid var(--gold);border-radius:2mm;background:var(--soft);font-weight:700;font-size:11.5pt;word-break:break-all}
+.url a{color:#111;text-decoration:none}
+.toc{list-style:none;padding:0;columns:2;column-gap:10mm}
+.toc li{display:flex;gap:3mm;break-inside:avoid}
+.toc li span{color:var(--gold);font-weight:700;width:6mm;flex:none}
+.toc a{color:inherit;text-decoration:none}
+.webbar{display:none}
+/* Экран: та же инструкция как обычная веб-страница */
+@media screen{
+  html,body{font-size:15px}
+  body{background:#EFECE7}
+  .webbar{display:flex;position:sticky;top:0;z-index:5;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:10px max(16px,calc(50% - 430px));background:#292929}
+  .webbar a{color:#CBA265;font-weight:600;text-decoration:none;font-size:14px}
+  .webbar .pdf{border:1.5px solid #CBA265;border-radius:999px;padding:5px 12px}
+  .page{width:auto;max-width:860px;height:auto;margin:16px auto;padding:28px 24px;background:#fff;overflow:visible;scroll-margin-top:56px}
+  .cover{min-height:70vh;padding:48px 20px;background:radial-gradient(ellipse 90% 55% at 50% 30%,#2E2A24 0%,var(--bg) 70%)}
+  .cover .name{font-size:48px}.cover .sub{font-size:20px}.cover .doc{font-size:26px;margin-top:40px}.cover svg{width:90px}
+  .cover .date{position:static;margin-top:28px}
+  h2{font-size:28px;margin-bottom:16px}h3{font-size:17px;margin:18px 0 8px}
+  [id]{scroll-margin-top:60px}
+  .foot{display:none}
+  .phone{width:250px}.phone.sm{width:220px}
+  .cap{font-size:12px}
+  .btn,.new{font-size:13px}
+  table{font-size:14px}th{font-size:12px}
+  .note{padding:12px 14px}
+  .steps>li{padding-left:40px}.steps>li::before{width:28px;height:28px;line-height:28px;font-size:15px}
+}
+@media screen and (max-width:720px){
+  .page{padding:22px 16px;margin:10px 0}
+  .row{flex-direction:column;gap:16px}
+  .pics{justify-self:center;margin:0 auto}
+  .two{grid-template-columns:1fr;gap:0}
+  .toc{columns:1}
+  h2{font-size:24px}
+}
+</style>
+</head>
+<body>
+<nav class="webbar"><a href="../">← В калькулятор</a><a class="pdf" href="FARBIG-instrukciya.pdf" download>Скачать PDF</a></nav>
+
+<section class="page cover">
+  <svg viewBox="1400 450 1200 3100" aria-hidden="true"><g transform="translate(0 4000) scale(1 -1)">
+    <path fill="#CBA265" transform="translate(1466.48 500)" d="M763.54 322.9C687.79 327.19 610.86 329.43 532.93 329.43C455 329.43 376.83 327.19 300.55 322.78C197.97 316.84 97.63 307.08 0 293.72L0 .18C169.74 23.82 348.31 36.52 532.93 36.52C717.55 36.52 897 23.76 1067.03 0L1067.03 293.55C968.46 307.08 867.12 316.96 763.54 322.9Z"/>
+    <path fill="#CBA265" transform="translate(2230.03 940.58)" d="M303.49 452.11L303.49 0C204.91 13.53 103.570 23.41 0 29.35L0 452.11Z"/>
+    <path fill="currentColor" transform="translate(2230.03 1544.38)" d="M59.4 .59L0 1955.62L303.49 1955.62L244.08 0Z"/>
+    <path fill="currentColor" transform="translate(1466.48 940.76)" d="M300.55 2088.72L300.55 1618.19L641.68 1618.19L641.68 1147.67L300.55 1147.67L300.55 29.05C197.97 23.11 97.63 13.35 0 0L0 2559.24L656.97 2559.24L656.97 2088.72Z"/>
+  </g></svg>
+  <div class="name">FARBIG</div>
+  <div class="sub">Калькулятор материалов<br><span>для мастеров-маляров</span></div>
+  <div class="doc">Инструкция пользователя</div>
+  <div class="badge">Работает в тестовом режиме</div>
+  <a class="url-c" href="https://kizlyarkamen-dot.github.io/farbig-calc/">kizlyarkamen-dot.github.io/farbig-calc</a>
+  <div class="date">Октябрь 2026</div>
+</section>
+
+<section class="page" id="s-about">
+  <h2>О калькуляторе</h2>
+  <p>FARBIG считает, сколько материала нужно на объект и сколько это стоит. Вы вводите размеры комнат — калькулятор сам раскладывает работы по технологии «Экспресс К3» и выдаёт список материалов: расход с запасом, сколько упаковок купить, цену и итог. Из расчёта получается смета для заказчика, файл Excel и список закупки для мессенджера.</p>
+  <p>Нормы расхода — из техкарты «Экспресс К3» FARBIG и техкарт WOHOM 2026. У каждой нормы указан источник.</p>
+  <div class="note warn"><b>Тестовый режим.</b> Калькулятор ещё дорабатывается. Возможны неточности в нормах и ценах — сверяйте важные цифры перед закупкой. Нашли ошибку — напишите нам, так калькулятор станет точнее.</div>
+  <h3>Что понадобится</h3>
+  <ul>
+    <li>Адрес калькулятора: <b>kizlyarkamen-dot.github.io/farbig-calc</b></li>
+    <li>Телефон или компьютер с браузером: Chrome на Android, Safari на iPhone, любой современный браузер на компьютере.</li>
+    <li>Интернет нужен только при первом открытии. Регистрация не нужна, калькулятор бесплатный.</li>
+  </ul>
+  <h3>Содержание</h3>
+  <ol class="toc">
+    <li><span>1</span><a href="#s-install">Как открыть и поставить ярлык</a></li>
+    <li><span>2</span><a href="#s-start">Быстрый старт: расчёт за 5 шагов</a></li>
+    <li><span>3</span><a href="#s-proj">Проекты и объект</a></li>
+    <li><span>4</span><a href="#s-rooms">Помещения, проёмы, сложная форма</a></li>
+    <li><span>5</span><a href="#s-tech">Технология и сравнение</a></li>
+    <li><span>6</span><a href="#s-lm">Калькулятор погонных метров</a></li>
+    <li><span>7</span><a href="#s-works">Работы и срок</a></li>
+    <li><span>8</span><a href="#s-mats">Материалы и цены</a></li>
+    <li><span>9</span><a href="#s-vedom">Ведомость, Excel, отправка</a></li>
+    <li><span>10</span><a href="#s-est">Смета для заказчика</a></li>
+    <li><span>11</span><a href="#s-settings">Настройки и резервная копия</a></li>
+    <li><span>12</span><a href="#s-faq">Частые вопросы и связь</a></li>
+  </ol>
+  <h3>Как устроен экран</h3>
+  <table>
+    <tr><th style="width:30%">Где</th><th>Что там</th></tr>
+    <tr><td>Верхняя полоса</td><td>Группа FARBIG в WhatsApp, <span class="btn">?</span> — эта инструкция, <span class="btn">Установить</span> — ярлык, <span class="btn">Настройки</span>.</td></tr>
+    <tr><td>Шаг 1: объект</td><td>Проект, объект, помещения, технология.</td></tr>
+    <tr><td>Шаг 2: объёмы работ</td><td>Работы с объёмами и срок выполнения.</td></tr>
+    <tr><td>Шаг 3: материалы</td><td>Что и сколько купить, цены, ведомость.</td></tr>
+    <tr><td>Шаг 4: смета</td><td>Смета для заказчика: PDF или сообщение.</td></tr>
+    <tr><td>Нижняя полоса</td><td>Итог «материалы + работы» и <span class="btn">Скачать Excel</span>.</td></tr>
+  </table>
+  <p>Значок <span class="btn">?</span> рядом с разделом калькулятора открывает нужную страницу этой инструкции.</p>
+  <div class="foot"><span>FARBIG · Инструкция пользователя</span><span>2</span></div>
+</section>
+
+<section class="page" id="s-install">
+  <h2><span class="n">1</span>Как открыть и поставить ярлык</h2>
+  <div class="row">
+    <div class="txt">
+      <p>Откройте калькулятор в браузере телефона по адресу:</p>
+      <p class="url"><a href="https://kizlyarkamen-dot.github.io/farbig-calc/">kizlyarkamen-dot.github.io/farbig-calc</a></p>
+      <p>Чтобы не набирать адрес каждый раз, поставьте ярлык <b>FARBIG</b> на экран телефона — он открывается как обычное приложение, во весь экран.</p>
+      <h3>Android (Chrome)</h3>
+      <ol class="steps">
+        <li>Нажмите <span class="btn">Установить</span> в верхней полосе (на узком экране — значок со стрелкой вниз).</li>
+        <li>В окне телефона нажмите <b>«Установить»</b>.</li>
+        <li>Ярлык FARBIG появится на рабочем столе.</li>
+      </ol>
+      <p>Если кнопки нет: меню браузера <b>⋮</b> → <b>«Добавить на главный экран»</b>.</p>
+      <h3>iPhone (Safari)</h3>
+      <ol class="steps">
+        <li>Откройте калькулятор именно в <b>Safari</b>.</li>
+        <li>Нажмите <span class="btn">Установить</span> — внизу появится подсказка.</li>
+        <li><b>«Поделиться»</b> (квадрат со стрелкой) → <b>«На экран Домой»</b> → <b>«Добавить»</b>.</li>
+      </ol>
+      <div class="note"><b>Без интернета.</b> После первого открытия калькулятор считает без сети — на объекте без связи тоже. Когда интернет появится, обновления подтянутся сами.</div>
+    </div>
+    <div class="pics"><div><div class="phone"><img src="img/install.jpg" alt="Верхняя полоса калькулятора и подсказка для iPhone"></div><div class="cap">Кнопка «Установить» и подсказка для iPhone</div></div></div>
+  </div>
+  <div class="foot"><span>FARBIG · Инструкция пользователя</span><span>3</span></div>
+</section>
+
+<section class="page" id="s-start">
+  <h2><span class="n">2</span>Быстрый старт: расчёт за 5 шагов</h2>
+  <ol class="steps" style="margin-top:5mm">
+    <li><b>Создайте проект.</b> <span class="btn">+ Новый проект</span> и название объекта, например «Квартира, ЖК «Солнечный», кв. 45».</li>
+    <li><b>Укажите высоту потолков</b>, например 2,7.</li>
+    <li><b>Добавьте помещения.</b> <span class="btn">+ Помещение</span>, длина и ширина. Окна и двери — в «Проёмы по размерам». Пол, периметр и стены посчитаются сами.</li>
+    <li><b>Выберите технологию</b> в блоке «Технология». Пока горит «Авто», список работ на шаге 2 собирается сам.</li>
+    <li><b>Заберите результат.</b> Шаг 3 — что купить, шаг 4 — смета для заказчика, внизу — итог и <span class="btn">Скачать Excel</span>.</li>
+  </ol>
+  <div class="note">Всё сохраняется само, кнопки «Сохранить» нет. Чтобы не потерять проекты при смене телефона — делайте резервную копию (раздел 11).</div>
+  <h3>Пример расчёта</h3>
+  <p>Квартира из 4 помещений (гостиная 5,5 × 4,2 м, спальня 4,5 × 3,6 м, кухня 4 × 3 м, коридор 5 × 1,6 м), потолки 2,7 м, технология К3, покраска в 2 слоя:</p>
+  <table>
+    <tr><th>Показатель</th><th style="text-align:right">Значение</th></tr>
+    <tr><td>Материалы</td><td style="text-align:right">265 260 ₽</td></tr>
+    <tr><td>Работы</td><td style="text-align:right">317 303 ₽</td></tr>
+    <tr><td><b>Итого</b></td><td style="text-align:right"><b>582 563 ₽</b></td></tr>
+    <tr><td>Срок, бригада 2 чел.</td><td style="text-align:right">≈ 17 рабочих дней</td></tr>
+  </table>
+  <p style="color:var(--muted);font-size:9pt">Цены и выработка ориентировочные — их можно заменить своими (разделы 8 и 11).</p>
+  <div class="foot"><span>FARBIG · Инструкция пользователя</span><span>4</span></div>
+</section>
+
+<section class="page" id="s-proj">
+  <h2><span class="n">3</span>Проекты и объект</h2>
+  <div class="row">
+    <div class="txt">
+      <p>Каждый объект — отдельный <b>проект</b> со своими помещениями, работами и материалами.</p>
+      <ul>
+        <li><b>Переключиться</b> — выберите проект в списке.</li>
+        <li><b>Новый</b> — <span class="btn">+ Новый проект</span>.</li>
+        <li><b>Удалить</b> — <span class="btn">Удалить проект</span> и ещё раз для подтверждения. Удалённый проект не восстановить, последний удалить нельзя.</li>
+      </ul>
+      <p>Поля объекта: <b>название, адрес, заказчик, высота потолков, комментарий</b>. Они попадают в Excel и в смету. Высота подставляется во все помещения без своей высоты.</p>
+      <div class="note">При первом открытии загружен <b>пример</b> — смета на 204 м² стен. Замените работы или создайте новый проект, и пример исчезнет.</div>
+      <h2 id="s-rooms" style="margin-top:7mm"><span class="n">4</span>Помещения и размеры</h2>
+      <table>
+        <tr><th>Поле</th><th>Что вводить</th></tr>
+        <tr><td>Помещение</td><td>Название: «Кухня», «Спальня»</td></tr>
+        <tr><td>Длина, ширина, м</td><td>Размеры комнаты</td></tr>
+        <tr><td>Высота, м</td><td>Если отличается от общей</td></tr>
+        <tr><td>Проёмы, м²</td><td>Окна и двери — вычитаются из стен</td></tr>
+        <tr><td>Пол, периметр, стены</td><td>Считаются сами, можно вписать вручную</td></tr>
+      </table>
+      <p><b>Формулы:</b> пол = длина × ширина; периметр = 2 × (длина + ширина); стены = периметр × высота − проёмы. Под списком — «Итого» по всем помещениям.</p>
+    </div>
+    <div class="pics"><div><div class="phone"><img src="img/rooms.jpg" alt="Помещения с размерами"></div><div class="cap">Помещения с размерами</div></div></div>
+  </div>
+  <div class="foot"><span>FARBIG · Инструкция пользователя</span><span>5</span></div>
+</section>
+
+<section class="page" id="s-ops">
+  <h2><span class="n">4</span>Проёмы и сложная форма <span class="new">новое</span></h2>
+  <div class="row">
+    <div class="txt">
+      <h3>Проёмы по размерам</h3>
+      <p>Под строкой помещения нажмите <b>«▸ Проёмы по размерам»</b> и впишите окна и двери: ширину, высоту и количество. Кнопки <span class="btn">+ Окно</span>, <span class="btn">+ Дверь</span>, <span class="btn">+ Проём, арка</span> добавляют строки.</p>
+      <ul>
+        <li>Площадь проёмов посчитается сама и вычтется из стен.</li>
+        <li><b>Откосы</b> считаются тоже: (2 × высота + ширина) × количество. Выберите работу и нажмите <span class="btn">+ Откосы в работы</span> — метраж добавится на шаг 2.</li>
+      </ul>
+      <h3>Сложная форма комнаты</h3>
+      <p><b>«▸ Сложная форма»</b> — для ниш, выступов, коробов и Г-образных комнат. Длину и ширину основной части вводите как обычно, а участки добавляйте ниже:</p>
+      <ul>
+        <li><b>Ниша, часть комнаты (+)</b> — площадь прибавляется.</li>
+        <li><b>Выступ, короб (−)</b> — площадь вычитается.</li>
+        <li><b>Длина</b> — сторона, которой участок примыкает к комнате, <b>глубина</b> — насколько уходит в сторону. Периметр растёт на 2 × глубину.</li>
+      </ul>
+      <p>Пример: Г-образная гостиная 5,5 × 4,2 м с частью 2 × 0,6 м — пол 24,3 м², периметр 20,6 м.</p>
+    </div>
+    <div class="pics">
+      <div><div class="phone sm"><img src="img/ops.jpg" alt="Окна и двери по размерам"></div><div class="cap">Окна и двери, откосы</div></div>
+      <div><div class="phone sm"><img src="img/segs.jpg" alt="Участки комнаты"></div><div class="cap">Ниша в комнате</div></div>
+    </div>
+  </div>
+  <div class="foot"><span>FARBIG · Инструкция пользователя</span><span>6</span></div>
+</section>
+
+<section class="page" id="s-tech">
+  <h2><span class="n">5</span>Технология и авторасчёт работ</h2>
+  <div class="row">
+    <div class="txt">
+      <h3>Схема отделки стен</h3>
+      <ul>
+        <li><b>К3: стеклохолст на шпатлёвку</b> — полный цикл «Экспресс К3».</li>
+        <li><b>Стеклохолст на клей + СуКуш.</b></li>
+        <li><b>Без стеклохолста</b>: база → финиш → покраска.</li>
+        <li><b>Только финиш и покраска</b> — основание готово.</li>
+      </ul>
+      <p>Дополнительно: <b>слоёв покраски</b> (обычно 2), галочки <b>Потолок</b>, <b>Стены из ГКЛ</b> (заделка швов), <b>Покраска молдингов и плинтусов</b>. Ниже видны объёмы: стены, пол и потолок, углы (4 × высота + примыкание к потолку), периметр.</p>
+      <h3>Авто и ручной режим</h3>
+      <ul>
+        <li><b>«Авто»</b> — работы пересобираются при любом изменении размеров или технологии. Добавленные вручную работы остаются.</li>
+        <li>Поправили автоматическую строку — авто <b>выключится</b>, список правится вручную.</li>
+        <li>Вернуть: <span class="btn">Рассчитать работы автоматически</span> (если работы уже есть — нажать дважды, они заменятся).</li>
+      </ul>
+      <h3 id="s-cmp">Сравнить технологии <span class="new">новое</span></h3>
+      <p><b>«▸ Сравнить технологии»</b> показывает таблицу по всем четырём схемам на ваших помещениях: материалы, работы, итог, разница с текущей и срок. <span class="btn">Выбрать</span> переключает технологию. Удобно, чтобы показать заказчику, за что он платит.</p>
+    </div>
+    <div class="pics">
+      <div><div class="phone sm"><img src="img/tech.jpg" alt="Блок Технология"></div><div class="cap">Блок «Технология»</div></div>
+      <div><div class="phone sm"><img src="img/cmp.jpg" alt="Сравнение технологий"></div><div class="cap">Сравнение технологий</div></div>
+    </div>
+  </div>
+  <div class="foot"><span>FARBIG · Инструкция пользователя</span><span>7</span></div>
+</section>
+
+<section class="page" id="s-lm">
+  <h2><span class="n">6</span>Калькулятор погонных метров</h2>
+  <div class="row">
+    <div class="txt">
+      <p>В конце шага 1 — строка <b>«Калькулятор погонных метров»</b>, нажмите, чтобы раскрыть. Три режима:</p>
+      <div class="card"><h3>Швы ГКЛ</h3><p>Площадь ГКЛ, размер листа, высота стены, слои. Посчитает продольные и торцевые швы и примерное число листов (запас 5%). «Площадь = стены помещений» подставит площадь из шага 1.</p></div>
+      <div class="card"><h3>Плинтус / молдинг</h3><p>Периметр минус двери (количество × ширина). «Периметр = все помещения» подставит сумму периметров.</p></div>
+      <div class="card"><h3>Свои отрезки</h3><p>Углы, откосы, примыкания: длина и количество одинаковых отрезков, <span class="btn">+ Отрезок</span> — ещё строка.</p></div>
+      <p><b>В работы:</b> выберите вид работы, при желании помещение, и нажмите <span class="btn">+ В работы</span>.</p>
+    </div>
+    <div class="pics"><div><div class="phone"><img src="img/lm.jpg" alt="Калькулятор погонных метров"></div><div class="cap">Режим «Швы ГКЛ»</div></div></div>
+  </div>
+  <div class="foot"><span>FARBIG · Инструкция пользователя</span><span>8</span></div>
+</section>
+
+<section class="page" id="s-works">
+  <h2><span class="n">7</span>Работы и срок</h2>
+  <div class="row">
+    <div class="txt">
+      <p>Шаг 2. Список свёрнут — нажмите на <b>«Работы: N поз.»</b>. Справа в заголовке — стоимость работ.</p>
+      <table>
+        <tr><th>Поле</th><th>Что это</th></tr>
+        <tr><td>Вид работы</td><td>Из справочника по отделам</td></tr>
+        <tr><td>Помещение</td><td>Из ваших помещений или «Все помещения»</td></tr>
+        <tr><td>Объём</td><td>м², м.п., шт</td></tr>
+        <tr><td>Параметр</td><td>Толщина слоя, слои, расход — где есть</td></tr>
+      </table>
+      <ul>
+        <li><b>«Объём из помещений…»</b> подставит стены, пол, потолок или периметр.</li>
+        <li>Под строкой — цена работы и требования техкарты.</li>
+        <li><b>«Нет в справочнике»</b> — строка остаётся, но материал по ней не считается.</li>
+      </ul>
+      <p><span class="btn">+ Добавить работу</span> — новая строка, <span class="btn">Очистить всё</span> — очистить проект (нажать дважды).</p>
+      <h3 id="s-term">Срок работ <span class="new">новое</span></h3>
+      <p>Над списком — поле <b>«Человек в бригаде»</b> и строка <b>«Срок: ≈ N раб. дней»</b>. Срок = объём каждой работы ÷ выработка в день ÷ число людей + время на сушку между этапами.</p>
+      <p>Выработка и сушка — <b>типовая оценка</b>. Поправьте выработку под свою бригаду: <b>Настройки → Цены работ</b>, колонка «Выработка в день».</p>
+    </div>
+    <div class="pics"><div><div class="phone"><img src="img/works.jpg" alt="Работы и срок"></div><div class="cap">Срок работ и список работ</div></div></div>
+  </div>
+  <div class="foot"><span>FARBIG · Инструкция пользователя</span><span>9</span></div>
+</section>
+
+<section class="page" id="s-mats">
+  <h2><span class="n">8</span>Материалы и цены</h2>
+  <div class="row">
+    <div class="txt">
+      <p>Шаг 3. Материалы сгруппированы по отделам, в заголовке — число материалов и сумма. <span class="btn">Развернуть всё</span> открывает всё сразу.</p>
+      <table>
+        <tr><th>Колонка</th><th>Что значит</th></tr>
+        <tr><td>Нужно</td><td>Расход по нормам с запасом</td></tr>
+        <tr><td>Купить</td><td>Целое число упаковок: «3 × мешок 25 кг»</td></tr>
+        <tr><td>Цена</td><td>За упаковку, можно поправить</td></tr>
+        <tr><td>Сумма</td><td>Упаковки × цена</td></tr>
+      </table>
+      <ul>
+        <li><b>Своя цена</b> запоминается на телефоне для всех проектов.</li>
+        <li><b>Доп. запас сверх норм</b> — ползунок 0–20%.</li>
+        <li><b>«Расход по работам»</b> под материалом показывает, откуда цифра: объём × норма, плюс запас, округление до упаковок.</li>
+        <li>Пометка <span class="btn" style="border-color:#C9533F">оценка</span> — в техкартах цифры нет, взято типовое значение.</li>
+      </ul>
+      <p>Внизу страницы — <b>«Нормы и источники»</b> по каждой работе.</p>
+    </div>
+    <div class="pics">
+      <div><div class="phone sm"><img src="img/mats.jpg" alt="Материалы"></div><div class="cap">Отделы материалов</div></div>
+      <div><div class="phone sm"><img src="img/use.jpg" alt="Расход по работам"></div><div class="cap">Расшифровка расхода</div></div>
+    </div>
+  </div>
+  <div class="foot"><span>FARBIG · Инструкция пользователя</span><span>10</span></div>
+</section>
+
+<section class="page" id="s-vedom">
+  <h2><span class="n">9</span>Ведомость, Excel, отправка</h2>
+  <div class="row">
+    <div class="txt">
+      <h3>Ведомость на объект</h3>
+      <p>Список закупки одной таблицей: материал, расход, сколько купить, сумма.</p>
+      <ul>
+        <li><span class="btn">Скопировать список</span> — ведомость текстом в буфер обмена.</li>
+        <li><span class="btn wa">Отправить</span> <span class="new">новое</span> — на телефоне открывается меню «Поделиться»: WhatsApp, Telegram, почта. На компьютере откроется WhatsApp с готовым текстом.</li>
+      </ul>
+      <h3>Итог внизу экрана</h3>
+      <p>«Итого: материалы + работы» и суммы по отдельности. Пересчитывается сразу.</p>
+      <h3>Скачать Excel</h3>
+      <table>
+        <tr><th>Лист</th><th>Содержимое</th></tr>
+        <tr><td>Материалы</td><td>Количество, упаковки, цены. Суммы — формулами</td></tr>
+        <tr><td>Расход по работам</td><td>Расшифровка расхода</td></tr>
+        <tr><td>Работы</td><td>Объёмы, цены, сумма работ</td></tr>
+        <tr><td>Нормы и источники</td><td>Нормы и требования техкарт</td></tr>
+        <tr><td>Помещения</td><td>Размеры, пол, периметр, стены</td></tr>
+        <tr><td>Итог</td><td>Объект, материалы, работы, всего, срок</td></tr>
+      </table>
+    </div>
+    <div class="pics"><div><div class="phone"><img src="img/vedom.jpg" alt="Ведомость"></div><div class="cap">Ведомость и кнопка «Скачать Excel»</div></div></div>
+  </div>
+  <div class="foot"><span>FARBIG · Инструкция пользователя</span><span>11</span></div>
+</section>
+
+<section class="page" id="s-est">
+  <h2><span class="n">10</span>Смета для заказчика <span class="new">новое</span></h2>
+  <div class="row">
+    <div class="txt">
+      <p>Шаг 4 — аккуратная смета с вашими данными. Закупочные цены материалов заказчик не видит.</p>
+      <ol class="steps">
+        <li>Один раз заполните свои данные: <b>Настройки → Мастер</b> (имя, телефон, город, примечание). Или нажмите «заполнить данные мастера» прямо в шаге 4.</li>
+        <li>Выберите, что показать: <b>материалы списком</b> (без цен, только количество) или одной суммой, <b>цены за единицу работ</b>, <b>срок выполнения</b>.</li>
+        <li>Нажмите <span class="btn">Смета клиенту</span> — откроется готовая смета.</li>
+        <li><span class="btn">Сохранить PDF / печать</span> → в окне печати выберите <b>«Сохранить как PDF»</b>. Или <span class="btn wa">Отправить</span> — смета уйдёт текстом в мессенджер.</li>
+      </ol>
+      <p>В смете: шапка мастера и дата, объект, адрес и заказчик, работы с объёмами и ценами, материалы, итог, срок, комментарий объекта, примечание и строки для подписей.</p>
+      <div class="note">Примечание по умолчанию: «Расчёт предварительный. Окончательная стоимость — после осмотра объекта». Его можно заменить своим в «Настройки → Мастер».</div>
+    </div>
+    <div class="pics">
+      <div><div class="phone sm"><img src="img/est.jpg" alt="Смета, начало"></div><div class="cap">Смета: шапка и работы</div></div>
+      <div><div class="phone sm"><img src="img/est2.jpg" alt="Смета, итог"></div><div class="cap">Смета: итог и подписи</div></div>
+    </div>
+  </div>
+  <div class="foot"><span>FARBIG · Инструкция пользователя</span><span>12</span></div>
+</section>
+
+<section class="page" id="s-settings">
+  <h2><span class="n">11</span>Настройки</h2>
+  <div class="row">
+    <div class="txt">
+      <p><span class="btn">Настройки</span> в верхней полосе. Всё сохраняется сразу.</p>
+      <div class="card"><h3>Виды работ</h3><p>Все работы по отделам. <span class="btn">Изменить</span> — название, единица, параметр, материалы и нормы. <span class="btn">+ Новый вид работ</span> — своя работа. Изменённые можно вернуть «Сбросить к стандарту».</p></div>
+      <div class="card"><h3>Материалы</h3><p>Цена работы, расход, упаковка и цена материалов. Материал общий для всех работ, где используется. Поиск и <span class="btn">+ Новый материал</span>.</p></div>
+      <div class="card"><h3>Цены работ</h3><p>Ваша расценка за единицу и <b>выработка в день</b> на одного человека <span class="new">новое</span> — по ней считается срок.</p></div>
+      <div class="card"><h3>Отделы</h3><p>Переименовать, поменять порядок, добавить, удалить.</p></div>
+      <div class="card"><h3>Мастер <span class="new">новое</span></h3><p>Имя, телефон, город и примечание для шапки сметы. Хранятся только на телефоне.</p></div>
+    </div>
+    <div class="pics">
+      <div><div class="phone sm"><img src="img/set-labor.jpg" alt="Цены работ и выработка"></div><div class="cap">Цены работ и выработка</div></div>
+      <div><div class="phone sm"><img src="img/set-master.jpg" alt="Данные мастера"></div><div class="cap">Вкладка «Мастер»</div></div>
+    </div>
+  </div>
+  <div class="foot"><span>FARBIG · Инструкция пользователя</span><span>13</span></div>
+</section>
+
+<section class="page" id="s-backup">
+  <h2><span class="n">11</span>Обмен и резервная копия <span class="new">новое</span></h2>
+  <div class="row">
+    <div class="txt">
+      <h3>Проекты</h3>
+      <p>Проекты хранятся только в браузере. Делайте резервную копию — особенно перед сменой телефона или очисткой браузера.</p>
+      <ol class="steps">
+        <li><b>Настройки → Обмен → <span class="btn">Сохранить проекты в файл</span></b>. Сохранится файл «Проекты FARBIG <i>дата</i>.json» со всеми проектами.</li>
+        <li>Перешлите файл себе (WhatsApp, почта, облако).</li>
+        <li>На новом телефоне: <b>«Загрузить проекты из файла»</b> → выберите файл.</li>
+        <li>Выберите <span class="btn">Добавить к текущим</span> (одинаковые проекты не задвоятся) или <span class="btn">Заменить все проекты</span>.</li>
+      </ol>
+      <h3>Настройки для бригады</h3>
+      <p><span class="btn">Скачать файл настроек</span> — ваши работы, материалы, цены, выработка и отделы. Бригада загружает его на этой же вкладке, и у всех одинаковые нормы и цены. Загрузка заменяет текущие настройки. Проекты и данные мастера в файл настроек не входят.</p>
+    </div>
+    <div class="pics"><div><div class="phone"><img src="img/set-share.jpg" alt="Вкладка Обмен"></div><div class="cap">Вкладка «Обмен»</div></div></div>
+  </div>
+  <div class="foot"><span>FARBIG · Инструкция пользователя</span><span>14</span></div>
+</section>
+
+<section class="page" id="s-faq">
+  <h2><span class="n">12</span>Частые вопросы</h2>
+  <div class="two">
+    <div>
+      <h3>Где хранятся мои проекты?</h3>
+      <p>Только в браузере на вашем устройстве. На сервер не отправляются, никто, кроме вас, их не видит.</p>
+      <h3>Как перенести на другой телефон?</h3>
+      <p>«Настройки → Обмен»: сохраните проекты в файл и загрузите на новом телефоне. Нормы и цены — файлом настроек там же.</p>
+      <h3>Почему «Купить» больше, чем «Нужно»?</h3>
+      <p>Материал продаётся упаковками — калькулятор округляет вверх.</p>
+      <h3>Срок точный?</h3>
+      <p>Нет, это оценка по типовой выработке. Впишите выработку своей бригады в «Настройки → Цены работ».</p>
+    </div>
+    <div>
+      <h3>Цены правильные?</h3>
+      <p>Ориентировочные. Впишите цены своего магазина и свои расценки — калькулятор запомнит.</p>
+      <h3>Нужной работы нет</h3>
+      <p>«Настройки → Виды работ → + Новый вид работ» — задайте материалы и нормы.</p>
+      <h3>Цифра кажется странной</h3>
+      <p>Раскройте «Расход по работам» под материалом. Если ошибка в калькуляторе — напишите нам.</p>
+      <h3>Работает без интернета?</h3>
+      <p>Да, после первого открытия. Excel и смета тоже.</p>
+    </div>
+  </div>
+  <h2 id="s-feedback" style="margin-top:8mm">Обратная связь</h2>
+  <p>Калькулятор в тестовом режиме, и нам важно ваше мнение: что неудобно, где ошибка в нормах, чего не хватает. Нажмите значок WhatsApp («Группа») в верхней полосе — откроется группа FARBIG, где можно задать вопрос и оставить замечание.</p>
+  <div class="note"><b>Ждём ваши замечания и предложения!</b></div>
+  <p style="font-size:8.5pt;color:var(--muted)">Сайт использует cookies и Яндекс Метрику, чтобы понимать, как люди пользуются калькулятором. Подробнее — в «Политике конфиденциальности» внизу страницы калькулятора.</p>
+  <div class="foot"><span>FARBIG · Инструкция пользователя</span><span>15</span></div>
+</section>
+</body>
+</html>
